@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 
 export default function Home() {
@@ -152,7 +153,7 @@ export default function Home() {
             {[
               {
                 title: "E-Commerce Analytics Platform",
-                description: "Developed a comprehensive analytics dashboard that increased client&apos;s revenue insights by 300% and reduced reporting time by 85%.",
+                description: "Developed a comprehensive analytics dashboard that increased client's revenue insights by 300% and reduced reporting time by 85%.",
                 metrics: ["300% Better Insights", "85% Time Reduction", "Real-time Processing"],
                 industry: "Retail"
               },
@@ -200,7 +201,7 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Let&apos;s Build Something <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Amazing</span>
+              Let's Build Something <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Amazing</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Ready to transform your business with cutting-edge digital solutions? Get in touch with our team of experts.
@@ -245,7 +246,7 @@ export default function Home() {
             <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30">
               <h3 className="text-2xl font-bold mb-4">Start Your Project Today</h3>
               <p className="text-gray-400 mb-6">
-                From concept to deployment, we&apos;ll guide you through every step of your digital transformation journey.
+                From concept to deployment, we'll guide you through every step of your digital transformation journey.
               </p>
               <button className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2">
                 Get Started Now

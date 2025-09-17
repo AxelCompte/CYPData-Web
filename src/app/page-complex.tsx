@@ -1,0 +1,403 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Zap, Users, CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
+
+export default function Home() {
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
+
+  const staggerContainer = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const services = [
+    {
+      icon: <Smartphone className="w-8 h-8" />,
+      title: "Native Mobile Apps",
+      description: "Custom Android and iOS applications built with cutting-edge technology for optimal performance and user experience.",
+      tech: ["React Native", "Flutter", "Swift", "Kotlin"]
+    },
+    {
+      icon: <Monitor className="w-8 h-8" />,
+      title: "Desktop Applications",
+      description: "Powerful desktop solutions that streamline your business processes and enhance productivity across all platforms.",
+      tech: ["Electron", "Qt", ".NET", "Java"]
+    },
+    {
+      icon: <BarChart3 className="w-8 h-8" />,
+      title: "Business Intelligence",
+      description: "Transform your data into actionable insights with our comprehensive BI solutions and interactive dashboards.",
+      tech: ["Power BI", "Tableau", "Qlik", "Custom BI"]
+    },
+    {
+      icon: <Database className="w-8 h-8" />,
+      title: "Big Data Solutions",
+      description: "Scalable data processing and analytics platforms that handle massive datasets with enterprise-grade reliability.",
+      tech: ["Apache Spark", "Hadoop", "Elasticsearch", "MongoDB"]
+    }
+  ];
+
+  const caseStudies = [
+    {
+      title: "E-Commerce Analytics Platform",
+      description: "Developed a comprehensive analytics dashboard that increased client's revenue insights by 300% and reduced reporting time by 85%.",
+      metrics: ["300% Better Insights", "85% Time Reduction", "Real-time Processing"],
+      industry: "Retail"
+    },
+    {
+      title: "Healthcare Management System",
+      description: "Built a mobile-first patient management system serving 50,000+ patients with 99.9% uptime and HIPAA compliance.",
+      metrics: ["50K+ Users", "99.9% Uptime", "HIPAA Compliant"],
+      industry: "Healthcare"
+    },
+    {
+      title: "Financial Trading Dashboard",
+      description: "Created a real-time trading analytics platform processing millions of transactions with sub-second latency.",
+      metrics: ["<1s Latency", "Millions of Transactions", "Real-time Analytics"],
+      industry: "Finance"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-900">
+      {/* Navigation */}
+      <motion.nav 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="fixed top-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800"
+      >
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <motion.div 
+              className="text-2xl font-bold"
+              whileHover={{ scale: 1.05 }}
+            >
+              <span className="gradient-text">CyP Data</span>
+            </motion.div>
+            <div className="hidden md:flex space-x-8">
+              <a href="#services" className="hover:text-purple-400 transition-colors">Services</a>
+              <a href="#cases" className="hover:text-purple-400 transition-colors">Case Studies</a>
+              <a href="#contact" className="hover:text-purple-400 transition-colors">Contact</a>
+            </div>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-gray-900 to-purple-800/20"></div>
+          <motion.div 
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-600/30 to-purple-800/30 rounded-full blur-3xl"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-800/30 to-purple-600/30 rounded-full blur-3xl"
+            animate={{
+              x: [0, -80, 0],
+              y: [0, 60, 0],
+              scale: [1, 0.8, 1],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+
+        <motion.div 
+          className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Digital Solutions for the
+            <span className="block gradient-text">Modern Enterprise</span>
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            We craft native mobile apps, desktop applications, and cutting-edge Business Intelligence solutions 
+            that transform data into competitive advantage.
+          </motion.p>
+
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <motion.button 
+              className="gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Explore Our Work
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+            <motion.button 
+              className="border-2 border-purple-500 text-purple-400 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-500/10 transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get In Touch
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-purple-400 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-purple-400 rounded-full mt-2"></div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Our <span className="gradient-text">Services</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              We deliver end-to-end digital solutions that drive innovation and accelerate business growth
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+          >
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+                whileHover={{ y: -10 }}
+              >
+                <div className="flex items-center mb-6">
+                  <div className="p-3 rounded-lg gradient-primary text-white mr-4 group-hover:scale-110 transition-transform duration-300">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold">{service.title}</h3>
+                </div>
+                <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {service.tech.map((tech, techIndex) => (
+                    <span 
+                      key={techIndex}
+                      className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Case Studies Section */}
+      <section id="cases" className="py-20 px-6 bg-gray-800/30">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Success <span className="gradient-text">Stories</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Real results from real projects. See how we've helped businesses transform their operations with data-driven solutions.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+          >
+            {caseStudies.map((study, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300"
+                whileHover={{ y: -10, scale: 1.02 }}
+              >
+                <div className="mb-4">
+                  <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                    {study.industry}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-purple-400 transition-colors">
+                  {study.title}
+                </h3>
+                <p className="text-gray-400 mb-6 leading-relaxed">
+                  {study.description}
+                </p>
+                <div className="space-y-2">
+                  {study.metrics.map((metric, metricIndex) => (
+                    <div key={metricIndex} className="flex items-center text-green-400">
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      <span className="text-sm font-medium">{metric}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Let's Build Something <span className="gradient-text">Amazing</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Ready to transform your business with cutting-edge digital solutions? Get in touch with our team of experts.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 rounded-lg gradient-primary">
+                  <Mail className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Email Us</h3>
+                  <p className="text-gray-400">contact@cypdata.com</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <div className="p-3 rounded-lg gradient-primary">
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Call Us</h3>
+                  <p className="text-gray-400">+34 XXX XXX XXX</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <div className="p-3 rounded-lg gradient-primary">
+                  <MapPin className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Visit Us</h3>
+                  <p className="text-gray-400">Madrid, Spain</p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Card */}
+            <motion.div 
+              className="p-8 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30"
+              whileHover={{ scale: 1.02 }}
+            >
+              <h3 className="text-2xl font-bold mb-4">Start Your Project Today</h3>
+              <p className="text-gray-400 mb-6">
+                From concept to deployment, we'll guide you through every step of your digital transformation journey.
+              </p>
+              <motion.button 
+                className="w-full gradient-primary text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Get Started Now
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 bg-gray-900 border-t border-gray-800">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <h3 className="text-2xl font-bold gradient-text">CyP Data</h3>
+              <p className="text-gray-400 mt-2">Digital Solutions & Business Intelligence</p>
+            </div>
+            <div className="flex space-x-6">
+              <a href="#services" className="text-gray-400 hover:text-purple-400 transition-colors">Services</a>
+              <a href="#cases" className="text-gray-400 hover:text-purple-400 transition-colors">Case Studies</a>
+              <a href="#contact" className="text-gray-400 hover:text-purple-400 transition-colors">Contact</a>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+            <p>&copy; 2025 CyP Data. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
