@@ -32,6 +32,48 @@ function useIntersectionObserver(options = {}) {
 
 export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
+  
+  // Mouse tracking for 3D card effect - Optimized version
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, cardRef: React.RefObject<HTMLDivElement | null>) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Calculate relative position (-1 to 1)
+    const relativeX = (x - centerX) / centerX;
+    const relativeY = (y - centerY) / centerY;
+    
+    // Clamp values to prevent extreme tilting at edges
+    const clampedX = Math.max(-1, Math.min(1, relativeX));
+    const clampedY = Math.max(-1, Math.min(1, relativeY));
+    
+    // Reduce rotation intensity for subtler effect
+    const rotateX = clampedY * -4; // Reduced from -8 to -4
+    const rotateY = clampedX * 4;  // Reduced from 8 to 4
+    
+    // Use requestAnimationFrame for smooth performance
+    requestAnimationFrame(() => {
+      if (cardRef.current) {
+        cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(3px)`;
+      }
+    });
+  };
+  
+  const handleMouseLeave = (cardRef: React.RefObject<HTMLDivElement | null>) => {
+    if (!cardRef.current) return;
+    
+    // Smooth return to original position
+    requestAnimationFrame(() => {
+      if (cardRef.current) {
+        cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      }
+    });
+  };
+
   const services = [
     {
       icon: <Smartphone className="w-8 h-8" />,
@@ -181,10 +223,20 @@ export default function Home() {
         ></div>
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Digital Solutions for the
-            <span className="block gradient-text">Modern Enterprise</span>
-          </h1>
+          <div className="flex items-center justify-center gap-8 mb-6">
+            <div className="logo-gradient-container flex-shrink-0">
+              <img 
+                src="/logo.webp" 
+                alt="CyP Data" 
+                className="h-24 md:h-32 w-auto opacity-0"
+              />
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+              Digital Solutions<br />
+              <span className="text-4xl md:text-6xl">for the</span><br />
+              <span className="gradient-text whitespace-nowrap">Modern Enterprise</span>
+            </h1>
+          </div>
           
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
            Where innovative software meets actionable insights for sustainable competitive advantage.
@@ -228,24 +280,38 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 rounded-lg gradient-primary text-white mr-4 group-hover:scale-110 transition-transform duration-300">
-                    {service.icon}
+            {services.map((service, index) => {
+              const cardRef = useRef<HTMLDivElement>(null);
+              
+              return (
+                <div 
+                  key={index} 
+                  ref={cardRef}
+                  className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2 cursor-pointer"
+                  style={{ 
+                    transformStyle: 'preserve-3d',
+                    transition: 'transform 0.1s ease-out'
+                  }}
+                  onMouseMove={(e) => handleMouseMove(e, cardRef)}
+                  onMouseLeave={() => handleMouseLeave(cardRef)}
+                >
+                  <div className="flex items-center mb-6">
+                    <div className="p-3 rounded-lg gradient-primary text-white mr-4 group-hover:scale-110 transition-transform duration-300">
+                      {service.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold">{service.title}</h3>
                   </div>
-                  <h3 className="text-2xl font-bold">{service.title}</h3>
+                  <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {service.tech.map((tech, techIndex) => (
+                      <span key={techIndex} className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {service.tech.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
