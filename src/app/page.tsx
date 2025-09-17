@@ -259,7 +259,7 @@ export default function Home() {
           {/* Two-column layout: Left for text, Right for sticky GIFs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left Column - Scrolling Content */}
-            <div className="space-y-96 pb-96">
+            <div className="space-y-8 lg:space-y-96 lg:pb-96">
               {caseStudies.map((study, index) => (
                 <div 
                   key={index}
@@ -294,14 +294,25 @@ export default function Home() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Mobile GIF - Show on small screens only */}
+                    <div className="lg:hidden mt-8">
+                      <div className="w-full h-80 rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
+                        <img
+                          src={study.gif}
+                          alt={`${study.title} demonstration`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Right Column - Sticky GIF Display */}
-            <div className="lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
-              <div className="relative w-full h-full max-w-lg">
+            {/* Right Column - Sticky GIF Display (Desktop Only) */}
+            <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
+              <div className="relative w-full h-full max-w-lg flex items-center justify-center">
                 {caseStudies.map((study, index) => (
                   <div
                     key={index}
