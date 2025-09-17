@@ -63,10 +63,27 @@ export default function Home() {
     {
       id: "project-1",
       title: "E-Commerce Analytics Platform",
-      description: "Developed a comprehensive analytics dashboard that increased client&apos;s revenue insights by 300% and reduced reporting time by 85%.",
+      description: "Developed a comprehensive analytics dashboard that increased client's revenue insights by 300% and reduced reporting time by 85%.",
       metrics: ["300% Better Insights", "85% Time Reduction", "Real-time Processing"],
       industry: "Retail",
-      gif: "/project_01.gif"
+      gif: "/project_01.gif",
+      features: [
+        {
+          icon: <BarChart3 className="w-6 h-6" />,
+          title: "Real-Time Analytics",
+          description: "Monitor sales performance, customer behavior, and inventory levels with live data streaming and instant visualizations."
+        },
+        {
+          icon: <Database className="w-6 h-6" />,
+          title: "Customer Segmentation",
+          description: "Advanced ML algorithms automatically categorize customers based on purchasing patterns, demographics, and engagement metrics."
+        },
+        {
+          icon: <Monitor className="w-6 h-6" />,
+          title: "Revenue Optimization",
+          description: "Intelligent pricing recommendations and inventory management to maximize profitability across all product categories."
+        }
+      ]
     },
     {
       id: "project-2", 
@@ -74,7 +91,24 @@ export default function Home() {
       description: "Built a mobile-first patient management system serving 50,000+ patients with 99.9% uptime and HIPAA compliance.",
       metrics: ["50K+ Users", "99.9% Uptime", "HIPAA Compliant"],
       industry: "Healthcare",
-      gif: "/project_02.gif"
+      gif: "/project_02.gif",
+      features: [
+        {
+          icon: <Smartphone className="w-6 h-6" />,
+          title: "Mobile-First Design",
+          description: "Native iOS and Android apps with offline capabilities, secure messaging, and appointment scheduling for patients and providers."
+        },
+        {
+          icon: <Database className="w-6 h-6" />,
+          title: "Electronic Health Records",
+          description: "Secure, HIPAA-compliant patient data management with automated backup, audit trails, and interoperability with existing systems."
+        },
+        {
+          icon: <BarChart3 className="w-6 h-6" />,
+          title: "Clinical Analytics",
+          description: "Population health insights, treatment outcome tracking, and predictive analytics for preventive care recommendations."
+        }
+      ]
     },
     {
       id: "project-3",
@@ -82,7 +116,24 @@ export default function Home() {
       description: "Created a real-time trading analytics platform processing millions of transactions with sub-second latency.",
       metrics: ["<1s Latency", "Millions of Transactions", "Real-time Analytics"],
       industry: "Finance",
-      gif: "/project_03.gif"
+      gif: "/project_03.gif",
+      features: [
+        {
+          icon: <BarChart3 className="w-6 h-6" />,
+          title: "High-Frequency Trading",
+          description: "Ultra-low latency order execution with microsecond precision, automated risk management, and real-time market data processing."
+        },
+        {
+          icon: <Database className="w-6 h-6" />,
+          title: "Risk Analytics",
+          description: "Advanced portfolio risk assessment, stress testing, and compliance monitoring with real-time alerts and automated reporting."
+        },
+        {
+          icon: <Monitor className="w-6 h-6" />,
+          title: "Market Intelligence",
+          description: "AI-powered market trend analysis, sentiment tracking, and predictive modeling for informed trading decisions."
+        }
+      ]
     }
   ];
 
@@ -108,14 +159,22 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/CYP.jpg')",
+            height: '100vh',
+            zIndex: 0
           }}
         ></div>
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/40 via-gray-900/60 to-purple-800/40"></div>
+        <div 
+          className="fixed inset-0 bg-gradient-to-br from-purple-600/40 via-gray-900/60 to-purple-800/40" 
+          style={{ 
+            zIndex: 1,
+            height: '100vh'
+          }}
+        ></div>
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
@@ -147,7 +206,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-6">
+      <section id="services" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -182,7 +241,7 @@ export default function Home() {
       </section>
 
       {/* Case Studies Section */}
-      <section id="cases" className="py-20 px-6 bg-gray-800/30">
+      <section id="cases" className="py-20 px-6 bg-gray-900/80 backdrop-blur-md relative z-10">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -196,7 +255,7 @@ export default function Home() {
           {/* Two-column layout: Left for text, Right for sticky GIFs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left Column - Scrolling Content */}
-            <div className="space-y-32">
+            <div className="space-y-96 pb-96">
               {caseStudies.map((study, index) => (
                 <div 
                   key={index}
@@ -216,11 +275,18 @@ export default function Home() {
                     <p className="text-lg text-gray-400 mb-8 leading-relaxed">
                       {study.description}
                     </p>
-                    <div className="space-y-3">
-                      {study.metrics.map((metric, metricIndex) => (
-                        <div key={metricIndex} className="flex items-center text-green-400">
-                          <CheckCircle className="w-5 h-5 mr-3" />
-                          <span className="font-medium">{metric}</span>
+                    
+                    {/* Key Features */}
+                    <div className="mb-8 space-y-6">
+                      {study.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-start space-x-4">
+                          <div className="flex-shrink-0 p-2 rounded-lg bg-purple-500/20 text-purple-400">
+                            {feature.icon}
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-white mb-2">{feature.title}</h4>
+                            <p className="text-sm text-gray-400 leading-relaxed">{feature.description}</p>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -267,7 +333,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6">
+      <section id="contact" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -328,7 +394,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 bg-gray-900 border-t border-gray-800">
+      <footer className="py-12 px-6 bg-gray-900 border-t border-gray-800 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
