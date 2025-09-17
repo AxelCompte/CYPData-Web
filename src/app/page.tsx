@@ -1,8 +1,37 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 
+// Custom hook for intersection observer
+function useIntersectionObserver(options = {}) {
+  const [activeId, setActiveId] = useState('');
+  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveId(entry.target.id);
+        }
+      });
+    }, {
+      rootMargin: '-50% 0px -50% 0px',
+      ...options
+    });
+
+    elementsRef.current.forEach((element) => {
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [options]);
+
+  return [activeId, elementsRef] as const;
+}
+
 export default function Home() {
+  const [activeProject, elementsRef] = useIntersectionObserver();
   const services = [
     {
       icon: <Smartphone className="w-8 h-8" />,
@@ -32,22 +61,28 @@ export default function Home() {
 
   const caseStudies = [
     {
+      id: "project-1",
       title: "E-Commerce Analytics Platform",
       description: "Developed a comprehensive analytics dashboard that increased client&apos;s revenue insights by 300% and reduced reporting time by 85%.",
       metrics: ["300% Better Insights", "85% Time Reduction", "Real-time Processing"],
-      industry: "Retail"
+      industry: "Retail",
+      gif: "/project_01.gif"
     },
     {
+      id: "project-2", 
       title: "Healthcare Management System",
       description: "Built a mobile-first patient management system serving 50,000+ patients with 99.9% uptime and HIPAA compliance.",
       metrics: ["50K+ Users", "99.9% Uptime", "HIPAA Compliant"],
-      industry: "Healthcare"
+      industry: "Healthcare",
+      gif: "/project_02.gif"
     },
     {
-      title: "Financial Trading Dashboard",
+      id: "project-3",
+      title: "Financial Trading Dashboard", 
       description: "Created a real-time trading analytics platform processing millions of transactions with sub-second latency.",
       metrics: ["<1s Latency", "Millions of Transactions", "Real-time Analytics"],
-      industry: "Finance"
+      industry: "Finance",
+      gif: "/project_03.gif"
     }
   ];
 
@@ -158,30 +193,75 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {caseStudies.map((study, index) => (
-              <div key={index} className="group p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:scale-105">
-                <div className="mb-4">
-                  <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
-                    {study.industry}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-purple-400 transition-colors">
-                  {study.title}
-                </h3>
-                <p className="text-gray-400 mb-6 leading-relaxed">
-                  {study.description}
-                </p>
-                <div className="space-y-2">
-                  {study.metrics.map((metric, metricIndex) => (
-                    <div key={metricIndex} className="flex items-center text-green-400">
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      <span className="text-sm font-medium">{metric}</span>
+          {/* Two-column layout: Left for text, Right for sticky GIFs */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            {/* Left Column - Scrolling Content */}
+            <div className="space-y-32">
+              {caseStudies.map((study, index) => (
+                <div 
+                  key={index}
+                  id={study.id}
+                  ref={(el) => { elementsRef.current[index] = el; }}
+                  className="group"
+                >
+                  <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300">
+                    <div className="mb-4">
+                      <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                        {study.industry}
+                      </span>
                     </div>
-                  ))}
+                    <h3 className="text-3xl font-bold mb-6 group-hover:text-purple-400 transition-colors">
+                      {study.title}
+                    </h3>
+                    <p className="text-lg text-gray-400 mb-8 leading-relaxed">
+                      {study.description}
+                    </p>
+                    <div className="space-y-3">
+                      {study.metrics.map((metric, metricIndex) => (
+                        <div key={metricIndex} className="flex items-center text-green-400">
+                          <CheckCircle className="w-5 h-5 mr-3" />
+                          <span className="font-medium">{metric}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Right Column - Sticky GIF Display */}
+            <div className="lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
+              <div className="relative w-full h-full max-w-lg">
+                {caseStudies.map((study, index) => (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-opacity duration-500 ${
+                      activeProject === study.id ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
+                      <img
+                        src={study.gif}
+                        alt={`${study.title} demonstration`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Default state when no project is active */}
+                {!activeProject && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-600/20 to-purple-800/20 flex items-center justify-center">
+                        <BarChart3 className="w-16 h-16 text-purple-400" />
+                      </div>
+                      <p className="text-gray-400 text-lg">Scroll to explore our projects</p>
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
