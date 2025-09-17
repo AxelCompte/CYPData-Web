@@ -143,8 +143,12 @@ export default function Home() {
       <nav className="fixed top-0 w-full z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold">
-              <span className="gradient-text">CyP Data</span>
+            <div className="logo-gradient-container">
+              <img 
+                src="/logo.webp" 
+                alt="CyP Data" 
+                className="h-8 w-auto opacity-0"
+              />
             </div>
             <div className="hidden md:flex space-x-8">
               <a href="#services" className="hover:text-purple-400 transition-colors">Services</a>
@@ -398,7 +402,13 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <h3 className="text-2xl font-bold gradient-text">CyP Data</h3>
+              <div className="logo-gradient-container">
+                <img 
+                  src="/logo.webp" 
+                  alt="CyP Data" 
+                  className="h-8 w-auto opacity-0"
+                />
+              </div>
               <p className="text-gray-400 mt-2">Digital Solutions & Business Intelligence</p>
             </div>
             <div className="flex space-x-6">

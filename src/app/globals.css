@@ -80,3 +80,28 @@ body {
   background: var(--primary-purple);
   color: white;
 }
+
+/* Logo gradient tint effect using CSS mask */
+.logo-gradient-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-gradient-container img {
+  display: block;
+}
+
+.logo-gradient-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  mask: url('/logo.webp') no-repeat center center;
+  mask-size: contain;
+  -webkit-mask: url('/logo.webp') no-repeat center center;
+  -webkit-mask-size: contain;
+  pointer-events: none;
+}
