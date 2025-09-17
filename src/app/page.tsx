@@ -71,7 +71,16 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-gray-900 to-purple-800/20"></div>
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/CYP.jpg')",
+          }}
+        ></div>
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/40 via-gray-900/60 to-purple-800/40"></div>
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
