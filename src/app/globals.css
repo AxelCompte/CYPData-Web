@@ -105,3 +105,10 @@ body {
   -webkit-mask-size: contain;
   pointer-events: none;
 }
+
+/* White logo for hero section */
+.hero-logo-white {
+  position: relative;
+  display: inline-block;
+  filter: brightness(0) invert(1);
+}

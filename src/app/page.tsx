@@ -32,6 +32,19 @@ function useIntersectionObserver(options = {}) {
 
 export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
+  const [isInHero, setIsInHero] = useState(true);
+  
+  // Track if user is in hero section
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+      setIsInHero(scrollY < heroHeight * 0.8); // Hide nav when 80% through hero
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   // Mouse tracking for 3D card effect - Optimized version
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, cardRef: React.RefObject<HTMLDivElement | null>) => {
@@ -182,7 +195,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800">
+      <nav className={`fixed top-0 w-full z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800 transition-all duration-500 ${
+        isInHero ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'
+      }`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="logo-gradient-container">
@@ -223,20 +238,18 @@ export default function Home() {
         ></div>
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <div className="flex items-center justify-center gap-8 mb-6">
-            <div className="logo-gradient-container flex-shrink-0">
-              <img 
-                src="/logo.webp" 
-                alt="CyP Data" 
-                className="h-24 md:h-32 w-auto opacity-0"
-              />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              Digital Solutions<br />
-              <span className="text-4xl md:text-6xl">for the</span><br />
-              <span className="gradient-text whitespace-nowrap">Modern Enterprise</span>
-            </h1>
+          <div className="hero-logo-white flex justify-center mb-8">
+            <img 
+              src="/logo.webp" 
+              alt="CyP Data" 
+              className="h-24 md:h-32 w-auto"
+            />
           </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+            Digital Solutions <span className="text-4xl md:text-6xl">for the</span><br />
+            <span className="gradient-text whitespace-nowrap">Modern Enterprise</span>
+          </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
            Where innovative software meets actionable insights for sustainable competitive advantage.
