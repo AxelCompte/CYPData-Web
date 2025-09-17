@@ -19,7 +19,11 @@ export const metadata: Metadata = {
   description: "Spanish company offering native mobile apps, desktop applications, Business Intelligence, Big Data websites, Power BI, and data analysis solutions.",
   keywords: ["Android", "iOS", "Business Intelligence", "Big Data", "Power BI", "Data Analysis", "Digital Solutions"],
   authors: [{ name: "CyP Data" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
