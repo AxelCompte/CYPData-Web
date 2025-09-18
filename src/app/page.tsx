@@ -602,13 +602,13 @@ const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<
         const maxDistance = 150;
 
         if (distance < maxDistance) {
-          const force = (1 - distance / maxDistance) * 0.02;
-          node.vx += dx * force * 0.005;
-          node.vy += dy * force * 0.005;
+          const force = (1 - distance / maxDistance) * 1;
+          node.vx += dx * force * 0.003;
+          node.vy += dy * force * 0.003;
         }
 
         // Return to original position
-        const returnForce = 0.008;
+        const returnForce = 0.08;
         node.vx += (node.originalX - node.x) * returnForce;
         node.vy += (node.originalY - node.y) * returnForce;
 
@@ -991,7 +991,7 @@ const translations = {
       title: "Soluciones Digitales",
       subtitle: "para la",
       highlight: "Empresa Moderna",
-      description: "Donde el software innovador se encuentra con insights accionables para generar ventaja competitiva sostenible. Equipo experto en Barcelona ofreciendo soluciones digitales de vanguardia.",
+      description: "Donde el software innovador se encuentra con insights accionables para generar ventaja competitiva sostenible.",
       cta1: "Explora Nuestro Trabajo",
       cta2: "Ponte en Contacto"
     },
@@ -1132,7 +1132,7 @@ const translations = {
       title: "Digital Solutions",
       subtitle: "for the",
       highlight: "Modern Enterprise",
-      description: "Where innovative software meets actionable insights for sustainable competitive advantage. Expert team in Barcelona delivering cutting-edge digital solutions.",
+      description: "Where innovative software meets actionable insights for sustainable competitive advantage.",
       cta1: "Explore Our Work",
       cta2: "Get In Touch"
     },
