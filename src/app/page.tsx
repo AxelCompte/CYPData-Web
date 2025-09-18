@@ -1280,6 +1280,7 @@ export default function Home() {
   const [isInHero, setIsInHero] = useState(true);
   const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
   const servicesRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
   const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -2070,8 +2071,11 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-gray-900 relative z-10">
-        <div className="container mx-auto max-w-7xl">
+      <section ref={contactRef} id="contact" className="py-32 px-6 bg-gray-900 relative z-10 overflow-hidden min-h-screen">
+        {/* Constellation Background */}
+        <ConstellationBackground sectionRef={contactRef} />
+        
+        <div className="container mx-auto max-w-7xl relative z-20">
           <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.contact.title} <span className="gradient-text">{t.contact.titleHighlight}</span>
