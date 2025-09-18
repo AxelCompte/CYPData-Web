@@ -715,6 +715,10 @@ const translations = {
         description: "Sitios web y aplicaciones web modernas, responsivas y optimizadas que ofrecen experiencias excepcionales y resultados medibles."
       }
     },
+    midline: {
+      title: "Soluciones a medida para cada desafío",
+      subtitle: "Nos adaptamos a tu visión y requerimientos del proyecto"
+    },
     cases: {
       title: "Historias de",
       titleHighlight: "Éxito",
@@ -851,6 +855,10 @@ const translations = {
         title: "Web Development",
         description: "Modern, responsive, and optimized websites and web applications that deliver exceptional user experiences and measurable results."
       }
+    },
+    midline: {
+      title: "Tailored solutions for every challenge",
+      subtitle: "We adapt to your vision and project requirements"
     },
     cases: {
       title: "Success",
@@ -1274,6 +1282,40 @@ export default function Home() {
               </StaggerChild>
             ))}
           </StaggerContainer>
+        </div>
+      </section>
+
+      {/* Mid-line Header */}
+      <section className="relative py-16 px-6 overflow-hidden">
+        {/* Enhanced Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-purple-900/30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(139,92,246,0.1),transparent_50%)]"></div>
+        
+        {/* Animated background elements */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-blue-500/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
+        
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <FadeInWhenVisible direction="up" className="text-center">
+            <div className="relative">
+              {/* Decorative elements */}
+              <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent transform -translate-y-1/2"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full"></div>
+              
+              {/* Main content with better styling */}
+              <div className="relative bg-gradient-to-r from-gray-900/90 via-gray-800/95 to-gray-900/90 backdrop-blur-sm px-12 py-6 rounded-2xl border border-purple-500/20 shadow-2xl shadow-purple-500/10 inline-block">
+                <div className="text-center space-y-2">
+                  <h3 className="text-2xl md:text-4xl font-bold">
+                    <span className="gradient-text">{t.midline.title}</span>
+                  </h3>
+                  <p className="text-lg md:text-xl text-gray-300 font-medium">
+                    {t.midline.subtitle}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </FadeInWhenVisible>
         </div>
       </section>
 
