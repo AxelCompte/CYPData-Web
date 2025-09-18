@@ -723,9 +723,21 @@ const ExpandableServiceCard = ({
   setExpandedCardIndex: (index: number | null) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Calculate expansion direction based on card position
   const getExpansionDirection = () => {
@@ -749,6 +761,20 @@ const ExpandableServiceCard = ({
     setExpandedCardIndex(expanded ? index : null);
   };
 
+  // Handle click for mobile
+  const handleMobileClick = () => {
+    if (isMobile) {
+      handleExpansion(!isExpanded);
+    }
+  };
+
+  // Handle hover for desktop
+  const handleDesktopHover = (hovering: boolean) => {
+    if (!isMobile) {
+      handleExpansion(hovering);
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
     
@@ -760,7 +786,8 @@ const ExpandableServiceCard = ({
   };
 
   const getTransform = () => {
-    if (!isHovered || !cardRef.current) return '';
+    // Disable 3D tilt effect on mobile
+    if (!isHovered || !cardRef.current || isMobile) return '';
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.width / 2;
@@ -775,15 +802,17 @@ const ExpandableServiceCard = ({
   return (
     <motion.div
       className={`group relative h-fit transition-opacity duration-300 ${
-        isOtherCardExpanded ? 'opacity-40' : 'opacity-100'
+        isOtherCardExpanded && !isMobile ? 'opacity-40' : 'opacity-100'
       }`}
       style={{ 
         zIndex: isExpanded ? 50 : isOtherCardExpanded ? 1 : 10 
       }}
-      onHoverStart={() => handleExpansion(true)}
-      onHoverEnd={() => handleExpansion(false)}
+      onHoverStart={() => handleDesktopHover(true)}
+      onHoverEnd={() => handleDesktopHover(false)}
+      layout={isMobile} // Enable layout animations for mobile
+      transition={isMobile ? { duration: 0.4, ease: [0.4, 0, 0.2, 1] } : undefined}
     >
-      <div
+      <motion.div
         ref={cardRef}
         className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer relative"
         data-cursor-hover
@@ -791,9 +820,24 @@ const ExpandableServiceCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onMouseMove={handleMouseMove}
+        onClick={handleMobileClick}
+        animate={isMobile && isExpanded ? { 
+          scale: 1.02,
+          borderColor: 'rgb(168 85 247 / 0.5)',
+          boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 0 25px rgb(168 85 247 / 0.15)'
+        } : isMobile ? {
+          scale: 1,
+          borderColor: 'rgb(156 163 175 / 0.5)',
+          boxShadow: '0 0 0 rgba(0,0,0,0)'
+        } : {}}
+        transition={{
+          scale: { duration: 0.3, ease: "easeOut" },
+          borderColor: { duration: 0.3 },
+          boxShadow: { duration: 0.3 }
+        }}
         style={{
           transform: getTransform(),
-          transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.3s ease-out',
+          transition: isHovered && !isMobile ? 'transform 0.1s ease-out' : 'transform 0.3s ease-out',
         }}
       >
         {/* Main Content */}
@@ -806,42 +850,56 @@ const ExpandableServiceCard = ({
         
         <p className="text-gray-400 mb-2 leading-relaxed">{service.description}</p>
         
-        {/* Expandable Technology Icons Section - Smart positioned overlay */}
-        {isExpanded && (
-          <motion.div
-            className={`absolute ${
-              isBottomRow 
-                ? 'bottom-full mb-2' // Expand upward for bottom cards
-                : 'top-full mt-2'    // Expand downward for top cards
-            } ${
-              isRightColumn 
-                ? 'right-0 left-auto' // Align right for right column cards
-                : 'left-0 right-auto' // Align left for left column cards
-            } w-full`}
-            style={{ 
-              zIndex: isBottomRow ? 60 : 70 // Higher z-index for top cards expanding down
-            }}
-            initial={{ 
-              opacity: 0, 
-              y: isBottomRow ? 10 : -10, 
-              scale: 0.95 
-            }}
-            animate={{ 
-              opacity: 1, 
-              y: 0, 
-              scale: 1 
-            }}
-            exit={{ 
-              opacity: 0, 
-              y: isBottomRow ? 10 : -10, 
-              scale: 0.95 
-            }}
-            transition={{
-              duration: 0.3,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-          >
-            <div className="p-6 rounded-2xl bg-gray-800/95 border border-purple-500/30 backdrop-blur-sm shadow-2xl shadow-purple-500/10">
+        {/* Expandable Technology Icons Section - Responsive behavior */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              className={`${
+                isMobile 
+                  ? 'relative mt-4 overflow-hidden' // Mobile: inline expansion with overflow hidden
+                  : `absolute ${
+                      isBottomRow 
+                        ? 'bottom-full mb-2' // Desktop: expand upward for bottom cards
+                        : 'top-full mt-2'    // Desktop: expand downward for top cards
+                    } ${
+                      isRightColumn 
+                        ? 'right-0 left-auto' // Align right for right column cards
+                        : 'left-0 right-auto' // Align left for left column cards
+                    } w-full`
+              }`}
+              style={{ 
+                zIndex: isMobile ? 20 : (isBottomRow ? 60 : 70)
+              }}
+              initial={{ 
+                opacity: 0, 
+                height: isMobile ? 0 : 'auto',
+                y: isMobile ? 0 : (isBottomRow ? 10 : -10), 
+                scale: isMobile ? 1 : 0.95 
+              }}
+              animate={{ 
+                opacity: 1, 
+                height: 'auto',
+                y: 0, 
+                scale: 1 
+              }}
+              exit={{ 
+                opacity: 0, 
+                height: isMobile ? 0 : 'auto',
+                y: isMobile ? 0 : (isBottomRow ? 10 : -10), 
+                scale: isMobile ? 1 : 0.95 
+              }}
+              transition={{
+                duration: isMobile ? 0.4 : 0.3,
+                ease: [0.4, 0, 0.2, 1],
+                height: { duration: isMobile ? 0.4 : 0 },
+                opacity: { duration: isMobile ? 0.3 : 0.3 }
+              }}
+            >
+            <div className={`p-6 rounded-2xl ${
+              isMobile 
+                ? 'bg-gray-700/50 border border-gray-600/50' // Mobile: simpler styling
+                : 'bg-gray-800/95 border border-purple-500/30 backdrop-blur-sm shadow-2xl shadow-purple-500/10' // Desktop: fancy overlay
+            }`}>
               <div className="flex items-center mb-4">
                 <Code className="w-4 h-4 text-purple-400 mr-2" />
                 <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
@@ -850,7 +908,9 @@ const ExpandableServiceCard = ({
               </div>
               
               <motion.div 
-                className="grid grid-cols-4 gap-4"
+                className={`grid ${
+                  isMobile ? 'grid-cols-2 gap-3' : 'grid-cols-4 gap-4'
+                }`}
                 initial={false}
                 animate={{ y: 0 }}
                 transition={{
@@ -869,12 +929,16 @@ const ExpandableServiceCard = ({
                       delay: techIndex * 0.05 + 0.15,
                       ease: "easeOut"
                     }}
-                    className="flex flex-col items-center p-3 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech"
+                    className={`flex flex-col items-center ${
+                      isMobile ? 'p-2' : 'p-3'
+                    } rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech`}
                   >
                     <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
                       {getTechIcon(tech)}
                     </div>
-                    <span className="text-xs text-gray-400 text-center leading-tight">
+                    <span className={`${
+                      isMobile ? 'text-xs' : 'text-xs'
+                    } text-gray-400 text-center leading-tight`}>
                       {tech}
                     </span>
                   </motion.div>
@@ -882,8 +946,9 @@ const ExpandableServiceCard = ({
               </motion.div>
             </div>
           </motion.div>
-        )}
-      </div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 };
@@ -1206,6 +1271,7 @@ export default function Home() {
   const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
   const servicesRef = useRef<HTMLElement>(null);
   const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Get current translations
   const t = translations[language];
@@ -1222,6 +1288,20 @@ export default function Home() {
   // Language switcher
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'es' ? 'en' : 'es');
+  };
+
+  // Smooth scroll function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const navHeight = 80; // Account for fixed navigation height
+      const elementTop = element.offsetTop - navHeight;
+      
+      window.scrollTo({
+        top: elementTop,
+        behavior: 'smooth'
+      });
+    }
   };
   
   // Handle form input changes
@@ -1410,10 +1490,18 @@ export default function Home() {
                 priority
               />
             </div>
+            
+            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
-              <NavLink href="#services" className="hover:text-purple-400">{t.nav.services}</NavLink>
-              <NavLink href="#cases" className="hover:text-purple-400">{t.nav.cases}</NavLink>
-              <NavLink href="#contact" className="hover:text-purple-400">{t.nav.contact}</NavLink>
+              <button onClick={() => scrollToSection('services')} className="hover:text-purple-400 transition-colors">
+                {t.nav.services}
+              </button>
+              <button onClick={() => scrollToSection('cases')} className="hover:text-purple-400 transition-colors">
+                {t.nav.cases}
+              </button>
+              <button onClick={() => scrollToSection('contact')} className="hover:text-purple-400 transition-colors">
+                {t.nav.contact}
+              </button>
               
               {/* Language Switcher */}
               <button
@@ -1425,7 +1513,117 @@ export default function Home() {
                 <span className="text-sm font-medium">{language.toUpperCase()}</span>
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden flex flex-col items-center justify-center w-8 h-8 space-y-1"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+            >
+              <motion.div
+                className="w-6 h-0.5 bg-white rounded-full"
+                animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+              <motion.div
+                className="w-6 h-0.5 bg-white rounded-full"
+                animate={isMobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+              <motion.div
+                className="w-6 h-0.5 bg-white rounded-full"
+                animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                className="md:hidden absolute top-full left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <div className="container mx-auto px-6 py-6">
+                  <div className="flex flex-col space-y-4">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      <button 
+                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        onClick={() => {
+                          scrollToSection('services');
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {t.nav.services}
+                      </button>
+                    </motion.div>
+                    
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <button 
+                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        onClick={() => {
+                          scrollToSection('cases');
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {t.nav.cases}
+                      </button>
+                    </motion.div>
+                    
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <button 
+                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        onClick={() => {
+                          scrollToSection('contact');
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {t.nav.contact}
+                      </button>
+                    </motion.div>
+
+                    {/* Mobile Language Switcher */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="pt-4"
+                    >
+                      <button
+                        onClick={() => {
+                          toggleLanguage();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="flex items-center space-x-3 py-3 px-4 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors w-full"
+                        title={language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+                      >
+                        <Globe className="w-5 h-5" />
+                        <span className="text-lg font-medium">
+                          {language === 'es' ? 'Español' : 'English'}
+                        </span>
+                      </button>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </nav>
 
@@ -1521,8 +1719,8 @@ export default function Home() {
             </p>
           </FadeInWhenVisible>
 
-          <div className="h-[600px] overflow-visible relative">
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full" staggerDelay={0.2}>
+          <div className="h-[600px] md:h-[600px] h-auto overflow-visible relative">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full md:h-full h-auto" staggerDelay={0.2}>
               {services.map((service, index) => (
                 <StaggerChild key={index} direction="up">
                   <ExpandableServiceCard 
