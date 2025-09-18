@@ -1887,6 +1887,178 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Clients Section */}
+      <section className="py-20 px-6 bg-gray-900/50 relative z-10">
+        <div className="container mx-auto max-w-7xl">
+          <FadeInWhenVisible direction="up" className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Trusted by <span className="gradient-text">Industry Leaders</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              We've had the privilege of working with some of the world's most innovative companies across various industries.
+            </p>
+          </FadeInWhenVisible>
+
+          {/* Client Logo Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2 lg:gap-2 items-center justify-items-center">
+            <div className="client-logo-item" data-logo="mercedes">
+              <img 
+                src="/company-logos/mercedez_benz_logo.webp" 
+                alt="Mercedes Benz" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="volkswagen">
+              <img 
+                src="/company-logos/volkswagen_logo.webp" 
+                alt="Volkswagen" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="nissan">
+              <img 
+                src="/company-logos/nissan_logo.webp" 
+                alt="Nissan" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="seat">
+              <img 
+                src="/company-logos/seat_logo.webp" 
+                alt="SEAT" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="pfizer">
+              <img 
+                src="/company-logos/pfizer_logo.webp" 
+                alt="Pfizer" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="magna">
+              <img 
+                src="/company-logos/magna_logo.webp" 
+                alt="Magna" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="gestamp">
+              <img 
+                src="/company-logos/gestamp_logo.webp" 
+                alt="Gestamp" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="lear">
+              <img 
+                src="/company-logos/lear_corporation_logo.webp" 
+                alt="Lear Corporation" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="plastic-omnium">
+              <img 
+                src="/company-logos/plastic_omnium_logo.webp" 
+                alt="Plastic Omnium" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="benteler">
+              <img 
+                src="/company-logos/benteler_logo.webp" 
+                alt="Benteler" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="agc">
+              <img 
+                src="/company-logos/agc_logo.webp" 
+                alt="AGC" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="autoneum">
+              <img 
+                src="/company-logos/autoneum_logo.webp" 
+                alt="Autoneum" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="ti-automotive">
+              <img 
+                src="/company-logos/ti_automotive_logo.webp" 
+                alt="TI Automotive" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="grupo-antolin">
+              <img 
+                src="/company-logos/grupo-antolin-logo-png_seeklogo-201813.webp" 
+                alt="Grupo Antolin" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="balearia">
+              <img 
+                src="/company-logos/balearia_logo.webp" 
+                alt="Balearia" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="schmitz">
+              <img 
+                src="/company-logos/schmitz_cargo_bull_logo.webp" 
+                alt="Schmitz Cargobull" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="berge">
+              <img 
+                src="/company-logos/berge_logo.webp" 
+                alt="Berge" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="doga">
+              <img 
+                src="/company-logos/doga_logo.webp" 
+                alt="Doga" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="silence">
+              <img 
+                src="/company-logos/silence_logo.webp" 
+                alt="Silence" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="smp">
+              <img 
+                src="/company-logos/smp_logo.webp" 
+                alt="SMP" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="enlog">
+              <img 
+                src="/company-logos/enlog.webp" 
+                alt="Enlog" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="sese">
+              <img 
+                src="/company-logos/logo-sese.webp" 
+                alt="SESE" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">

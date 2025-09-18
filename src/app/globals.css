@@ -112,3 +112,49 @@ body {
   display: inline-block;
   filter: brightness(0) invert(1);
 }
+
+/* Client logos hover effect */
+.client-logo-item {
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  --gradient-start: #8b5cf6;
+  --gradient-end: #a855f7;
+}
+
+.client-logo-item:hover {
+  transform: translateY(-4px) scale(1.15);
+}
+
+.client-logo-item img {
+  transition: all 0.3s ease;
+  filter: brightness(1) contrast(1);
+}
+
+.client-logo-item:hover img {
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1000%) hue-rotate(270deg) brightness(1.2);
+  transform: scale(1.1);
+}
+
+
+
+
+
+/* Infinite scroll animation for client logos */
+@keyframes infinite-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 30s linear infinite;
+}
+
+.animate-infinite-scroll:hover {
+  animation-play-state: paused;
+}
