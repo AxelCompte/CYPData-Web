@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe } from 'lucide-react';
 
 // Optimized video component with GIF fallback
@@ -76,6 +77,337 @@ const OptimizedVideo = ({
         Your browser doesn't support video playback.
       </p>
     </video>
+  );
+};
+
+// Enhanced Button Component with Advanced Micro-Interactions
+const EnhancedButton = ({ 
+  children, 
+  variant = 'primary', 
+  size = 'default',
+  href,
+  onClick,
+  disabled = false,
+  loading = false,
+  className = '',
+  ...props 
+}: {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
+  size?: 'small' | 'default' | 'large';
+  href?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  className?: string;
+  [key: string]: any;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [ripples, setRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
+  const [isPressed, setIsPressed] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
+
+  const baseClasses = "relative overflow-hidden font-medium transition-all duration-200 ease-out cursor-pointer select-none";
+  
+  const variantClasses = {
+    primary: "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-purple-500/25",
+    secondary: "bg-gray-800 text-white border border-gray-700 hover:border-purple-500",
+    ghost: "text-purple-400 hover:text-purple-300 hover:bg-purple-500/10",
+    outline: "border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
+  };
+
+  const sizeClasses = {
+    small: "px-4 py-2 text-sm rounded-lg",
+    default: "px-6 py-3 text-base rounded-xl",
+    large: "px-8 py-4 text-lg rounded-xl"
+  };
+
+  const createRipple = (event: React.MouseEvent) => {
+    const button = buttonRef.current;
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    const newRipple = {
+      id: Date.now(),
+      x,
+      y
+    };
+
+    setRipples(prev => [...prev, newRipple]);
+    
+    // Remove ripple after animation
+    setTimeout(() => {
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+    }, 600);
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
+    if (disabled || loading) return;
+    
+    createRipple(event);
+    onClick?.();
+  };
+
+  const buttonMotion = {
+    scale: isPressed ? 0.98 : isHovered ? 1.02 : 1,
+    y: isPressed ? 1 : 0,
+  };
+
+  const Component = href ? motion.a : motion.button;
+  
+  return (
+    <Component
+      ref={buttonRef as any}
+      href={href}
+      onClick={handleClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      disabled={disabled}
+      className={`
+        ${baseClasses}
+        ${variantClasses[variant]}
+        ${sizeClasses[size]}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+        ${className}
+      `}
+      animate={buttonMotion}
+      transition={{ duration: 0.15, ease: "easeOut" }}
+      whileTap={{ scale: 0.98 }}
+      {...props}
+    >
+      {/* Magnetic hover effect background */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0"
+        animate={{ opacity: isHovered ? 0.1 : 0 }}
+        transition={{ duration: 0.2 }}
+      />
+      
+      {/* Ripple effects */}
+      <AnimatePresence>
+        {ripples.map((ripple) => (
+          <motion.div
+            key={ripple.id}
+            className="absolute bg-white rounded-full pointer-events-none"
+            style={{
+              left: ripple.x - 2,
+              top: ripple.y - 2,
+              width: 4,
+              height: 4,
+            }}
+            initial={{ scale: 0, opacity: 0.5 }}
+            animate={{ scale: 20, opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
+        ))}
+      </AnimatePresence>
+
+      {/* Content */}
+      <span className="relative flex items-center justify-center gap-2">
+        {loading && (
+          <motion.div
+            className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+        )}
+        {children}
+        {variant === 'primary' && !loading && (
+          <motion.div
+            animate={{ x: isHovered ? 4 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ArrowRight className="w-4 h-4" />
+          </motion.div>
+        )}
+      </span>
+
+      {/* Shine effect for primary buttons */}
+      {variant === 'primary' && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0"
+          animate={{ 
+            x: isHovered ? "100%" : "-100%",
+            opacity: isHovered ? [0, 0.1, 0] : 0 
+          }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+        />
+      )}
+    </Component>
+  );
+};
+
+// Enhanced Navigation Link Component
+const NavLink = ({ 
+  href, 
+  children, 
+  className = "" 
+}: { 
+  href: string; 
+  children: React.ReactNode; 
+  className?: string; 
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <motion.a
+      href={href}
+      className={`relative py-2 transition-colors ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ y: -1 }}
+      transition={{ duration: 0.2 }}
+    >
+      {children}
+      
+      {/* Animated underline */}
+      <motion.div
+        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
+        initial={{ width: 0 }}
+        animate={{ width: isHovered ? "100%" : 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      />
+    </motion.a>
+  );
+};
+
+// Scroll Animation Components
+const FadeInWhenVisible = ({ 
+  children, 
+  delay = 0, 
+  direction = 'up',
+  className = '' 
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  className?: string;
+}) => {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.1
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+  const directionVariants = {
+    up: { y: 40, opacity: 0 },
+    down: { y: -40, opacity: 0 },
+    left: { x: 40, opacity: 0 },
+    right: { x: -40, opacity: 0 }
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      animate={controls}
+      initial={directionVariants[direction]}
+      variants={{
+        visible: {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 0.6,
+            delay,
+            ease: "easeOut"
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const StaggerContainer = ({ 
+  children, 
+  className = '',
+  staggerDelay = 0.1 
+}: {
+  children: React.ReactNode;
+  className?: string;
+  staggerDelay?: number;
+}) => {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.1
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      animate={controls}
+      initial="hidden"
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: staggerDelay
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const StaggerChild = ({ 
+  children, 
+  direction = 'up',
+  className = '' 
+}: {
+  children: React.ReactNode;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  className?: string;
+}) => {
+  const directionVariants = {
+    up: { y: 40, opacity: 0 },
+    down: { y: -40, opacity: 0 },
+    left: { x: 40, opacity: 0 },
+    right: { x: -40, opacity: 0 }
+  };
+
+  return (
+    <motion.div
+      variants={{
+        hidden: directionVariants[direction],
+        visible: {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 0.6,
+            ease: "easeOut"
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 };
 function useIntersectionObserver(options = {}) {
@@ -604,9 +936,9 @@ export default function Home() {
               />
             </div>
             <div className="hidden md:flex space-x-8 items-center">
-              <a href="#services" className="hover:text-purple-400 transition-colors">{t.nav.services}</a>
-              <a href="#cases" className="hover:text-purple-400 transition-colors">{t.nav.cases}</a>
-              <a href="#contact" className="hover:text-purple-400 transition-colors">{t.nav.contact}</a>
+              <NavLink href="#services" className="hover:text-purple-400">{t.nav.services}</NavLink>
+              <NavLink href="#cases" className="hover:text-purple-400">{t.nav.cases}</NavLink>
+              <NavLink href="#contact" className="hover:text-purple-400">{t.nav.contact}</NavLink>
               
               {/* Language Switcher */}
               <button
@@ -644,7 +976,7 @@ export default function Home() {
         ></div>
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <div className="hero-logo-white flex justify-center mb-8">
+          <FadeInWhenVisible direction="up" delay={0.2} className="hero-logo-white flex justify-center mb-8">
             <Image 
               src="/logo.webp" 
               alt="CyP Data" 
@@ -653,33 +985,42 @@ export default function Home() {
               className="h-24 md:h-32 w-auto"
               priority
             />
-          </div>
+          </FadeInWhenVisible>
           
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-            <span className="sr-only">CyP Data - </span>
-            {t.hero.title} <span className="text-4xl md:text-6xl">{t.hero.subtitle}</span><br />
-            <span className="gradient-text whitespace-nowrap">{t.hero.highlight}</span>
-          </h1>
+          <FadeInWhenVisible direction="up" delay={0.4}>
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+              <span className="sr-only">CyP Data - </span>
+              {t.hero.title} <span className="text-4xl md:text-6xl">{t.hero.subtitle}</span><br />
+              <span className="gradient-text whitespace-nowrap">{t.hero.highlight}</span>
+            </h1>
+          </FadeInWhenVisible>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-           {t.hero.description}
-          </p>
+          <FadeInWhenVisible direction="up" delay={0.6}>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+             {t.hero.description}
+            </p>
+          </FadeInWhenVisible>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
+          <FadeInWhenVisible direction="up" delay={0.8}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <EnhancedButton 
               href="#cases"
-              className="gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2 hover:scale-105"
+              variant="primary"
+              size="large"
+              className="text-lg font-semibold"
             >
               {t.hero.cta1}
-              <ArrowRight className="w-5 h-5" />
-            </a>
-            <a 
+            </EnhancedButton>
+            <EnhancedButton 
               href="#contact"
-              className="border-2 border-purple-500 text-purple-400 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-500/10 transition-all duration-300 hover:scale-105"
+              variant="outline"
+              size="large"
+              className="text-lg font-semibold"
             >
               {t.hero.cta2}
-            </a>
-          </div>
+            </EnhancedButton>
+            </div>
+          </FadeInWhenVisible>
         </div>
 
         {/* Scroll Indicator */}
@@ -693,26 +1034,26 @@ export default function Home() {
       {/* Services Section */}
       <section id="services" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <header className="text-center mb-16">
+          <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.services.title} <span className="gradient-text">{t.services.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               {t.services.description}
             </p>
-          </header>
+          </FadeInWhenVisible>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerDelay={0.2}>
             {services.map((service, index) => {
               const cardRef = useRef<HTMLDivElement>(null);
               
               return (
-                <div 
-                  key={index} 
-                  ref={cardRef}
-                  className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2 cursor-pointer"
-                  style={{ 
-                    transformStyle: 'preserve-3d',
+                <StaggerChild key={index} direction="up">
+                  <div 
+                    ref={cardRef}
+                    className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2 cursor-pointer"
+                    style={{ 
+                      transformStyle: 'preserve-3d',
                     transition: 'transform 0.1s ease-out'
                   }}
                   onMouseMove={(e) => handleMouseMove(e, cardRef)}
@@ -733,29 +1074,35 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+                </StaggerChild>
               );
             })}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* Case Studies Section */}
       <section id="cases" className="py-20 px-6 bg-gray-900/80 backdrop-blur-md relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <header className="text-center mb-16">
+          <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.cases.title} <span className="gradient-text">{t.cases.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               {t.cases.description}
             </p>
-          </header>
+          </FadeInWhenVisible>
 
           {/* Two-column layout: Left for text, Right for sticky GIFs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left Column - Scrolling Content */}
-            <div className="space-y-8 lg:space-y-96 lg:pb-96">
+            <StaggerContainer className="space-y-8 lg:space-y-96 lg:pb-96" staggerDelay={0.3}>
               {caseStudies.map((study, index) => (
+                <StaggerChild 
+                  key={study.id}
+                  direction="left"
+                  className="group"
+                >
                 <div 
                   key={index}
                   id={study.id}
@@ -802,8 +1149,9 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+                </StaggerChild>
               ))}
-            </div>
+            </StaggerContainer>
 
             {/* Right Column - Sticky GIF Display (Desktop Only) */}
             <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
@@ -846,14 +1194,14 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <header className="text-center mb-16">
+          <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.contact.title} <span className="gradient-text">{t.contact.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               {t.contact.description}
             </p>
-          </header>
+          </FadeInWhenVisible>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Contact Info */}
@@ -992,23 +1340,21 @@ export default function Home() {
                 </div>
 
                 {/* Submit Button */}
-                <button
+                <EnhancedButton
                   type="submit"
+                  variant="primary"
+                  size="large"
                   disabled={isSubmitting}
-                  className="w-full gradient-primary text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  loading={isSubmitting}
+                  className="w-full text-lg font-semibold"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      {t.contact.form.sending}
-                    </>
-                  ) : (
+                  {isSubmitting ? t.contact.form.sending : (
                     <>
                       <Send className="w-5 h-5" />
                       {t.contact.form.submit}
                     </>
                   )}
-                </button>
+                </EnhancedButton>
 
                 {/* Submit Message */}
                 {submitMessage && (
@@ -1046,9 +1392,9 @@ export default function Home() {
               <p className="text-gray-400 mt-2">{t.footer.description}</p>
             </div>
             <div className="flex space-x-6">
-              <a href="#services" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.services}</a>
-              <a href="#cases" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.cases}</a>
-              <a href="#contact" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.contact}</a>
+              <NavLink href="#services" className="text-gray-400 hover:text-purple-400">{t.nav.services}</NavLink>
+              <NavLink href="#cases" className="text-gray-400 hover:text-purple-400">{t.nav.cases}</NavLink>
+              <NavLink href="#contact" className="text-gray-400 hover:text-purple-400">{t.nav.contact}</NavLink>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
