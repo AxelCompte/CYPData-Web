@@ -410,6 +410,75 @@ const StaggerChild = ({
     </motion.div>
   );
 };
+
+// Enhanced Project Card Animation Component for Success Stories
+const AnimatedProjectCard = ({ children, index }: {
+  children: React.ReactNode;
+  index: number;
+}) => {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const inView = useInView(ref, {
+    once: false, // Allow re-triggering for enter/exit effects
+    amount: 0.3
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    } else {
+      controls.start('hidden');
+    }
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      animate={controls}
+      initial="hidden"
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 60,
+          scale: 0.95,
+          transition: {
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: {
+            duration: 0.8,
+            delay: index * 0.1,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }
+        }
+      }}
+      className="group"
+    >
+      <motion.div
+        whileHover={{
+          scale: 1.03,
+          y: -8,
+          transition: { 
+            duration: 0.3, 
+            ease: "easeOut" 
+          }
+        }}
+        whileTap={{
+          scale: 0.98,
+          transition: { duration: 0.1 }
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 function useIntersectionObserver(options = {}) {
   const [activeId, setActiveId] = useState('');
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -1096,20 +1165,17 @@ export default function Home() {
           {/* Two-column layout: Left for text, Right for sticky GIFs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left Column - Scrolling Content */}
-            <StaggerContainer className="space-y-8 lg:space-y-96 lg:pb-96" staggerDelay={0.3}>
+            <div className="space-y-8 lg:space-y-96 lg:pb-96">
               {caseStudies.map((study, index) => (
-                <StaggerChild 
+                <AnimatedProjectCard 
                   key={study.id}
-                  direction="left"
-                  className="group"
+                  index={index}
                 >
                 <div 
-                  key={index}
                   id={study.id}
                   ref={(el) => { elementsRef.current[index] = el; }}
-                  className="group"
                 >
-                  <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300">
+                  <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
                     <div className="mb-4">
                       <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
                         {study.industry}
@@ -1149,9 +1215,9 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                </StaggerChild>
+                </AnimatedProjectCard>
               ))}
-            </StaggerContainer>
+            </div>
 
             {/* Right Column - Sticky GIF Display (Desktop Only) */}
             <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
