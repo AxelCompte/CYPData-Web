@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare } from 'lucide-react';
 
 // Custom hook for intersection observer
 function useIntersectionObserver(options = {}) {
@@ -33,6 +33,54 @@ function useIntersectionObserver(options = {}) {
 export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
   const [isInHero, setIsInHero] = useState(true);
+  
+  // Contact form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+  
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage('');
+    
+    try {
+      // TODO: Replace with your actual API endpoint
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSubmitMessage('¡Mensaje enviado correctamente! Te contactaremos pronto.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error('Error al enviar el mensaje');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitMessage('Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos directamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   // Track if user is in hero section
   useEffect(() => {
@@ -514,16 +562,106 @@ export default function Home() {
               </div>
             </div>
 
-            {/* CTA Card */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 hover:scale-105 transition-transform duration-300">
+            {/* Contact Form Card */}
+            <div className="p-8 rounded-2xl bg-gray-800/60 border border-gray-700/50 hover:border-gray-600/60 transition-colors duration-300">
               <h3 className="text-2xl font-bold mb-4">Start Your Project Today</h3>
               <p className="text-gray-400 mb-6">
-                From concept to reality, we&apos;ll guide you through every step of your digital transformation journey.
+                From <span className="gradient-text font-semibold">concept to reality</span>, we&apos;ll guide you through every step of your digital transformation journey.
               </p>
-              <button className="w-full gradient-primary text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105">
-                Get Started Now
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              
+              {/* Contact Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Name Field */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                    <Mail className="w-4 h-4 inline mr-2" />
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                    placeholder="your.email@company.com"
+                  />
+                </div>
+
+                {/* Message Field */}
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                    <MessageSquare className="w-4 h-4 inline mr-2" />
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-colors duration-200 resize-vertical"
+                    placeholder="Tell us about your project idea, requirements, or any questions you have..."
+                    style={{ 
+                      minHeight: '100px',
+                      maxHeight: '300px'
+                    }}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full gradient-primary text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+
+                {/* Submit Message */}
+                {submitMessage && (
+                  <div className={`p-4 rounded-lg text-sm ${
+                    submitMessage.includes('correctamente') 
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                  }`}>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                      {submitMessage}
+                    </div>
+                  </div>
+                )}
+              </form>
             </div>
           </div>
         </div>
