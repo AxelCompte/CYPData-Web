@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe } from 'lucide-react';
 
 // Optimized video component with GIF fallback
+// Optimized video component without hydration issues
 const OptimizedVideo = ({ 
   src, 
   alt, 
@@ -17,46 +18,62 @@ const OptimizedVideo = ({
   priority?: boolean 
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [key, setKey] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
-  // Use the .webm source directly since files are already converted
-  const videoSrc = src;
-  const gifFallback = src.replace('.webm', '.gif');
+  // Only run on client side to avoid hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+    setIsLoaded(false);
+    setKey(prev => prev + 1);
+    
+    // Small delay to ensure video element is ready
+    const timer = setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.load(); // Force reload the video
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [src]);
 
-  // If video fails to load or has error, show GIF fallback
-  if (hasError) {
-    return (
-      <Image
-        src={gifFallback}
-        alt={alt}
-        fill
-        className={`object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-        loading={priority ? "eager" : "lazy"}
-        onLoad={() => setIsLoaded(true)}
-        priority={priority}
-        unoptimized
-      />
-    );
-  }
+  // Use a stable cache-busting approach
+  const videoSrc = isMounted ? `${src}?v=${key}` : src;
 
   return (
     <video
-      className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 object-cover`}
+      ref={videoRef}
+      key={`${src}-${key}`} // Force remount on key change
+      className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 object-cover w-full h-full`}
       autoPlay
       loop
       muted
       playsInline
-      onLoadedData={() => setIsLoaded(true)}
-      onError={() => {
-        console.log(`Video failed to load: ${videoSrc}, falling back to GIF`);
-        setHasError(true);
+      onLoadedData={() => {
+        console.log(`Video loaded: ${src}`);
+        setIsLoaded(true);
       }}
-      preload={priority ? "metadata" : "none"}
+      onCanPlay={() => {
+        // Ensure video plays even after reload
+        if (videoRef.current) {
+          videoRef.current.play().catch(console.error);
+        }
+      }}
+      onError={(e) => {
+        console.error(`Video failed to load: ${src}`, e);
+        // Try to reload the video on error
+        setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.load();
+          }
+        }, 1000);
+      }}
+      preload="metadata"
     >
       <source src={videoSrc} type="video/webm" />
-      {/* Fallback message for very old browsers */}
       <p className="text-gray-400 text-center p-4">
-        Your browser doesn't support video playback. Please update your browser for the best experience.
+        Your browser doesn't support video playback.
       </p>
     </video>
   );
@@ -497,7 +514,7 @@ export default function Home() {
       description: "Developed a comprehensive analytics dashboard that increased client's revenue insights by 300% and reduced reporting time by 85%.",
       metrics: ["300% Better Insights", "85% Time Reduction", "Real-time Processing"],
       industry: "Retail",
-      gif: "/project_01.gif",
+      gif: "/project_01.webm",
       features: [
         {
           icon: <BarChart3 className="w-6 h-6" />,
@@ -522,7 +539,7 @@ export default function Home() {
       description: "Built a mobile-first patient management system serving 50,000+ patients with 99.9% uptime and HIPAA compliance.",
       metrics: ["50K+ Users", "99.9% Uptime", "HIPAA Compliant"],
       industry: "Healthcare",
-      gif: "/project_02.gif",
+      gif: "/project_02.webm",
       features: [
         {
           icon: <Smartphone className="w-6 h-6" />,
@@ -547,7 +564,7 @@ export default function Home() {
       description: "Created a real-time trading analytics platform processing millions of transactions with sub-second latency.",
       metrics: ["<1s Latency", "Millions of Transactions", "Real-time Analytics"],
       industry: "Finance",
-      gif: "/project_03.gif",
+      gif: "/project_03.webm",
       features: [
         {
           icon: <BarChart3 className="w-6 h-6" />,
