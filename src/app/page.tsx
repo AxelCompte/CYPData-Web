@@ -1686,12 +1686,12 @@ export default function Home() {
           </FadeInWhenVisible>
 
           <FadeInWhenVisible direction="up" delay={0.8}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center -ml-4">
             <EnhancedButton 
               href="#cases"
               variant="primary"
               size="large"
-              className="text-lg font-semibold"
+              className="text-lg font-semibold w-72"
             >
               {t.hero.cta1}
             </EnhancedButton>
@@ -1699,19 +1699,12 @@ export default function Home() {
               href="#contact"
               variant="outline"
               size="large"
-              className="text-lg font-semibold"
+              className="text-lg font-semibold w-72" 
             >
               {t.hero.cta2}
             </EnhancedButton>
             </div>
           </FadeInWhenVisible>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-purple-400 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-purple-400 rounded-full mt-2"></div>
-          </div>
         </div>
       </section>
 
