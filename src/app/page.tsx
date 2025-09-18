@@ -247,12 +247,13 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+            <span className="sr-only">CyP Data - </span>
             Digital Solutions <span className="text-4xl md:text-6xl">for the</span><br />
             <span className="gradient-text whitespace-nowrap">Modern Enterprise</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-           Where innovative software meets actionable insights for sustainable competitive advantage.
+           Where innovative software meets actionable insights for sustainable competitive advantage. Expert team in Barcelona delivering cutting-edge digital solutions.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -283,14 +284,14 @@ export default function Home() {
       {/* Services Section */}
       <section id="services" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Our <span className="gradient-text">Services</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              We deliver end-to-end digital solutions that drive innovation and accelerate business growth
+              We deliver end-to-end digital solutions that drive innovation and accelerate business growth across Barcelona and Spain
             </p>
-          </div>
+          </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => {
@@ -332,14 +333,14 @@ export default function Home() {
       {/* Case Studies Section */}
       <section id="cases" className="py-20 px-6 bg-gray-900/80 backdrop-blur-md relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Success <span className="gradient-text">Stories</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Real results from real projects. See how we&apos;ve helped businesses transform their operations with data-driven solutions.
             </p>
-          </div>
+          </header>
 
           {/* Two-column layout: Left for text, Right for sticky GIFs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -435,14 +436,14 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="py-20 px-6 bg-gray-900 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Let&apos;s Build Something <span className="gradient-text">Amazing</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Ready to transform your business with cutting-edge digital solutions? Get in touch with our team of experts.
+              Ready to transform your business with cutting-edge digital solutions? Get in touch with our expert team in Barcelona.
             </p>
-          </div>
+          </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Contact Info */}
@@ -453,7 +454,12 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Email Us</h3>
-                  <p className="text-gray-400">contact@cypdata.com</p>
+                  <a 
+                    href="mailto:alonso.molina@cypcore.com"
+                    className="text-gray-400 hover:text-purple-400 transition-colors"
+                  >
+                    alonso.molina@cypcore.com
+                  </a>
                 </div>
               </div>
               
@@ -463,7 +469,13 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Call Us</h3>
-                  <p className="text-gray-400">+34 XXX XXX XXX</p>
+                  <a 
+                    href="tel:+34659160145"
+                    className="text-gray-400 hover:text-purple-400 transition-colors"
+                  >
+                    +34 659 160 145
+                  </a>
+                  <p className="text-sm text-gray-500">Mon-Fri: 8:00 AM - 5:00 PM</p>
                 </div>
               </div>
               
@@ -473,7 +485,31 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Visit Us</h3>
-                  <p className="text-gray-400">Madrid, Spain</p>
+                  <address className="text-gray-400 not-italic">
+                    Ctra. Piera, 7A<br />
+                    08760 Martorell, Barcelona<br />
+                    Spain
+                  </address>
+                </div>
+              </div>
+
+              {/* LinkedIn Link */}
+              <div className="flex items-center space-x-4">
+                <div className="p-3 rounded-lg gradient-primary">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">LinkedIn</h3>
+                  <a 
+                    href="https://es.linkedin.com/company/cypcore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-purple-400 transition-colors"
+                  >
+                    @cypcore
+                  </a>
                 </div>
               </div>
             </div>
@@ -482,7 +518,7 @@ export default function Home() {
             <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 hover:scale-105 transition-transform duration-300">
               <h3 className="text-2xl font-bold mb-4">Start Your Project Today</h3>
               <p className="text-gray-400 mb-6">
-                From concept to deployment, we&apos;ll guide you through every step of your digital transformation journey.
+                From concept to reality, we&apos;ll guide you through every step of your digital transformation journey.
               </p>
               <button className="w-full gradient-primary text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105">
                 Get Started Now
@@ -505,7 +541,7 @@ export default function Home() {
                   className="h-8 w-auto opacity-0"
                 />
               </div>
-              <p className="text-gray-400 mt-2">Digital Solutions & Business Intelligence</p>
+              <p className="text-gray-400 mt-2">Digital Solutions & Business Intelligence | Barcelona, Spain</p>
             </div>
             <div className="flex space-x-6">
               <a href="#services" className="text-gray-400 hover:text-purple-400 transition-colors">Services</a>
