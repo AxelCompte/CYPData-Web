@@ -599,22 +599,22 @@ const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 200;
+        const maxDistance = 150;
 
         if (distance < maxDistance) {
-          const force = (1 - distance / maxDistance) * 0.08;
-          node.vx += dx * force * 0.02;
-          node.vy += dy * force * 0.02;
+          const force = (1 - distance / maxDistance) * 0.02;
+          node.vx += dx * force * 0.005;
+          node.vy += dy * force * 0.005;
         }
 
         // Return to original position
-        const returnForce = 0.015;
+        const returnForce = 0.008;
         node.vx += (node.originalX - node.x) * returnForce;
         node.vy += (node.originalY - node.y) * returnForce;
 
         // Apply velocity with damping
-        node.vx *= 0.98;
-        node.vy *= 0.98;
+        node.vx *= 0.95;
+        node.vy *= 0.95;
         node.x += node.vx;
         node.y += node.vy;
 
@@ -634,10 +634,10 @@ const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<
           const dy = node.y - otherNode.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
-            const opacity = (1 - distance / 150) * 0.4;
+          if (distance < 120) {
+            const opacity = (1 - distance / 120) * 0.25;
             ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(otherNode.x, otherNode.y);
@@ -651,24 +651,24 @@ const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 200;
+        const maxDistance = 150;
         
         // Base node
         const nodeOpacity = distance < maxDistance ? 
-          0.7 + (1 - distance / maxDistance) * 0.5 : 0.5;
+          0.6 + (1 - distance / maxDistance) * 0.3 : 0.4;
         
         ctx.fillStyle = `rgba(139, 92, 246, ${nodeOpacity})`;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Add glow effect for nodes near mouse
+        // Add subtle glow effect for nodes near mouse
         if (distance < maxDistance) {
-          const glowOpacity = (1 - distance / maxDistance) * 0.6;
-          const glowSize = 2 + (1 - distance / maxDistance) * 4;
+          const glowOpacity = (1 - distance / maxDistance) * 0.3;
+          const glowSize = 2 + (1 - distance / maxDistance) * 2;
           
           ctx.shadowColor = '#8b5cf6';
-          ctx.shadowBlur = 15;
+          ctx.shadowBlur = 8;
           ctx.fillStyle = `rgba(139, 92, 246, ${glowOpacity})`;
           ctx.beginPath();
           ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
@@ -708,7 +708,9 @@ const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<
 // Expandable Service Card Component
 const ExpandableServiceCard = ({ 
   service, 
-  index 
+  index,
+  expandedCardIndex,
+  setExpandedCardIndex
 }: {
   service: {
     icon: React.ReactNode;
@@ -717,11 +719,35 @@ const ExpandableServiceCard = ({
     tech: string[];
   };
   index: number;
+  expandedCardIndex: number | null;
+  setExpandedCardIndex: (index: number | null) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+
+  // Calculate expansion direction based on card position
+  const getExpansionDirection = () => {
+    // For a 2-column grid (md:grid-cols-2)
+    const isRightColumn = index % 2 === 1;
+    const isBottomRow = index >= 2; // Assuming 4 cards total (0,1 top row, 2,3 bottom row)
+    
+    return {
+      isRightColumn,
+      isBottomRow
+    };
+  };
+
+  const { isRightColumn, isBottomRow } = getExpansionDirection();
+
+  // Check if this card should be transparent
+  const isOtherCardExpanded = expandedCardIndex !== null && expandedCardIndex !== index;
+
+  const handleExpansion = (expanded: boolean) => {
+    setIsExpanded(expanded);
+    setExpandedCardIndex(expanded ? index : null);
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
@@ -748,13 +774,18 @@ const ExpandableServiceCard = ({
 
   return (
     <motion.div
-      className="group relative"
-      onHoverStart={() => setIsExpanded(true)}
-      onHoverEnd={() => setIsExpanded(false)}
+      className={`group relative h-fit transition-opacity duration-300 ${
+        isOtherCardExpanded ? 'opacity-40' : 'opacity-100'
+      }`}
+      style={{ 
+        zIndex: isExpanded ? 50 : isOtherCardExpanded ? 1 : 10 
+      }}
+      onHoverStart={() => handleExpansion(true)}
+      onHoverEnd={() => handleExpansion(false)}
     >
       <div
         ref={cardRef}
-        className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer overflow-hidden"
+        className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer relative"
         data-cursor-hover
         data-cursor-text={service.title}
         onMouseEnter={() => setIsHovered(true)}
@@ -775,70 +806,83 @@ const ExpandableServiceCard = ({
         
         <p className="text-gray-400 mb-2 leading-relaxed">{service.description}</p>
         
-        {/* Expandable Technology Icons Section - Always rendered but hidden */}
-        <div className="relative">
+        {/* Expandable Technology Icons Section - Smart positioned overlay */}
+        {isExpanded && (
           <motion.div
-            className="border-t border-gray-700/50"
-            initial={false}
-            animate={{
-              height: isExpanded ? 'auto' : 0,
-              paddingTop: isExpanded ? 16 : 0,
-              marginTop: isExpanded ? 16 : 0,
-              opacity: isExpanded ? 1 : 0
+            className={`absolute ${
+              isBottomRow 
+                ? 'bottom-full mb-2' // Expand upward for bottom cards
+                : 'top-full mt-2'    // Expand downward for top cards
+            } ${
+              isRightColumn 
+                ? 'right-0 left-auto' // Align right for right column cards
+                : 'left-0 right-auto' // Align left for left column cards
+            } w-full`}
+            style={{ 
+              zIndex: isBottomRow ? 60 : 70 // Higher z-index for top cards expanding down
+            }}
+            initial={{ 
+              opacity: 0, 
+              y: isBottomRow ? 10 : -10, 
+              scale: 0.95 
+            }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: 1 
+            }}
+            exit={{ 
+              opacity: 0, 
+              y: isBottomRow ? 10 : -10, 
+              scale: 0.95 
             }}
             transition={{
               duration: 0.3,
-              ease: [0.4, 0, 0.2, 1],
-              height: { duration: 0.3 },
-              opacity: { duration: 0.2, delay: isExpanded ? 0.1 : 0 }
+              ease: [0.4, 0, 0.2, 1]
             }}
-            style={{ overflow: 'hidden' }}
           >
-            <div className="flex items-center mb-3">
-              <Code className="w-4 h-4 text-purple-400 mr-2" />
-              <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
-                Technologies
-              </span>
+            <div className="p-6 rounded-2xl bg-gray-800/95 border border-purple-500/30 backdrop-blur-sm shadow-2xl shadow-purple-500/10">
+              <div className="flex items-center mb-4">
+                <Code className="w-4 h-4 text-purple-400 mr-2" />
+                <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                  Technologies
+                </span>
+              </div>
+              
+              <motion.div 
+                className="grid grid-cols-4 gap-4"
+                initial={false}
+                animate={{ y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut",
+                  delay: 0.1
+                }}
+              >
+                {service.tech.map((tech, techIndex) => (
+                  <motion.div
+                    key={techIndex}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.2,
+                      delay: techIndex * 0.05 + 0.15,
+                      ease: "easeOut"
+                    }}
+                    className="flex flex-col items-center p-3 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech"
+                  >
+                    <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
+                      {getTechIcon(tech)}
+                    </div>
+                    <span className="text-xs text-gray-400 text-center leading-tight">
+                      {tech}
+                    </span>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
-            
-            <motion.div 
-              className="grid grid-cols-4 gap-4"
-              initial={false}
-              animate={{
-                y: isExpanded ? 0 : 20
-              }}
-              transition={{
-                duration: 0.3,
-                ease: "easeOut",
-                delay: isExpanded ? 0.1 : 0
-              }}
-            >
-              {service.tech.map((tech, techIndex) => (
-                <motion.div
-                  key={techIndex}
-                  initial={false}
-                  animate={{
-                    opacity: isExpanded ? 1 : 0,
-                    scale: isExpanded ? 1 : 0.9
-                  }}
-                  transition={{
-                    duration: 0.2,
-                    delay: isExpanded ? techIndex * 0.05 + 0.15 : 0,
-                    ease: "easeOut"
-                  }}
-                  className="flex flex-col items-center p-3 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech"
-                >
-                  <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
-                    {getTechIcon(tech)}
-                  </div>
-                  <span className="text-xs text-gray-400 text-center leading-tight">
-                    {tech}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
           </motion.div>
-        </div>
+        )}
       </div>
     </motion.div>
   );
@@ -1161,6 +1205,7 @@ export default function Home() {
   const [isInHero, setIsInHero] = useState(true);
   const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
   const servicesRef = useRef<HTMLElement>(null);
+  const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
   
   // Get current translations
   const t = translations[language];
@@ -1462,12 +1507,12 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} id="services" className="py-20 px-6 bg-gray-900 relative z-10 overflow-hidden">
+      <section ref={servicesRef} id="services" className="py-32 px-6 bg-gray-900 relative z-10 overflow-hidden min-h-screen">
         {/* Constellation Background */}
         <ConstellationBackground sectionRef={servicesRef} />
         
         <div className="container mx-auto max-w-7xl relative z-20">
-          <FadeInWhenVisible direction="up" className="text-center mb-16">
+          <FadeInWhenVisible direction="up" className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.services.title} <span className="gradient-text">{t.services.titleHighlight}</span>
             </h2>
@@ -1476,16 +1521,20 @@ export default function Home() {
             </p>
           </FadeInWhenVisible>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerDelay={0.2}>
-            {services.map((service, index) => (
-              <StaggerChild key={index} direction="up">
-                <ExpandableServiceCard 
-                  service={service}
-                  index={index}
-                />
-              </StaggerChild>
-            ))}
-          </StaggerContainer>
+          <div className="h-[600px] overflow-visible relative">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full" staggerDelay={0.2}>
+              {services.map((service, index) => (
+                <StaggerChild key={index} direction="up">
+                  <ExpandableServiceCard 
+                    service={service}
+                    index={index}
+                    expandedCardIndex={expandedCardIndex}
+                    setExpandedCardIndex={setExpandedCardIndex}
+                  />
+                </StaggerChild>
+              ))}
+            </StaggerContainer>
+          </div>
         </div>
       </section>
 
