@@ -532,6 +532,179 @@ const getTechIcon = (tech: string) => {
   return iconMap[tech] || <Code className="w-5 h-5 text-gray-400" />;
 };
 
+// Dynamic Constellation Background Component
+const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<HTMLElement | null> }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | null>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const nodesRef = useRef<Array<{
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    originalX: number;
+    originalY: number;
+  }>>([]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const section = sectionRef?.current;
+    if (!canvas || !section) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth * 2; // Retina support
+      canvas.height = canvas.offsetHeight * 2;
+      ctx.scale(2, 2);
+      
+      // Initialize nodes
+      const nodeCount = Math.floor((canvas.width * canvas.height) / 40000);
+      nodesRef.current = Array.from({ length: nodeCount }, () => ({
+        x: Math.random() * canvas.offsetWidth,
+        y: Math.random() * canvas.offsetHeight,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        originalX: 0,
+        originalY: 0,
+      }));
+      
+      // Set original positions
+      nodesRef.current.forEach(node => {
+        node.originalX = node.x;
+        node.originalY = node.y;
+      });
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
+
+    const animate = () => {
+      if (!ctx || !canvas) return;
+
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+      const nodes = nodesRef.current;
+      const mouse = mouseRef.current;
+
+      // Update and draw nodes
+      nodes.forEach((node, i) => {
+        // Mouse interaction - attract nodes to mouse
+        const dx = mouse.x - node.x;
+        const dy = mouse.y - node.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = 200;
+
+        if (distance < maxDistance) {
+          const force = (1 - distance / maxDistance) * 0.08;
+          node.vx += dx * force * 0.02;
+          node.vy += dy * force * 0.02;
+        }
+
+        // Return to original position
+        const returnForce = 0.015;
+        node.vx += (node.originalX - node.x) * returnForce;
+        node.vy += (node.originalY - node.y) * returnForce;
+
+        // Apply velocity with damping
+        node.vx *= 0.98;
+        node.vy *= 0.98;
+        node.x += node.vx;
+        node.y += node.vy;
+
+        // Keep nodes in bounds
+        if (node.x < 0 || node.x > canvas.offsetWidth) {
+          node.x = Math.max(0, Math.min(canvas.offsetWidth, node.x));
+          node.vx *= -0.5;
+        }
+        if (node.y < 0 || node.y > canvas.offsetHeight) {
+          node.y = Math.max(0, Math.min(canvas.offsetHeight, node.y));
+          node.vy *= -0.5;
+        }
+
+        // Draw connections first (behind nodes)
+        nodes.slice(i + 1).forEach(otherNode => {
+          const dx = node.x - otherNode.x;
+          const dy = node.y - otherNode.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            const opacity = (1 - distance / 150) * 0.4;
+            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(otherNode.x, otherNode.y);
+            ctx.stroke();
+          }
+        });
+      });
+
+      // Draw nodes on top
+      nodes.forEach(node => {
+        const dx = mouse.x - node.x;
+        const dy = mouse.y - node.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = 200;
+        
+        // Base node
+        const nodeOpacity = distance < maxDistance ? 
+          0.7 + (1 - distance / maxDistance) * 0.5 : 0.5;
+        
+        ctx.fillStyle = `rgba(139, 92, 246, ${nodeOpacity})`;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Add glow effect for nodes near mouse
+        if (distance < maxDistance) {
+          const glowOpacity = (1 - distance / maxDistance) * 0.6;
+          const glowSize = 2 + (1 - distance / maxDistance) * 4;
+          
+          ctx.shadowColor = '#8b5cf6';
+          ctx.shadowBlur = 15;
+          ctx.fillStyle = `rgba(139, 92, 246, ${glowOpacity})`;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    resizeCanvas();
+    section.addEventListener('mousemove', handleMouseMove);
+    section.addEventListener('mouseenter', handleMouseMove);
+    window.addEventListener('resize', resizeCanvas);
+    animate();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      section.removeEventListener('mousemove', handleMouseMove);
+      section.removeEventListener('mouseenter', handleMouseMove);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, [sectionRef]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 1 }}
+    />
+  );
+};
+
 // Expandable Service Card Component
 const ExpandableServiceCard = ({ 
   service, 
@@ -987,6 +1160,7 @@ export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
   const [isInHero, setIsInHero] = useState(true);
   const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
+  const servicesRef = useRef<HTMLElement>(null);
   
   // Get current translations
   const t = translations[language];
@@ -1288,8 +1462,11 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-6 bg-gray-900 relative z-10">
-        <div className="container mx-auto max-w-7xl">
+      <section ref={servicesRef} id="services" className="py-20 px-6 bg-gray-900 relative z-10 overflow-hidden">
+        {/* Constellation Background */}
+        <ConstellationBackground sectionRef={servicesRef} />
+        
+        <div className="container mx-auto max-w-7xl relative z-20">
           <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.services.title} <span className="gradient-text">{t.services.titleHighlight}</span>
