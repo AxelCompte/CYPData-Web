@@ -546,6 +546,32 @@ const ExpandableServiceCard = ({
   index: number;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    setMousePosition({ x, y });
+  };
+
+  const getTransform = () => {
+    if (!isHovered || !cardRef.current) return '';
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (mousePosition.y - centerY) / centerY * -8;
+    const rotateY = (mousePosition.x - centerX) / centerX * 8;
+    
+    return `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+  };
 
   return (
     <motion.div
@@ -553,16 +579,17 @@ const ExpandableServiceCard = ({
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
     >
-      <motion.div
+      <div
+        ref={cardRef}
         className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer overflow-hidden"
         data-cursor-hover
         data-cursor-text={service.title}
-        whileHover={{ 
-          y: -4
-        }}
-        transition={{ 
-          duration: 0.2,
-          ease: "easeOut"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onMouseMove={handleMouseMove}
+        style={{
+          transform: getTransform(),
+          transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.3s ease-out',
         }}
       >
         {/* Main Content */}
@@ -573,7 +600,7 @@ const ExpandableServiceCard = ({
           <h3 className="text-2xl font-bold">{service.title}</h3>
         </div>
         
-        <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
+        <p className="text-gray-400 mb-2 leading-relaxed">{service.description}</p>
         
         {/* Expandable Technology Icons Section - Always rendered but hidden */}
         <div className="relative">
@@ -639,7 +666,7 @@ const ExpandableServiceCard = ({
             </motion.div>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
@@ -1299,12 +1326,22 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl relative z-10">
           <FadeInWhenVisible direction="up" className="text-center">
             <div className="relative">
-              {/* Decorative elements */}
-              <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent transform -translate-y-1/2"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full"></div>
+              {/* Enhanced Decorative elements */}
+              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent transform -translate-y-1/2"></div>
+              <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-300/80 to-transparent transform -translate-y-1/2"></div>
+              
+              {/* Enhanced center dot */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
+                <div className="absolute inset-0 w-3 h-3 bg-purple-300 rounded-full animate-ping opacity-75"></div>
+              </div>
+              
+              {/* Side accent dots */}
+              <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-purple-400/60 rounded-full"></div>
+              <div className="absolute top-1/2 right-1/4 transform translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-purple-400/60 rounded-full"></div>
               
               {/* Main content with better styling */}
-              <div className="relative bg-gradient-to-r from-gray-900/90 via-gray-800/95 to-gray-900/90 backdrop-blur-sm px-12 py-6 rounded-2xl border border-purple-500/20 shadow-2xl shadow-purple-500/10 inline-block">
+              <div className="relative bg-gray-900 px-12 py-6 rounded-2xl border border-purple-500/20 inline-block">
                 <div className="text-center space-y-2">
                   <h3 className="text-2xl md:text-4xl font-bold">
                     <span className="gradient-text">{t.midline.title}</span>
