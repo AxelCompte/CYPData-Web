@@ -1305,7 +1305,7 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const navHeight = 80; // Account for fixed navigation height
+      const navHeight = 60; // Account for fixed navigation height + padding
       const elementTop = element.offsetTop - navHeight;
       
       window.scrollTo({
