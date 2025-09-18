@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare } from 'lucide-react';
+import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe } from 'lucide-react';
 
 // Custom hook for intersection observer
 function useIntersectionObserver(options = {}) {
@@ -30,9 +30,275 @@ function useIntersectionObserver(options = {}) {
   return [activeId, elementsRef] as const;
 }
 
+// Translations object
+const translations = {
+  es: {
+    nav: {
+      services: "Servicios",
+      cases: "Casos de Éxito",
+      contact: "Contacto"
+    },
+    hero: {
+      title: "Soluciones Digitales",
+      subtitle: "para la",
+      highlight: "Empresa Moderna",
+      description: "Donde el software innovador se encuentra con insights accionables para generar ventaja competitiva sostenible. Equipo experto en Barcelona ofreciendo soluciones digitales de vanguardia.",
+      cta1: "Explora Nuestro Trabajo",
+      cta2: "Ponte en Contacto"
+    },
+    services: {
+      title: "Nuestros",
+      titleHighlight: "Servicios",
+      description: "Ofrecemos soluciones digitales end-to-end que impulsan la innovación y aceleran el crecimiento empresarial en Barcelona y España",
+      mobileApps: {
+        title: "Aplicaciones Móviles Nativas",
+        description: "Aplicaciones Android e iOS personalizadas construidas con tecnología de vanguardia para un rendimiento óptimo y experiencia de usuario."
+      },
+      desktop: {
+        title: "Aplicaciones de Escritorio",
+        description: "Soluciones de escritorio potentes que optimizan tus procesos empresariales y mejoran la productividad en todas las plataformas."
+      },
+      bi: {
+        title: "Business Intelligence",
+        description: "Transforma tus datos en insights accionables con nuestras soluciones integrales de BI y dashboards interactivos."
+      },
+      bigData: {
+        title: "Soluciones Big Data",
+        description: "Plataformas escalables de procesamiento y análisis de datos que manejan datasets masivos con confiabilidad empresarial."
+      }
+    },
+    cases: {
+      title: "Historias de",
+      titleHighlight: "Éxito",
+      description: "Resultados reales de proyectos reales. Descubre cómo hemos ayudado a empresas a transformar sus operaciones con soluciones basadas en datos.",
+      ecommerce: {
+        title: "Plataforma de Analytics E-Commerce",
+        description: "Desarrollamos un dashboard de analytics integral que incrementó los insights de ingresos del cliente en un 300% y redujo el tiempo de reportes en un 85%.",
+        industry: "Retail",
+        features: {
+          realTime: {
+            title: "Analytics en Tiempo Real",
+            description: "Monitoriza rendimiento de ventas, comportamiento del cliente y niveles de inventario con streaming de datos en vivo y visualizaciones instantáneas."
+          },
+          segmentation: {
+            title: "Segmentación de Clientes",
+            description: "Algoritmos ML avanzados categorizan automáticamente clientes basándose en patrones de compra, demografía y métricas de engagement."
+          },
+          optimization: {
+            title: "Optimización de Ingresos",
+            description: "Recomendaciones inteligentes de precios y gestión de inventario para maximizar rentabilidad en todas las categorías de productos."
+          }
+        }
+      },
+      healthcare: {
+        title: "Sistema de Gestión Sanitaria",
+        description: "Construimos un sistema de gestión de pacientes mobile-first sirviendo a 50,000+ pacientes con 99.9% uptime y cumplimiento HIPAA.",
+        industry: "Sanidad",
+        features: {
+          mobile: {
+            title: "Diseño Mobile-First",
+            description: "Apps nativas iOS y Android con capacidades offline, mensajería segura y programación de citas para pacientes y proveedores."
+          },
+          ehr: {
+            title: "Historiales Médicos Electrónicos",
+            description: "Gestión segura de datos de pacientes compatible con HIPAA con backup automatizado, auditorías y interoperabilidad con sistemas existentes."
+          },
+          analytics: {
+            title: "Analytics Clínicos",
+            description: "Insights de salud poblacional, seguimiento de resultados de tratamientos y analytics predictivos para recomendaciones de cuidado preventivo."
+          }
+        }
+      },
+      finance: {
+        title: "Dashboard de Trading Financiero",
+        description: "Creamos una plataforma de analytics de trading en tiempo real procesando millones de transacciones con latencia sub-segundo.",
+        industry: "Finanzas",
+        features: {
+          trading: {
+            title: "Trading de Alta Frecuencia",
+            description: "Ejecución de órdenes ultra-baja latencia con precisión de microsegundos, gestión automatizada de riesgos y procesamiento de datos de mercado en tiempo real."
+          },
+          risk: {
+            title: "Analytics de Riesgo",
+            description: "Evaluación avanzada de riesgo de cartera, pruebas de estrés y monitoreo de cumplimiento con alertas en tiempo real y reportes automatizados."
+          },
+          intelligence: {
+            title: "Inteligencia de Mercado",
+            description: "Análisis de tendencias de mercado impulsado por IA, seguimiento de sentimientos y modelado predictivo para decisiones de trading informadas."
+          }
+        }
+      },
+      scrollText: "Desplázate para explorar nuestros proyectos"
+    },
+    contact: {
+      title: "Construyamos Algo",
+      titleHighlight: "Increíble",
+      description: "¿Listo para transformar tu negocio con soluciones digitales de vanguardia? Ponte en contacto con nuestro equipo experto en Barcelona.",
+      email: "Envíanos un Email",
+      call: "Llámanos",
+      schedule: "Lun-Vie: 8:00 AM - 5:00 PM",
+      visit: "Visítanos",
+      linkedin: "LinkedIn",
+      form: {
+        title: "Comienza Tu Proyecto Hoy",
+        description: "Del",
+        descriptionHighlight: "concepto a la realidad",
+        descriptionEnd: ", te guiaremos a través de cada paso de tu viaje de transformación digital.",
+        nameLabel: "Nombre",
+        namePlaceholder: "Tu nombre completo",
+        emailLabel: "Email",
+        emailPlaceholder: "tu.email@empresa.com",
+        messageLabel: "Mensaje",
+        messagePlaceholder: "Cuéntanos sobre tu idea de proyecto, requisitos o cualquier pregunta que tengas...",
+        submit: "Enviar Mensaje",
+        sending: "Enviando...",
+        success: "¡Mensaje enviado correctamente! Te contactaremos pronto.",
+        error: "Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos directamente."
+      }
+    },
+    footer: {
+      description: "Soluciones Digitales e Inteligencia de Negocios | Barcelona, España",
+      copyright: "2025 CyP Data. Todos los derechos reservados."
+    }
+  },
+  en: {
+    nav: {
+      services: "Services",
+      cases: "Case Studies",
+      contact: "Contact"
+    },
+    hero: {
+      title: "Digital Solutions",
+      subtitle: "for the",
+      highlight: "Modern Enterprise",
+      description: "Where innovative software meets actionable insights for sustainable competitive advantage. Expert team in Barcelona delivering cutting-edge digital solutions.",
+      cta1: "Explore Our Work",
+      cta2: "Get In Touch"
+    },
+    services: {
+      title: "Our",
+      titleHighlight: "Services",
+      description: "We deliver end-to-end digital solutions that drive innovation and accelerate business growth across Barcelona and Spain",
+      mobileApps: {
+        title: "Native Mobile Apps",
+        description: "Custom Android and iOS applications built with cutting-edge technology for optimal performance and user experience."
+      },
+      desktop: {
+        title: "Desktop Applications",
+        description: "Powerful desktop solutions that streamline your business processes and enhance productivity across all platforms."
+      },
+      bi: {
+        title: "Business Intelligence",
+        description: "Transform your data into actionable insights with our comprehensive BI solutions and interactive dashboards."
+      },
+      bigData: {
+        title: "Big Data Solutions",
+        description: "Scalable data processing and analytics platforms that handle massive datasets with enterprise-grade reliability."
+      }
+    },
+    cases: {
+      title: "Success",
+      titleHighlight: "Stories",
+      description: "Real results from real projects. See how we've helped businesses transform their operations with data-driven solutions.",
+      ecommerce: {
+        title: "E-Commerce Analytics Platform",
+        description: "Developed a comprehensive analytics dashboard that increased client's revenue insights by 300% and reduced reporting time by 85%.",
+        industry: "Retail",
+        features: {
+          realTime: {
+            title: "Real-Time Analytics",
+            description: "Monitor sales performance, customer behavior, and inventory levels with live data streaming and instant visualizations."
+          },
+          segmentation: {
+            title: "Customer Segmentation",
+            description: "Advanced ML algorithms automatically categorize customers based on purchasing patterns, demographics, and engagement metrics."
+          },
+          optimization: {
+            title: "Revenue Optimization",
+            description: "Intelligent pricing recommendations and inventory management to maximize profitability across all product categories."
+          }
+        }
+      },
+      healthcare: {
+        title: "Healthcare Management System",
+        description: "Built a mobile-first patient management system serving 50,000+ patients with 99.9% uptime and HIPAA compliance.",
+        industry: "Healthcare",
+        features: {
+          mobile: {
+            title: "Mobile-First Design",
+            description: "Native iOS and Android apps with offline capabilities, secure messaging, and appointment scheduling for patients and providers."
+          },
+          ehr: {
+            title: "Electronic Health Records",
+            description: "Secure, HIPAA-compliant patient data management with automated backup, audit trails, and interoperability with existing systems."
+          },
+          analytics: {
+            title: "Clinical Analytics",
+            description: "Population health insights, treatment outcome tracking, and predictive analytics for preventive care recommendations."
+          }
+        }
+      },
+      finance: {
+        title: "Financial Trading Dashboard",
+        description: "Created a real-time trading analytics platform processing millions of transactions with sub-second latency.",
+        industry: "Finance",
+        features: {
+          trading: {
+            title: "High-Frequency Trading",
+            description: "Ultra-low latency order execution with microsecond precision, automated risk management, and real-time market data processing."
+          },
+          risk: {
+            title: "Risk Analytics",
+            description: "Advanced portfolio risk assessment, stress testing, and compliance monitoring with real-time alerts and automated reporting."
+          },
+          intelligence: {
+            title: "Market Intelligence",
+            description: "AI-powered market trend analysis, sentiment tracking, and predictive modeling for informed trading decisions."
+          }
+        }
+      },
+      scrollText: "Scroll to explore our projects"
+    },
+    contact: {
+      title: "Let's Build Something",
+      titleHighlight: "Amazing",
+      description: "Ready to transform your business with cutting-edge digital solutions? Get in touch with our expert team in Barcelona.",
+      email: "Email Us",
+      call: "Call Us",
+      schedule: "Mon-Fri: 8:00 AM - 5:00 PM",
+      visit: "Visit Us",
+      linkedin: "LinkedIn",
+      form: {
+        title: "Start Your Project Today",
+        description: "From",
+        descriptionHighlight: "concept to reality",
+        descriptionEnd: ", we'll guide you through every step of your digital transformation journey.",
+        nameLabel: "Name",
+        namePlaceholder: "Your full name",
+        emailLabel: "Email",
+        emailPlaceholder: "your.email@company.com",
+        messageLabel: "Message",
+        messagePlaceholder: "Tell us about your project idea, requirements, or any questions you have...",
+        submit: "Send Message",
+        sending: "Sending...",
+        success: "Message sent successfully! We'll contact you soon.",
+        error: "Error sending message. Please try again or contact us directly."
+      }
+    },
+    footer: {
+      description: "Digital Solutions & Business Intelligence | Barcelona, Spain",
+      copyright: "2025 CyP Data. All rights reserved."
+    }
+  }
+};
+
 export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
   const [isInHero, setIsInHero] = useState(true);
+  const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
+  
+  // Get current translations
+  const t = translations[language];
   
   // Contact form state
   const [formData, setFormData] = useState({
@@ -42,6 +308,11 @@ export default function Home() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  
+  // Language switcher
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'es' ? 'en' : 'es');
+  };
   
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,14 +340,14 @@ export default function Home() {
       });
       
       if (response.ok) {
-        setSubmitMessage('¡Mensaje enviado correctamente! Te contactaremos pronto.');
+        setSubmitMessage(t.contact.form.success);
         setFormData({ name: '', email: '', message: '' });
       } else {
         throw new Error('Error al enviar el mensaje');
       }
     } catch (error) {
       console.error('Error:', error);
-      setSubmitMessage('Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos directamente.');
+      setSubmitMessage(t.contact.form.error);
     } finally {
       setIsSubmitting(false);
     }
@@ -138,26 +409,26 @@ export default function Home() {
   const services = [
     {
       icon: <Smartphone className="w-8 h-8" />,
-      title: "Native Mobile Apps",
-      description: "Custom Android and iOS applications built with cutting-edge technology for optimal performance and user experience.",
+      title: t.services.mobileApps.title,
+      description: t.services.mobileApps.description,
       tech: ["React Native", "Flutter", "Swift", "Kotlin"]
     },
     {
       icon: <Monitor className="w-8 h-8" />,
-      title: "Desktop Applications",
-      description: "Powerful desktop solutions that streamline your business processes and enhance productivity across all platforms.",
+      title: t.services.desktop.title,
+      description: t.services.desktop.description,
       tech: ["Electron", "Qt", ".NET", "Java"]
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
-      title: "Business Intelligence",
-      description: "Transform your data into actionable insights with our comprehensive BI solutions and interactive dashboards.",
+      title: t.services.bi.title,
+      description: t.services.bi.description,
       tech: ["Power BI", "Tableau", "Qlik", "Custom BI"]
     },
     {
       icon: <Database className="w-8 h-8" />,
-      title: "Big Data Solutions",
-      description: "Scalable data processing and analytics platforms that handle massive datasets with enterprise-grade reliability.",
+      title: t.services.bigData.title,
+      description: t.services.bigData.description,
       tech: ["Apache Spark", "Hadoop", "Elasticsearch", "MongoDB"]
     }
   ];
@@ -255,10 +526,20 @@ export default function Home() {
                 className="h-8 w-auto opacity-0"
               />
             </div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#services" className="hover:text-purple-400 transition-colors">Services</a>
-              <a href="#cases" className="hover:text-purple-400 transition-colors">Case Studies</a>
-              <a href="#contact" className="hover:text-purple-400 transition-colors">Contact</a>
+            <div className="hidden md:flex space-x-8 items-center">
+              <a href="#services" className="hover:text-purple-400 transition-colors">{t.nav.services}</a>
+              <a href="#cases" className="hover:text-purple-400 transition-colors">{t.nav.cases}</a>
+              <a href="#contact" className="hover:text-purple-400 transition-colors">{t.nav.contact}</a>
+              
+              {/* Language Switcher */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
+                title={language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm font-medium">{language.toUpperCase()}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -296,12 +577,12 @@ export default function Home() {
           
           <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
             <span className="sr-only">CyP Data - </span>
-            Digital Solutions <span className="text-4xl md:text-6xl">for the</span><br />
-            <span className="gradient-text whitespace-nowrap">Modern Enterprise</span>
+            {t.hero.title} <span className="text-4xl md:text-6xl">{t.hero.subtitle}</span><br />
+            <span className="gradient-text whitespace-nowrap">{t.hero.highlight}</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-           Where innovative software meets actionable insights for sustainable competitive advantage. Expert team in Barcelona delivering cutting-edge digital solutions.
+           {t.hero.description}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -309,14 +590,14 @@ export default function Home() {
               href="#cases"
               className="gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2 hover:scale-105"
             >
-              Explore Our Work
+              {t.hero.cta1}
               <ArrowRight className="w-5 h-5" />
             </a>
             <a 
               href="#contact"
               className="border-2 border-purple-500 text-purple-400 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-500/10 transition-all duration-300 hover:scale-105"
             >
-              Get In Touch
+              {t.hero.cta2}
             </a>
           </div>
         </div>
@@ -334,10 +615,10 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Our <span className="gradient-text">Services</span>
+              {t.services.title} <span className="gradient-text">{t.services.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              We deliver end-to-end digital solutions that drive innovation and accelerate business growth across Barcelona and Spain
+              {t.services.description}
             </p>
           </header>
 
@@ -383,10 +664,10 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Success <span className="gradient-text">Stories</span>
+              {t.cases.title} <span className="gradient-text">{t.cases.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Real results from real projects. See how we&apos;ve helped businesses transform their operations with data-driven solutions.
+              {t.cases.description}
             </p>
           </header>
 
@@ -486,10 +767,10 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <header className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Let&apos;s Build Something <span className="gradient-text">Amazing</span>
+              {t.contact.title} <span className="gradient-text">{t.contact.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Ready to transform your business with cutting-edge digital solutions? Get in touch with our expert team in Barcelona.
+              {t.contact.description}
             </p>
           </header>
 
@@ -501,7 +782,7 @@ export default function Home() {
                   <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Email Us</h3>
+                  <h3 className="font-semibold text-lg">{t.contact.email}</h3>
                   <a 
                     href="mailto:alonso.molina@cypcore.com"
                     className="text-gray-400 hover:text-purple-400 transition-colors"
@@ -516,14 +797,14 @@ export default function Home() {
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Call Us</h3>
+                  <h3 className="font-semibold text-lg">{t.contact.call}</h3>
                   <a 
                     href="tel:+34659160145"
                     className="text-gray-400 hover:text-purple-400 transition-colors"
                   >
                     +34 659 160 145
                   </a>
-                  <p className="text-sm text-gray-500">Mon-Fri: 8:00 AM - 5:00 PM</p>
+                  <p className="text-sm text-gray-500">{t.contact.schedule}</p>
                 </div>
               </div>
               
@@ -532,7 +813,7 @@ export default function Home() {
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Visit Us</h3>
+                  <h3 className="font-semibold text-lg">{t.contact.visit}</h3>
                   <address className="text-gray-400 not-italic">
                     Ctra. Piera, 7A<br />
                     08760 Martorell, Barcelona<br />
@@ -549,7 +830,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">LinkedIn</h3>
+                  <h3 className="font-semibold text-lg">{t.contact.linkedin}</h3>
                   <a 
                     href="https://es.linkedin.com/company/cypcore"
                     target="_blank"
@@ -564,9 +845,9 @@ export default function Home() {
 
             {/* Contact Form Card */}
             <div className="p-8 rounded-2xl bg-gray-800/60 border border-gray-700/50 hover:border-gray-600/60 transition-colors duration-300">
-              <h3 className="text-2xl font-bold mb-4">Start Your Project Today</h3>
+              <h3 className="text-2xl font-bold mb-4">{t.contact.form.title}</h3>
               <p className="text-gray-400 mb-6">
-                From <span className="gradient-text font-semibold">concept to reality</span>, we&apos;ll guide you through every step of your digital transformation journey.
+                {t.contact.form.description} <span className="gradient-text font-semibold">{t.contact.form.descriptionHighlight}</span>{t.contact.form.descriptionEnd}
               </p>
               
               {/* Contact Form */}
@@ -575,7 +856,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
-                    Name *
+                    {t.contact.form.nameLabel} *
                   </label>
                   <input
                     type="text"
@@ -585,7 +866,7 @@ export default function Home() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
-                    placeholder="Your full name"
+                    placeholder={t.contact.form.namePlaceholder}
                   />
                 </div>
 
@@ -593,7 +874,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                     <Mail className="w-4 h-4 inline mr-2" />
-                    Email *
+                    {t.contact.form.emailLabel} *
                   </label>
                   <input
                     type="email"
@@ -603,7 +884,7 @@ export default function Home() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
-                    placeholder="your.email@company.com"
+                    placeholder={t.contact.form.emailPlaceholder}
                   />
                 </div>
 
@@ -611,7 +892,7 @@ export default function Home() {
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
                     <MessageSquare className="w-4 h-4 inline mr-2" />
-                    Message *
+                    {t.contact.form.messageLabel} *
                   </label>
                   <textarea
                     id="message"
@@ -621,7 +902,7 @@ export default function Home() {
                     required
                     rows={4}
                     className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-colors duration-200 resize-vertical"
-                    placeholder="Tell us about your project idea, requirements, or any questions you have..."
+                    placeholder={t.contact.form.messagePlaceholder}
                     style={{ 
                       minHeight: '100px',
                       maxHeight: '300px'
@@ -638,12 +919,12 @@ export default function Home() {
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Sending...
+                      {t.contact.form.sending}
                     </>
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Send Message
+                      {t.contact.form.submit}
                     </>
                   )}
                 </button>
@@ -679,16 +960,16 @@ export default function Home() {
                   className="h-8 w-auto opacity-0"
                 />
               </div>
-              <p className="text-gray-400 mt-2">Digital Solutions & Business Intelligence | Barcelona, Spain</p>
+              <p className="text-gray-400 mt-2">{t.footer.description}</p>
             </div>
             <div className="flex space-x-6">
-              <a href="#services" className="text-gray-400 hover:text-purple-400 transition-colors">Services</a>
-              <a href="#cases" className="text-gray-400 hover:text-purple-400 transition-colors">Case Studies</a>
-              <a href="#contact" className="text-gray-400 hover:text-purple-400 transition-colors">Contact</a>
+              <a href="#services" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.services}</a>
+              <a href="#cases" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.cases}</a>
+              <a href="#contact" className="text-gray-400 hover:text-purple-400 transition-colors">{t.nav.contact}</a>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2025 CyP Data. All rights reserved.</p>
+            <p>&copy; {t.footer.copyright}</p>
           </div>
         </div>
       </footer>
