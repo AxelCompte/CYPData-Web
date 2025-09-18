@@ -1,9 +1,66 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe } from 'lucide-react';
 
-// Custom hook for intersection observer
+// Optimized video component with GIF fallback
+const OptimizedVideo = ({ 
+  src, 
+  alt, 
+  className = "",
+  priority = false 
+}: { 
+  src: string, 
+  alt: string, 
+  className?: string,
+  priority?: boolean 
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  
+  // Use the .webm source directly since files are already converted
+  const videoSrc = src;
+  const gifFallback = src.replace('.webm', '.gif');
+
+  // If video fails to load or has error, show GIF fallback
+  if (hasError) {
+    return (
+      <Image
+        src={gifFallback}
+        alt={alt}
+        fill
+        className={`object-cover ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        loading={priority ? "eager" : "lazy"}
+        onLoad={() => setIsLoaded(true)}
+        priority={priority}
+        unoptimized
+      />
+    );
+  }
+
+  return (
+    <video
+      className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 object-cover`}
+      autoPlay
+      loop
+      muted
+      playsInline
+      onLoadedData={() => setIsLoaded(true)}
+      onError={() => {
+        console.log(`Video failed to load: ${videoSrc}, falling back to GIF`);
+        setHasError(true);
+      }}
+      preload={priority ? "metadata" : "none"}
+    >
+      <source src={videoSrc} type="video/webm" />
+      {/* Fallback message for very old browsers */}
+      <p className="text-gray-400 text-center p-4">
+        Your browser doesn't support video playback. Please update your browser for the best experience.
+      </p>
+    </video>
+  );
+};
 function useIntersectionObserver(options = {}) {
   const [activeId, setActiveId] = useState('');
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -520,10 +577,13 @@ export default function Home() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="logo-gradient-container">
-              <img 
+              <Image 
                 src="/logo.webp" 
                 alt="CyP Data" 
+                width={120}
+                height={40}
                 className="h-8 w-auto opacity-0"
+                priority
               />
             </div>
             <div className="hidden md:flex space-x-8 items-center">
@@ -551,7 +611,7 @@ export default function Home() {
         <div 
           className="fixed inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/CYP.jpg')",
+            backgroundImage: "url('/CYP.webp')",
             height: '100vh',
             zIndex: 0
           }}
@@ -568,10 +628,13 @@ export default function Home() {
         
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <div className="hero-logo-white flex justify-center mb-8">
-            <img 
+            <Image 
               src="/logo.webp" 
               alt="CyP Data" 
+              width={192}
+              height={128}
               className="h-24 md:h-32 w-auto"
+              priority
             />
           </div>
           
@@ -712,11 +775,11 @@ export default function Home() {
 
                     {/* Mobile GIF - Show on small screens only */}
                     <div className="lg:hidden mt-8">
-                      <div className="w-full h-80 rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
-                        <img
+                      <div className="w-full h-80 rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl relative">
+                        <OptimizedVideo
                           src={study.gif}
                           alt={`${study.title} demonstration`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full"
                         />
                       </div>
                     </div>
@@ -735,11 +798,12 @@ export default function Home() {
                       activeProject === study.id ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
-                    <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
-                      <img
+                    <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl relative">
+                      <OptimizedVideo
                         src={study.gif}
                         alt={`${study.title} demonstration`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
+                        priority={activeProject === study.id}
                       />
                     </div>
                   </div>
@@ -954,9 +1018,11 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className="logo-gradient-container">
-                <img 
+                <Image 
                   src="/logo.webp" 
                   alt="CyP Data" 
+                  width={120}
+                  height={40}
                   className="h-8 w-auto opacity-0"
                 />
               </div>
