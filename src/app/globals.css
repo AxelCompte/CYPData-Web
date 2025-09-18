@@ -133,7 +133,7 @@ body {
 }
 
 .client-logo-item:hover img {
-  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1000%) hue-rotate(270deg) brightness(1.2);
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1000%) hue-rotate(235deg) brightness(1.2);
   transform: scale(1.1);
 }
 

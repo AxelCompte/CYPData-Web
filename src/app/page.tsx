@@ -1117,6 +1117,11 @@ const translations = {
         error: "Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos directamente."
       }
     },
+    clients: {
+      title: "La confianza de",
+      titleHighlight: "Líderes de la Industria",
+      description: "Hemos tenido el privilegio de trabajar con algunas de las empresas más innovadoras del mundo en diversas industrias."
+    },
     footer: {
       description: "Soluciones Digitales e Inteligencia de Negocios | Barcelona, España",
       copyright: "2025 CyP Data. Todos los derechos reservados."
@@ -1257,6 +1262,11 @@ const translations = {
         success: "Message sent successfully! We'll contact you soon.",
         error: "Error sending message. Please try again or contact us directly."
       }
+    },
+    clients: {
+      title: "Trusted by",
+      titleHighlight: "Industry Leaders",
+      description: "We've had the privilege of working with some of the world's most innovative companies across various industries."
     },
     footer: {
       description: "Digital Solutions & Business Intelligence | Barcelona, Spain",
@@ -1892,10 +1902,10 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Trusted by <span className="gradient-text">Industry Leaders</span>
+              {t.clients.title} <span className="gradient-text">{t.clients.titleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              We've had the privilege of working with some of the world's most innovative companies across various industries.
+              {t.clients.description}
             </p>
           </FadeInWhenVisible>
 
