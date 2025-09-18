@@ -3,7 +3,27 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
-import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe } from 'lucide-react';
+import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe, Brain, Code } from 'lucide-react';
+import { 
+  SiReact, 
+  SiFlutter, 
+  SiSwift, 
+  SiKotlin, 
+  SiElectron, 
+  SiQt, 
+  SiDotnet, 
+  SiNextdotjs, 
+  SiVuedotjs, 
+  SiNodedotjs,
+  SiOpenai,
+  SiTensorflow,
+  SiPytorch,
+  SiTableau,
+  SiApachespark,
+  SiMongodb,
+  SiElasticsearch
+} from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 
 // Optimized video component with GIF fallback
 // Optimized video component without hydration issues
@@ -479,6 +499,151 @@ const AnimatedProjectCard = ({ children, index }: {
   );
 };
 
+// Technology Icon Mapping
+const getTechIcon = (tech: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    'React Native': <SiReact className="w-5 h-5" style={{ color: '#61DAFB' }} />,
+    'React': <SiReact className="w-5 h-5" style={{ color: '#61DAFB' }} />,
+    'Flutter': <SiFlutter className="w-5 h-5" style={{ color: '#02569B' }} />,
+    'Swift': <SiSwift className="w-5 h-5" style={{ color: '#FA7343' }} />,
+    'Kotlin': <SiKotlin className="w-5 h-5" style={{ color: '#7F52FF' }} />,
+    'Electron': <SiElectron className="w-5 h-5" style={{ color: '#47848F' }} />,
+    'Qt': <SiQt className="w-5 h-5" style={{ color: '#41CD52' }} />,
+    '.NET': <SiDotnet className="w-5 h-5" style={{ color: '#512BD4' }} />,
+    'Java': <FaJava className="w-5 h-5" style={{ color: '#ED8B00' }} />,
+    'Next.js': <SiNextdotjs className="w-5 h-5" style={{ color: '#000000' }} />,
+    'Vue.js': <SiVuedotjs className="w-5 h-5" style={{ color: '#4FC08D' }} />,
+    'Node.js': <SiNodedotjs className="w-5 h-5" style={{ color: '#339933' }} />,
+    'OpenAI': <SiOpenai className="w-5 h-5" style={{ color: '#412991' }} />,
+    'TensorFlow': <SiTensorflow className="w-5 h-5" style={{ color: '#FF6F00' }} />,
+    'PyTorch': <SiPytorch className="w-5 h-5" style={{ color: '#EE4C2C' }} />,
+    'Power BI': <BarChart3 className="w-5 h-5" style={{ color: '#F2C811' }} />,
+    'Tableau': <SiTableau className="w-5 h-5" style={{ color: '#E97627' }} />,
+    'Apache Spark': <SiApachespark className="w-5 h-5" style={{ color: '#E25A1C' }} />,
+    'MongoDB': <SiMongodb className="w-5 h-5" style={{ color: '#47A248' }} />,
+    'Elasticsearch': <SiElasticsearch className="w-5 h-5" style={{ color: '#005571' }} />,
+    // Fallback icons for technologies without specific icons
+    'Qlik': <BarChart3 className="w-5 h-5 text-purple-400" />,
+    'Custom BI': <BarChart3 className="w-5 h-5 text-purple-400" />,
+    'Hadoop': <Database className="w-5 h-5 text-green-400" />,
+    'Hugging Face': <Brain className="w-5 h-5 text-yellow-400" />
+  };
+  
+  return iconMap[tech] || <Code className="w-5 h-5 text-gray-400" />;
+};
+
+// Expandable Service Card Component
+const ExpandableServiceCard = ({ 
+  service, 
+  index 
+}: {
+  service: {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    tech: string[];
+  };
+  index: number;
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <motion.div
+      className="group relative"
+      onHoverStart={() => setIsExpanded(true)}
+      onHoverEnd={() => setIsExpanded(false)}
+    >
+      <motion.div
+        className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer overflow-hidden"
+        data-cursor-hover
+        data-cursor-text={service.title}
+        whileHover={{ 
+          y: -4
+        }}
+        transition={{ 
+          duration: 0.2,
+          ease: "easeOut"
+        }}
+      >
+        {/* Main Content */}
+        <div className="flex items-center mb-6">
+          <div className="p-3 rounded-lg gradient-primary text-white mr-4 group-hover:scale-105 transition-transform duration-200">
+            {service.icon}
+          </div>
+          <h3 className="text-2xl font-bold">{service.title}</h3>
+        </div>
+        
+        <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
+        
+        {/* Expandable Technology Icons Section - Always rendered but hidden */}
+        <div className="relative">
+          <motion.div
+            className="border-t border-gray-700/50"
+            initial={false}
+            animate={{
+              height: isExpanded ? 'auto' : 0,
+              paddingTop: isExpanded ? 16 : 0,
+              marginTop: isExpanded ? 16 : 0,
+              opacity: isExpanded ? 1 : 0
+            }}
+            transition={{
+              duration: 0.3,
+              ease: [0.4, 0, 0.2, 1],
+              height: { duration: 0.3 },
+              opacity: { duration: 0.2, delay: isExpanded ? 0.1 : 0 }
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div className="flex items-center mb-3">
+              <Code className="w-4 h-4 text-purple-400 mr-2" />
+              <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                Technologies
+              </span>
+            </div>
+            
+            <motion.div 
+              className="grid grid-cols-4 gap-4"
+              initial={false}
+              animate={{
+                y: isExpanded ? 0 : 20
+              }}
+              transition={{
+                duration: 0.3,
+                ease: "easeOut",
+                delay: isExpanded ? 0.1 : 0
+              }}
+            >
+              {service.tech.map((tech, techIndex) => (
+                <motion.div
+                  key={techIndex}
+                  initial={false}
+                  animate={{
+                    opacity: isExpanded ? 1 : 0,
+                    scale: isExpanded ? 1 : 0.9
+                  }}
+                  transition={{
+                    duration: 0.2,
+                    delay: isExpanded ? techIndex * 0.05 + 0.15 : 0,
+                    ease: "easeOut"
+                  }}
+                  className="flex flex-col items-center p-3 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech"
+                >
+                  <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
+                    {getTechIcon(tech)}
+                  </div>
+                  <span className="text-xs text-gray-400 text-center leading-tight">
+                    {tech}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 function useIntersectionObserver(options = {}) {
   const [activeId, setActiveId] = useState('');
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -540,6 +705,14 @@ const translations = {
       bigData: {
         title: "Soluciones Big Data",
         description: "Plataformas escalables de procesamiento y análisis de datos que manejan datasets masivos con confiabilidad empresarial."
+      },
+      aiIntegration: {
+        title: "Integración de IA",
+        description: "Implementación de soluciones de inteligencia artificial personalizadas que automatizan procesos y mejoran la toma de decisiones empresariales."
+      },
+      webDevelopment: {
+        title: "Desarrollo Web",
+        description: "Sitios web y aplicaciones web modernas, responsivas y optimizadas que ofrecen experiencias excepcionales y resultados medibles."
       }
     },
     cases: {
@@ -669,6 +842,14 @@ const translations = {
       bigData: {
         title: "Big Data Solutions",
         description: "Scalable data processing and analytics platforms that handle massive datasets with enterprise-grade reliability."
+      },
+      aiIntegration: {
+        title: "AI Integration",
+        description: "Custom artificial intelligence solutions that automate processes, enhance decision-making, and drive business innovation."
+      },
+      webDevelopment: {
+        title: "Web Development",
+        description: "Modern, responsive, and optimized websites and web applications that deliver exceptional user experiences and measurable results."
       }
     },
     cases: {
@@ -840,47 +1021,6 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Mouse tracking for 3D card effect - Optimized version
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, cardRef: React.RefObject<HTMLDivElement | null>) => {
-    if (!cardRef.current) return;
-    
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    // Calculate relative position (-1 to 1)
-    const relativeX = (x - centerX) / centerX;
-    const relativeY = (y - centerY) / centerY;
-    
-    // Clamp values to prevent extreme tilting at edges
-    const clampedX = Math.max(-1, Math.min(1, relativeX));
-    const clampedY = Math.max(-1, Math.min(1, relativeY));
-    
-    // Reduce rotation intensity for subtler effect
-    const rotateX = clampedY * -4; // Reduced from -8 to -4
-    const rotateY = clampedX * 4;  // Reduced from 8 to 4
-    
-    // Use requestAnimationFrame for smooth performance
-    requestAnimationFrame(() => {
-      if (cardRef.current) {
-        cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(3px)`;
-      }
-    });
-  };
-  
-  const handleMouseLeave = (cardRef: React.RefObject<HTMLDivElement | null>) => {
-    if (!cardRef.current) return;
-    
-    // Smooth return to original position
-    requestAnimationFrame(() => {
-      if (cardRef.current) {
-        cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-      }
-    });
-  };
-
   const services = [
     {
       icon: <Smartphone className="w-8 h-8" />,
@@ -893,6 +1033,18 @@ export default function Home() {
       title: t.services.desktop.title,
       description: t.services.desktop.description,
       tech: ["Electron", "Qt", ".NET", "Java"]
+    },
+    {
+      icon: <Code className="w-8 h-8" />,
+      title: t.services.webDevelopment.title,
+      description: t.services.webDevelopment.description,
+      tech: ["React", "Next.js", "Vue.js", "Node.js"]
+    },
+    {
+      icon: <Brain className="w-8 h-8" />,
+      title: t.services.aiIntegration.title,
+      description: t.services.aiIntegration.description,
+      tech: ["OpenAI", "TensorFlow", "PyTorch", "Hugging Face"]
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
@@ -1113,39 +1265,14 @@ export default function Home() {
           </FadeInWhenVisible>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerDelay={0.2}>
-            {services.map((service, index) => {
-              const cardRef = useRef<HTMLDivElement>(null);
-              
-              return (
-                <StaggerChild key={index} direction="up">
-                  <div 
-                    ref={cardRef}
-                    className="group p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 hover:-translate-y-2 cursor-pointer"
-                    style={{ 
-                      transformStyle: 'preserve-3d',
-                    transition: 'transform 0.1s ease-out'
-                  }}
-                  onMouseMove={(e) => handleMouseMove(e, cardRef)}
-                  onMouseLeave={() => handleMouseLeave(cardRef)}
-                >
-                  <div className="flex items-center mb-6">
-                    <div className="p-3 rounded-lg gradient-primary text-white mr-4 group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold">{service.title}</h3>
-                  </div>
-                  <p className="text-gray-400 mb-6 leading-relaxed">{service.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {service.tech.map((tech, techIndex) => (
-                      <span key={techIndex} className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                </StaggerChild>
-              );
-            })}
+            {services.map((service, index) => (
+              <StaggerChild key={index} direction="up">
+                <ExpandableServiceCard 
+                  service={service}
+                  index={index}
+                />
+              </StaggerChild>
+            ))}
           </StaggerContainer>
         </div>
       </section>
