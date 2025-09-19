@@ -1998,7 +1998,7 @@ export default function Home() {
             </div>
             <div className="client-logo-item" data-logo="grupo-antolin">
               <img 
-                src="/company-logos/grupo-antolin-logo-png_seeklogo-201813.webp" 
+                src="/company-logos/grupo_antolin_logo.webp" 
                 alt="Grupo Antolin" 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
@@ -2054,8 +2054,36 @@ export default function Home() {
             </div>
             <div className="client-logo-item" data-logo="sese">
               <img 
-                src="/company-logos/logo-sese.webp" 
+                src="/company-logos/sese_logo.webp" 
                 alt="SESE" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="matt">
+              <img 
+                src="/company-logos/matt_logo.webp" 
+                alt="Matt" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="zeus">
+              <img 
+                src="/company-logos/zeus_smart_visual_data_logo.webp" 
+                alt="Zeus Smart Visual Data" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="hebo">
+              <img 
+                src="/company-logos/hebo_logo.webp" 
+                alt="Hebo" 
+                className="h-20 md:h-24 lg:h-28 w-auto"
+              />
+            </div>
+            <div className="client-logo-item" data-logo="mango">
+              <img 
+                src="/company-logos/mango_logo.webp" 
+                alt="Mango" 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
