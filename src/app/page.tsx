@@ -846,6 +846,25 @@ const ExpandableServiceCard = ({
             {service.icon}
           </div>
           <h3 className="text-2xl font-bold">{service.title}</h3>
+          {/* Mobile expand/collapse icon */}
+          {isMobile && (
+            <div className="ml-auto">
+              <motion.div
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="p-2 rounded-full bg-gray-700/50 text-purple-400"
+              >
+                <svg 
+                  className="w-5 h-5" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </motion.div>
+            </div>
+          )}
         </div>
         
         <p className="text-gray-400 mb-2 leading-relaxed">{service.description}</p>
