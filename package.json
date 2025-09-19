@@ -12,6 +12,7 @@
     "analyze:browser": "set BUNDLE_ANALYZE=browser && next build"
   },
   "dependencies": {
+    "critters": "^0.0.23",
     "framer-motion": "^12.23.13",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",

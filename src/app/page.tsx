@@ -29,12 +29,12 @@ import { FaJava } from 'react-icons/fa';
 // Optimized video component without hydration issues
 const OptimizedVideo = ({ 
   src, 
-  alt, 
+  alt, // eslint-disable-line @typescript-eslint/no-unused-vars
   className = "",
-  priority = false 
+  priority = false // eslint-disable-line @typescript-eslint/no-unused-vars
 }: { 
   src: string, 
-  alt: string, 
+  alt: string,
   className?: string,
   priority?: boolean 
 }) => {
@@ -94,7 +94,7 @@ const OptimizedVideo = ({
     >
       <source src={videoSrc} type="video/webm" />
       <p className="text-gray-400 text-center p-4">
-        Your browser doesn't support video playback.
+        Your browser doesn&apos;t support video playback.
       </p>
     </video>
   );
@@ -120,7 +120,7 @@ const EnhancedButton = ({
   disabled?: boolean;
   loading?: boolean;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [ripples, setRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
@@ -180,6 +180,7 @@ const EnhancedButton = ({
   
   return (
     <Component
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={buttonRef as any}
       href={href}
       onClick={handleClick}
