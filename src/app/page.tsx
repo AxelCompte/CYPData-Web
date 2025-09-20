@@ -709,7 +709,8 @@ const ExpandableServiceCard = ({
   service, 
   index,
   expandedCardIndex,
-  setExpandedCardIndex
+  setExpandedCardIndex,
+  technologiesLabel
 }: {
   service: {
     icon: React.ReactNode;
@@ -720,6 +721,7 @@ const ExpandableServiceCard = ({
   index: number;
   expandedCardIndex: number | null;
   setExpandedCardIndex: (index: number | null) => void;
+  technologiesLabel: string;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -921,7 +923,7 @@ const ExpandableServiceCard = ({
               <div className="flex items-center mb-4">
                 <Code className="w-4 h-4 text-purple-300 mr-2" />
                 <span className="text-sm font-semibold text-purple-300 uppercase tracking-wide">
-                  Technologies
+                  {technologiesLabel}
                 </span>
               </div>
               
@@ -999,6 +1001,153 @@ function useIntersectionObserver(options = {}) {
 
 // Translations object
 const translations = {
+  ca: {
+    nav: {
+      services: "Serveis",
+      cases: "Casos d'Èxit",
+      contact: "Contacte"
+    },
+    hero: {
+      title: "Solucions Digitals",
+      subtitle: "per a",
+      highlight: "l'Empresa Moderna",
+      description: "On el programari innovador es troba amb insights accionables per generar avantatge competitiu sostenible.",
+      cta1: "Explora el Nostre Treball",
+      cta2: "Posa't en Contacte"
+    },
+    services: {
+      title: "Els Nostres",
+      titleHighlight: "Serveis",
+      description: "Oferim solucions digitals end-to-end que impulsen la innovació i acceleren el creixement empresarial a Barcelona i Catalunya",
+      technologies: "Tecnologies",
+      mobileApps: {
+        title: "Aplicacions Mòbils Natives",
+        description: "Aplicacions Android i iOS personalitzades construïdes amb tecnologia d'avantguarda per a un rendiment òptim i experiència d'usuari."
+      },
+      desktop: {
+        title: "Aplicacions d'Escriptori",
+        description: "Solucions d'escriptori potents que optimitzen els teus processos empresarials i milloren la productivitat en totes les plataformes."
+      },
+      bi: {
+        title: "Business Intelligence",
+        description: "Transforma les teves dades en insights accionables amb les nostres solucions integrals de BI i dashboards interactius."
+      },
+      bigData: {
+        title: "Solucions Big Data",
+        description: "Plataformes escalables de processament i anàlisi de dades que gestionen datasets massius amb fiabilitat empresarial."
+      },
+      aiIntegration: {
+        title: "Integració d'IA",
+        description: "Implementació de solucions d'intel·ligència artificial personalitzades que automatitzen processos i milloren la presa de decisions empresarials."
+      },
+      webDevelopment: {
+        title: "Desenvolupament Web",
+        description: "Llocs web i aplicacions web modernes, responsives i optimitzades que ofereixen experiències excepcionals i resultats mesurables."
+      }
+    },
+    midline: {
+      title: "Solucions a mida per a cada repte",
+      subtitle: "Ens adaptem a la teva visió i requeriments del projecte"
+    },
+    cases: {
+      title: "Històries d'",
+      titleHighlight: "Èxit",
+      description: "Resultats reals de projectes reals. Descobreix com hem ajudat empreses a transformar les seves operacions amb solucions basades en dades.",
+      ecommerce: {
+        title: "Plataforma d'Analytics E-Commerce",
+        description: "Vam desenvolupar un dashboard d'analytics integral que va incrementar els insights d'ingressos del client en un 300% i va reduir el temps de reportes en un 85%.",
+        industry: "Retail",
+        features: {
+          realTime: {
+            title: "Analytics en Temps Real",
+            description: "Monitoritza rendiment de vendes, comportament del client i nivells d'inventari amb streaming de dades en viu i visualitzacions instantànies."
+          },
+          segmentation: {
+            title: "Segmentació de Clients",
+            description: "Algoritmes ML avançats categoritzen automàticament clients basant-se en patrons de compra, demografia i mètriques d'engagement."
+          },
+          optimization: {
+            title: "Optimització d'Ingressos",
+            description: "Recomanacions intel·ligents de preus i gestió d'inventari per maximitzar la rendibilitat en totes les categories de productes."
+          }
+        }
+      },
+      healthcare: {
+        title: "Sistema de Gestió Sanitària",
+        description: "Vam construir un sistema de gestió de pacients mobile-first servint a 50.000+ pacients amb 99.9% uptime i compliment HIPAA.",
+        industry: "Sanitat",
+        features: {
+          mobile: {
+            title: "Disseny Mobile-First",
+            description: "Apps natives iOS i Android amb capacitats offline, missatgeria segura i programació de cites per a pacients i proveïdors."
+          },
+          ehr: {
+            title: "Historials Mèdics Electrònics",
+            description: "Gestió segura de dades de pacients compatible amb HIPAA amb backup automatitzat, auditories i interoperabilitat amb sistemes existents."
+          },
+          analytics: {
+            title: "Analytics Clínics",
+            description: "Insights de salut poblacional, seguiment de resultats de tractaments i analytics predictius per a recomanacions de cura preventiva."
+          }
+        }
+      },
+      finance: {
+        title: "Dashboard de Trading Financer",
+        description: "Vam crear una plataforma d'analytics de trading en temps real processant milions de transaccions amb latència sub-segon.",
+        industry: "Finances",
+        features: {
+          trading: {
+            title: "Trading d'Alta Freqüència",
+            description: "Execució d'ordres ultra-baixa latència amb precisió de microsegons, gestió automatitzada de riscos i processament de dades de mercat en temps real."
+          },
+          risk: {
+            title: "Analytics de Risc",
+            description: "Avaluació avançada de risc de cartera, proves d'estrès i monitorització de compliment amb alertes en temps real i reportes automatitzats."
+          },
+          intelligence: {
+            title: "Intel·ligència de Mercat",
+            description: "Anàlisi de tendències de mercat impulsat per IA, seguiment de sentiments i modelatge predictiu per a decisions de trading informades."
+          }
+        }
+      },
+      scrollText: "Desplaça't per explorar els nostres projectes"
+    },
+    contact: {
+      title: "Construïm Alguna Cosa",
+      titleHighlight: "Increïble",
+      description: "Preparat per transformar el teu negoci amb solucions digitals d'avantguarda? Posa't en contacte amb el nostre equip expert a Barcelona.",
+      email: "Envia'ns un Email",
+      call: "Truca'ns",
+      schedule: "Dll-Div: 8:00 AM - 5:00 PM",
+      visit: "Visita'ns",
+      linkedin: "LinkedIn",
+      form: {
+        title: "Comença el Teu Projecte Avui",
+        description: "Del",
+        descriptionHighlight: "concepte a la realitat",
+        descriptionEnd: ", et guiarem a través de cada pas del teu viatge de transformació digital.",
+        nameLabel: "Nom",
+        namePlaceholder: "El teu nom complet",
+        emailLabel: "Email",
+        emailPlaceholder: "el.teu.email@empresa.com",
+        messageLabel: "Missatge",
+        messagePlaceholder: "Explica'ns sobre la teva idea de projecte, requisits o qualsevol pregunta que tinguis...",
+        submit: "Enviar Missatge",
+        sending: "Enviant...",
+        success: "¡Missatge enviat correctament! Et contactarem aviat.",
+        error: "Error en enviar el missatge. Si us plau, torna-ho a intentar o contacta'ns directament."
+      }
+    },
+    clients: {
+      title: "La confiança de",
+      titleHighlight: "Líders de la Indústria",
+      description: "Hem tingut el privilegi de treballar amb algunes de les empreses més innovadores del món en diverses indústries."
+    },
+    footer: {
+      description: "Solucions Digitals i Intel·ligència de Negocis | Barcelona, Catalunya",
+      copyright: "2025 CyP Data. Tots els drets reservats."
+    }
+  },
   es: {
     nav: {
       services: "Servicios",
@@ -1017,6 +1166,7 @@ const translations = {
       title: "Nuestros",
       titleHighlight: "Servicios",
       description: "Ofrecemos soluciones digitales end-to-end que impulsan la innovación y aceleran el crecimiento empresarial en Barcelona y España",
+      technologies: "Tecnologías",
       mobileApps: {
         title: "Aplicaciones Móviles Nativas",
         description: "Aplicaciones Android e iOS personalizadas construidas con tecnología de vanguardia para un rendimiento óptimo y experiencia de usuario."
@@ -1163,6 +1313,7 @@ const translations = {
       title: "Our",
       titleHighlight: "Services",
       description: "We deliver end-to-end digital solutions that drive innovation and accelerate business growth across Barcelona and Spain",
+      technologies: "Technologies",
       mobileApps: {
         title: "Native Mobile Apps",
         description: "Custom Android and iOS applications built with cutting-edge technology for optimal performance and user experience."
@@ -1296,11 +1447,19 @@ const translations = {
 export default function Home() {
   const [activeProject, elementsRef] = useIntersectionObserver();
   const [isInHero, setIsInHero] = useState(true);
-  const [language, setLanguage] = useState<'es' | 'en'>('es'); // Default to Spanish
+  // Start with Spanish to match server rendering, then switch to Catalan client-side
+  const [language, setLanguage] = useState<'ca' | 'es' | 'en'>('es');
+  const [isMounted, setIsMounted] = useState(false);
   const servicesRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
   const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Set Catalan as default after component mounts (client-side only)
+  useEffect(() => {
+    setIsMounted(true);
+    setLanguage('ca'); // Switch to Catalan after hydration
+  }, []);
   
   // Get current translations
   const t = translations[language];
@@ -1315,8 +1474,19 @@ export default function Home() {
   const [submitMessage, setSubmitMessage] = useState('');
   
   // Language switcher
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === 'es' ? 'en' : 'es');
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  
+  const languages = [
+    { code: 'ca' as const, name: 'Català', flag: '🇪🇸' },
+    { code: 'es' as const, name: 'Español', flag: '🇪🇸' },
+    { code: 'en' as const, name: 'English', flag: '🇬🇧' }
+  ];
+  
+  const currentLanguage = languages.find(lang => lang.code === language);
+  
+  const changeLanguage = (newLanguage: 'ca' | 'es' | 'en') => {
+    setLanguage(newLanguage);
+    setIsLanguageDropdownOpen(false);
   };
 
   // Smooth scroll function
@@ -1383,6 +1553,21 @@ export default function Home() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isLanguageDropdownOpen) {
+        const target = event.target as Element;
+        if (!target.closest('.language-dropdown')) {
+          setIsLanguageDropdownOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isLanguageDropdownOpen]);
   
   const services = [
     {
@@ -1534,14 +1719,49 @@ export default function Home() {
               </button>
               
               {/* Language Switcher */}
-              <button
-                onClick={toggleLanguage}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
-                title={language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-              >
-                <Globe className="w-4 h-4" />
-                <span className="text-sm font-medium">{language.toUpperCase()}</span>
-              </button>
+              <div className="relative language-dropdown">
+                <button
+                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
+                  title="Choose language"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span className="text-sm font-medium">{currentLanguage?.name}</span>
+                  <motion.div
+                    animate={{ rotate: isLanguageDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </motion.div>
+                </button>
+                
+                <AnimatePresence>
+                  {isLanguageDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full mt-2 right-0 bg-gray-800 border border-gray-700 rounded-lg shadow-lg py-2 min-w-[140px] z-50"
+                    >
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => changeLanguage(lang.code)}
+                          className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors flex items-center space-x-3 ${
+                            language === lang.code ? 'text-purple-300 bg-gray-700/50' : 'text-gray-300'
+                          }`}
+                        >
+                          <span className="text-sm">{lang.flag}</span>
+                          <span className="text-sm">{lang.name}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -1633,21 +1853,33 @@ export default function Home() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 }}
-                      className="pt-4"
+                      className="pt-4 space-y-2"
                     >
-                      <button
-                        onClick={() => {
-                          toggleLanguage();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="flex items-center space-x-3 py-3 px-4 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors w-full"
-                        title={language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-                      >
-                        <Globe className="w-5 h-5" />
-                        <span className="text-lg font-medium">
-                          {language === 'es' ? 'Español' : 'English'}
-                        </span>
-                      </button>
+                      <div className="text-sm text-gray-400 px-4 mb-2">Idioma / Language</div>
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            changeLanguage(lang.code);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`flex items-center space-x-3 py-3 px-4 rounded-lg border transition-colors w-full ${
+                            language === lang.code 
+                              ? 'border-purple-500 bg-purple-500/10 text-purple-300' 
+                              : 'border-gray-700 hover:border-purple-500'
+                          }`}
+                        >
+                          <span className="text-lg">{lang.flag}</span>
+                          <span className="text-lg font-medium">{lang.name}</span>
+                          {language === lang.code && (
+                            <div className="ml-auto">
+                              <svg className="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
+                        </button>
+                      ))}
                     </motion.div>
                   </div>
                 </div>
@@ -1751,6 +1983,7 @@ export default function Home() {
                     index={index}
                     expandedCardIndex={expandedCardIndex}
                     setExpandedCardIndex={setExpandedCardIndex}
+                    technologiesLabel={t.services.technologies}
                   />
                 </StaggerChild>
               ))}
@@ -2238,7 +2471,7 @@ export default function Home() {
                     <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.visit}</h3>
                     <address className="text-gray-400 group-hover:text-purple-300 transition-colors not-italic">
                       Ctra. Piera, 7A<br />
-                      08760 Martorell, Barcelona, {language === 'es' ? 'España' : 'Spain'}
+                      08760 Martorell, Barcelona, {language === 'ca' ? 'Catalunya' : language === 'es' ? 'España' : 'Spain'}
                     </address>
                   </div>
                 </div>
