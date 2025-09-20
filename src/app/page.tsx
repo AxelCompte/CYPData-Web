@@ -788,7 +788,7 @@ const ExpandableServiceCard = ({
 
   const getTransform = () => {
     // Disable 3D tilt effect on mobile
-    if (!isHovered || !cardRef.current || isMobile) return 'none';
+    if (!isHovered || !cardRef.current || isMobile) return 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.width / 2;
@@ -979,14 +979,6 @@ const MagneticClientLogos = () => {
       const isSmallScreen = window.innerWidth < 768; // md breakpoint
       const isMobileDevice = isTouchDevice && isSmallScreen; // More strict: must be both touch AND small screen
       setIsMobile(isMobileDevice);
-      
-      // Debug log
-      console.log('Mobile detection:', { 
-        isTouchDevice, 
-        isSmallScreen, 
-        windowWidth: window.innerWidth,
-        isMobileDevice 
-      });
     };
     
     checkMobile();
@@ -1056,9 +1048,6 @@ const MagneticClientLogos = () => {
     // Skip magnetic effect on mobile
     if (isMobile || !containerRef.current) return;
     
-    // Debug log
-    console.log('Mouse move detected, applying magnetic effect');
-    
     // Use requestAnimationFrame for smoother updates
     requestAnimationFrame(() => {
       const mouseX = e.clientX;
@@ -1083,11 +1072,8 @@ const MagneticClientLogos = () => {
 
   // Add/remove mouse listener and set mobile styles
   useEffect(() => {
-    console.log('Effect running, isMobile:', isMobile);
-    
     if (isMobile) {
       // On mobile: set all logos to scale 1 and full brightness
-      console.log('Setting mobile styles');
       logoRefs.current.forEach((logoElement) => {
         if (!logoElement) return;
         const img = logoElement.querySelector('img');
@@ -1098,14 +1084,12 @@ const MagneticClientLogos = () => {
       });
     } else {
       // On desktop: add mouse listener for magnetic effect
-      console.log('Adding mouse listener for desktop');
       document.addEventListener('mousemove', handleMouseMove);
     }
     
     // Cleanup function
     return () => {
       if (!isMobile) {
-        console.log('Removing mouse listener');
         document.removeEventListener('mousemove', handleMouseMove);
       }
     };
