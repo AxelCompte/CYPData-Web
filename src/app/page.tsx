@@ -2,28 +2,199 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
 import { ArrowRight, Smartphone, Monitor, BarChart3, Database, Mail, Phone, MapPin, CheckCircle, Send, User, MessageSquare, Globe, Brain, Code } from 'lucide-react';
-import { 
-  SiReact, 
-  SiFlutter, 
-  SiSwift, 
-  SiKotlin, 
-  SiElectron, 
-  SiQt, 
-  SiDotnet, 
-  SiNextdotjs, 
-  SiVuedotjs, 
-  SiNodedotjs,
-  SiOpenai,
-  SiTensorflow,
-  SiPytorch,
-  SiTableau,
-  SiApachespark,
-  SiMongodb,
-  SiElasticsearch
-} from 'react-icons/si';
-import { FaJava } from 'react-icons/fa';
+
+// Dynamic imports for performance monitoring
+const WebVitals = dynamic(() => import('./components/WebVitals'), { ssr: false });
+
+// Dynamic imports for tech icons to reduce bundle size
+const SiReact = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiReact })), { ssr: false });
+const SiFlutter = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiFlutter })), { ssr: false });
+const SiSwift = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiSwift })), { ssr: false });
+const SiKotlin = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiKotlin })), { ssr: false });
+const SiElectron = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiElectron })), { ssr: false });
+const SiQt = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiQt })), { ssr: false });
+const SiDotnet = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiDotnet })), { ssr: false });
+const SiNextdotjs = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiNextdotjs })), { ssr: false });
+const SiVuedotjs = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiVuedotjs })), { ssr: false });
+const SiNodedotjs = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiNodedotjs })), { ssr: false });
+const SiOpenai = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiOpenai })), { ssr: false });
+const SiTensorflow = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiTensorflow })), { ssr: false });
+const SiPytorch = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiPytorch })), { ssr: false });
+const SiTableau = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiTableau })), { ssr: false });
+const SiApachespark = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiApachespark })), { ssr: false });
+const SiMongodb = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiMongodb })), { ssr: false });
+const SiElasticsearch = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiElasticsearch })), { ssr: false });
+const FaJava = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaJava })), { ssr: false });
+
+// Dynamic imports for better code splitting and performance
+const ConstellationBackground = dynamic(() => Promise.resolve({
+  default: function ConstellationBackgroundComponent({ sectionRef }: { sectionRef?: React.RefObject<HTMLElement | null> }) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const animationRef = useRef<number | null>(null);
+    const mouseRef = useRef({ x: 0, y: 0 });
+    const nodesRef = useRef<Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      originalX: number;
+      originalY: number;
+    }>>([]);
+
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      const section = sectionRef?.current;
+      if (!canvas || !section) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const resizeCanvas = () => {
+        canvas.width = canvas.offsetWidth * 2;
+        canvas.height = canvas.offsetHeight * 2;
+        ctx.scale(2, 2);
+        
+        const nodeCount = Math.floor((canvas.width * canvas.height) / 40000);
+        nodesRef.current = Array.from({ length: nodeCount }, () => ({
+          x: Math.random() * canvas.offsetWidth,
+          y: Math.random() * canvas.offsetHeight,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          originalX: 0,
+          originalY: 0,
+        }));
+        
+        nodesRef.current.forEach(node => {
+          node.originalX = node.x;
+          node.originalY = node.y;
+        });
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = section.getBoundingClientRect();
+        mouseRef.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      };
+
+      const animate = () => {
+        if (!ctx || !canvas) return;
+
+        ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+        const nodes = nodesRef.current;
+        const mouse = mouseRef.current;
+
+        nodes.forEach((node, i) => {
+          const dx = mouse.x - node.x;
+          const dy = mouse.y - node.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const maxDistance = 150;
+
+          if (distance < maxDistance) {
+            const force = (1 - distance / maxDistance) * 1;
+            node.vx += dx * force * 0.003;
+            node.vy += dy * force * 0.003;
+          }
+
+          const returnForce = 0.08;
+          node.vx += (node.originalX - node.x) * returnForce;
+          node.vy += (node.originalY - node.y) * returnForce;
+
+          node.vx *= 0.95;
+          node.vy *= 0.95;
+          node.x += node.vx;
+          node.y += node.vy;
+
+          if (node.x < 0 || node.x > canvas.offsetWidth) {
+            node.x = Math.max(0, Math.min(canvas.offsetWidth, node.x));
+            node.vx *= -0.5;
+          }
+          if (node.y < 0 || node.y > canvas.offsetHeight) {
+            node.y = Math.max(0, Math.min(canvas.offsetHeight, node.y));
+            node.vy *= -0.5;
+          }
+
+          nodes.slice(i + 1).forEach(otherNode => {
+            const dx = node.x - otherNode.x;
+            const dy = node.y - otherNode.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.25;
+              ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(node.x, node.y);
+              ctx.lineTo(otherNode.x, otherNode.y);
+              ctx.stroke();
+            }
+          });
+        });
+
+        nodes.forEach(node => {
+          const dx = mouse.x - node.x;
+          const dy = mouse.y - node.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const maxDistance = 150;
+          
+          const nodeOpacity = distance < maxDistance ? 
+            0.6 + (1 - distance / maxDistance) * 0.3 : 0.4;
+          
+          ctx.fillStyle = `rgba(139, 92, 246, ${nodeOpacity})`;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (distance < maxDistance) {
+            const glowOpacity = (1 - distance / maxDistance) * 0.3;
+            const glowSize = 2 + (1 - distance / maxDistance) * 2;
+            
+            ctx.shadowColor = '#8b5cf6';
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = `rgba(139, 92, 246, ${glowOpacity})`;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+
+        animationRef.current = requestAnimationFrame(animate);
+      };
+
+      resizeCanvas();
+      section.addEventListener('mousemove', handleMouseMove);
+      section.addEventListener('mouseenter', handleMouseMove);
+      window.addEventListener('resize', resizeCanvas);
+      animate();
+
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        section.removeEventListener('mousemove', handleMouseMove);
+        section.removeEventListener('mouseenter', handleMouseMove);
+        window.removeEventListener('resize', resizeCanvas);
+      };
+    }, [sectionRef]);
+
+    return (
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{ zIndex: 1 }}
+      />
+    );
+  }
+}), { 
+  ssr: false,
+  loading: () => <div className="absolute inset-0 w-full h-full pointer-events-none" />
+});
 
 // Optimized video component with GIF fallback
 // Optimized video component without hydration issues
@@ -531,179 +702,6 @@ const getTechIcon = (tech: string) => {
   };
   
   return iconMap[tech] || <Code className="w-5 h-5 text-gray-400" />;
-};
-
-// Dynamic Constellation Background Component
-const ConstellationBackground = ({ sectionRef }: { sectionRef?: React.RefObject<HTMLElement | null> }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const nodesRef = useRef<Array<{
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    originalX: number;
-    originalY: number;
-  }>>([]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const section = sectionRef?.current;
-    if (!canvas || !section) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth * 2; // Retina support
-      canvas.height = canvas.offsetHeight * 2;
-      ctx.scale(2, 2);
-      
-      // Initialize nodes
-      const nodeCount = Math.floor((canvas.width * canvas.height) / 40000);
-      nodesRef.current = Array.from({ length: nodeCount }, () => ({
-        x: Math.random() * canvas.offsetWidth,
-        y: Math.random() * canvas.offsetHeight,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        originalX: 0,
-        originalY: 0,
-      }));
-      
-      // Set original positions
-      nodesRef.current.forEach(node => {
-        node.originalX = node.x;
-        node.originalY = node.y;
-      });
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = section.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
-    };
-
-    const animate = () => {
-      if (!ctx || !canvas) return;
-
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-
-      const nodes = nodesRef.current;
-      const mouse = mouseRef.current;
-
-      // Update and draw nodes
-      nodes.forEach((node, i) => {
-        // Mouse interaction - attract nodes to mouse
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 150;
-
-        if (distance < maxDistance) {
-          const force = (1 - distance / maxDistance) * 1;
-          node.vx += dx * force * 0.003;
-          node.vy += dy * force * 0.003;
-        }
-
-        // Return to original position
-        const returnForce = 0.08;
-        node.vx += (node.originalX - node.x) * returnForce;
-        node.vy += (node.originalY - node.y) * returnForce;
-
-        // Apply velocity with damping
-        node.vx *= 0.95;
-        node.vy *= 0.95;
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Keep nodes in bounds
-        if (node.x < 0 || node.x > canvas.offsetWidth) {
-          node.x = Math.max(0, Math.min(canvas.offsetWidth, node.x));
-          node.vx *= -0.5;
-        }
-        if (node.y < 0 || node.y > canvas.offsetHeight) {
-          node.y = Math.max(0, Math.min(canvas.offsetHeight, node.y));
-          node.vy *= -0.5;
-        }
-
-        // Draw connections first (behind nodes)
-        nodes.slice(i + 1).forEach(otherNode => {
-          const dx = node.x - otherNode.x;
-          const dy = node.y - otherNode.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            const opacity = (1 - distance / 120) * 0.25;
-            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
-            ctx.lineWidth = 0.8;
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(otherNode.x, otherNode.y);
-            ctx.stroke();
-          }
-        });
-      });
-
-      // Draw nodes on top
-      nodes.forEach(node => {
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 150;
-        
-        // Base node
-        const nodeOpacity = distance < maxDistance ? 
-          0.6 + (1 - distance / maxDistance) * 0.3 : 0.4;
-        
-        ctx.fillStyle = `rgba(139, 92, 246, ${nodeOpacity})`;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Add subtle glow effect for nodes near mouse
-        if (distance < maxDistance) {
-          const glowOpacity = (1 - distance / maxDistance) * 0.3;
-          const glowSize = 2 + (1 - distance / maxDistance) * 2;
-          
-          ctx.shadowColor = '#8b5cf6';
-          ctx.shadowBlur = 8;
-          ctx.fillStyle = `rgba(139, 92, 246, ${glowOpacity})`;
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      });
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    resizeCanvas();
-    section.addEventListener('mousemove', handleMouseMove);
-    section.addEventListener('mouseenter', handleMouseMove);
-    window.addEventListener('resize', resizeCanvas);
-    animate();
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      section.removeEventListener('mousemove', handleMouseMove);
-      section.removeEventListener('mouseenter', handleMouseMove);
-      window.removeEventListener('resize', resizeCanvas);
-    };
-  }, [sectionRef]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 1 }}
-    />
-  );
 };
 
 // Expandable Service Card Component
@@ -1505,6 +1503,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <WebVitals />
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800 transition-all duration-500 ${
         isInHero ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'

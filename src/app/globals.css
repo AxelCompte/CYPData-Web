@@ -160,3 +160,51 @@ body {
 .animate-infinite-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Performance Optimizations */
+/* Optimize animations for better performance */
+.motion-reduce-transform {
+  will-change: transform;
+}
+
+.motion-reduce-opacity {
+  will-change: opacity;
+}
+
+/* Optimize commonly animated elements */
+button, a, [data-cursor-hover] {
+  will-change: transform, opacity;
+}
+
+/* Reset will-change after animation completes */
+button:not(:hover):not(:focus),
+a:not(:hover):not(:focus),
+[data-cursor-hover]:not(:hover) {
+  will-change: auto;
+}
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Optimize canvas rendering */
+canvas {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Reduce paint and composite layers */
+.layer-optimized {
+  contain: layout style paint;
+}
+
+/* Optimize text rendering during animations */
+.smooth-text {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

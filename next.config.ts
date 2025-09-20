@@ -17,10 +17,13 @@ const nextConfig: NextConfig = {
   // Experimental features for better performance
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
-  // Headers for caching
+  // External packages
+  serverExternalPackages: ['canvas', 'web-vitals'],
+
+  // Advanced caching and performance headers
   async headers() {
     return [
       {
@@ -38,14 +41,58 @@ const nextConfig: NextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
         ],
       },
       {
-        source: '/public/(.*)',
+        source: '/_next/static/(.*)',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Images and fonts
+      {
+        source: '/(.*)\\.(png|jpg|jpeg|gif|webp|svg|ico)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Fonts
+      {
+        source: '/(.*)\\.(woff|woff2|eot|ttf|otf)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // CSS and JS
+      {
+        source: '/(.*)\\.(css|js)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Media files
+      {
+        source: '/(.*)\\.(webm|mp4)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800',
           },
         ],
       },
