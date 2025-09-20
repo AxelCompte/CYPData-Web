@@ -132,7 +132,7 @@ const EnhancedButton = ({
   const variantClasses = {
     primary: "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-purple-500/25",
     secondary: "bg-gray-800 text-white border border-gray-700 hover:border-purple-500",
-    ghost: "text-purple-400 hover:text-purple-300 hover:bg-purple-500/10",
+    ghost: "text-purple-300 hover:text-purple-300 hover:bg-purple-500/10",
     outline: "border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
   };
 
@@ -524,8 +524,8 @@ const getTechIcon = (tech: string) => {
     'MongoDB': <SiMongodb className="w-5 h-5" style={{ color: '#47A248' }} />,
     'Elasticsearch': <SiElasticsearch className="w-5 h-5" style={{ color: '#005571' }} />,
     // Fallback icons for technologies without specific icons
-    'Qlik': <BarChart3 className="w-5 h-5 text-purple-400" />,
-    'Custom BI': <BarChart3 className="w-5 h-5 text-purple-400" />,
+    'Qlik': <BarChart3 className="w-5 h-5 text-purple-300" />,
+    'Custom BI': <BarChart3 className="w-5 h-5 text-purple-300" />,
     'Hadoop': <Database className="w-5 h-5 text-green-400" />,
     'Hugging Face': <Brain className="w-5 h-5 text-yellow-400" />
   };
@@ -853,7 +853,7 @@ const ExpandableServiceCard = ({
               <motion.div
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="p-2 rounded-full bg-gray-700/50 text-purple-400"
+                className="p-2 rounded-full bg-gray-700/50 text-purple-300"
               >
                 <svg 
                   className="w-5 h-5" 
@@ -921,8 +921,8 @@ const ExpandableServiceCard = ({
                 : 'bg-gray-800/95 border border-purple-500/30 backdrop-blur-sm shadow-2xl shadow-purple-500/10' // Desktop: fancy overlay
             }`}>
               <div className="flex items-center mb-4">
-                <Code className="w-4 h-4 text-purple-400 mr-2" />
-                <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                <Code className="w-4 h-4 text-purple-300 mr-2" />
+                <span className="text-sm font-semibold text-purple-300 uppercase tracking-wide">
                   Technologies
                 </span>
               </div>
@@ -1524,13 +1524,13 @@ export default function Home() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
-              <button onClick={() => scrollToSection('services')} className="hover:text-purple-400 transition-colors">
+              <button onClick={() => scrollToSection('services')} className="hover:text-purple-300 transition-colors">
                 {t.nav.services}
               </button>
-              <button onClick={() => scrollToSection('cases')} className="hover:text-purple-400 transition-colors">
+              <button onClick={() => scrollToSection('cases')} className="hover:text-purple-300 transition-colors">
                 {t.nav.cases}
               </button>
-              <button onClick={() => scrollToSection('contact')} className="hover:text-purple-400 transition-colors">
+              <button onClick={() => scrollToSection('contact')} className="hover:text-purple-300 transition-colors">
                 {t.nav.contact}
               </button>
               
@@ -1587,7 +1587,7 @@ export default function Home() {
                       transition={{ delay: 0.1 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('services');
                           setIsMobileMenuOpen(false);
@@ -1603,7 +1603,7 @@ export default function Home() {
                       transition={{ delay: 0.2 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('cases');
                           setIsMobileMenuOpen(false);
@@ -1619,7 +1619,7 @@ export default function Home() {
                       transition={{ delay: 0.3 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-400 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('contact');
                           setIsMobileMenuOpen(false);
@@ -1831,11 +1831,11 @@ export default function Home() {
                 >
                   <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
                     <div className="mb-4">
-                      <span className="text-sm font-semibold text-purple-400 uppercase tracking-wide">
+                      <span className="text-sm font-semibold text-purple-300 uppercase tracking-wide">
                         {study.industry}
                       </span>
                     </div>
-                    <h3 className="text-3xl font-bold mb-6 group-hover:text-purple-400 transition-colors">
+                    <h3 className="text-3xl font-bold mb-6 group-hover:text-purple-300 transition-colors">
                       {study.title}
                     </h3>
                     <p className="text-lg text-gray-400 mb-8 leading-relaxed">
@@ -1846,7 +1846,7 @@ export default function Home() {
                     <div className="mb-8 space-y-6">
                       {study.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-start space-x-4">
-                          <div className="flex-shrink-0 p-2 rounded-lg bg-purple-500/20 text-purple-400">
+                          <div className="flex-shrink-0 p-2 rounded-lg gradient-primary text-white">
                             {feature.icon}
                           </div>
                           <div>
@@ -1899,7 +1899,7 @@ export default function Home() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-600/20 to-purple-800/20 flex items-center justify-center">
-                        <BarChart3 className="w-16 h-16 text-purple-400" />
+                        <BarChart3 className="w-16 h-16 text-purple-300" />
                       </div>
                       <p className="text-gray-400 text-lg">Scroll to explore our projects</p>
                     </div>
@@ -1926,184 +1926,236 @@ export default function Home() {
           {/* Client Logo Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2 lg:gap-2 items-center justify-items-center">
             <div className="client-logo-item" data-logo="mercedes">
-              <img 
+              <Image 
                 src="/company-logos/mercedez_benz_logo.webp" 
                 alt="Mercedes Benz" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="volkswagen">
-              <img 
+              <Image 
                 src="/company-logos/volkswagen_logo.webp" 
                 alt="Volkswagen" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="nissan">
-              <img 
+              <Image 
                 src="/company-logos/nissan_logo.webp" 
                 alt="Nissan" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="seat">
-              <img 
+              <Image 
                 src="/company-logos/seat_logo.webp" 
                 alt="SEAT" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="pfizer">
-              <img 
+              <Image 
                 src="/company-logos/pfizer_logo.webp" 
                 alt="Pfizer" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="magna">
-              <img 
+              <Image 
                 src="/company-logos/magna_logo.webp" 
                 alt="Magna" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="gestamp">
-              <img 
+              <Image 
                 src="/company-logos/gestamp_logo.webp" 
                 alt="Gestamp" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="lear">
-              <img 
+              <Image 
                 src="/company-logos/lear_corporation_logo.webp" 
                 alt="Lear Corporation" 
+                width={112}
+                height={112} 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="plastic-omnium">
-              <img 
+              <Image 
                 src="/company-logos/plastic_omnium_logo.webp" 
                 alt="Plastic Omnium" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="benteler">
-              <img 
+              <Image 
                 src="/company-logos/benteler_logo.webp" 
                 alt="Benteler" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="agc">
-              <img 
+              <Image 
                 src="/company-logos/agc_logo.webp" 
                 alt="AGC" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="autoneum">
-              <img 
+              <Image 
                 src="/company-logos/autoneum_logo.webp" 
                 alt="Autoneum" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="ti-automotive">
-              <img 
+              <Image 
                 src="/company-logos/ti_automotive_logo.webp" 
                 alt="TI Automotive" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="grupo-antolin">
-              <img 
+              <Image 
                 src="/company-logos/grupo_antolin_logo.webp" 
                 alt="Grupo Antolin" 
+                width={112}
+                height={112} 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="balearia">
-              <img 
+              <Image 
                 src="/company-logos/balearia_logo.webp" 
                 alt="Balearia" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="schmitz">
-              <img 
+              <Image 
                 src="/company-logos/schmitz_cargo_bull_logo.webp" 
                 alt="Schmitz Cargobull" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="berge">
-              <img 
+              <Image 
                 src="/company-logos/berge_logo.webp" 
                 alt="Berge" 
+                width={112}
+                height={112} 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="doga">
-              <img 
+              <Image 
                 src="/company-logos/doga_logo.webp" 
                 alt="Doga" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="silence">
-              <img 
+              <Image 
                 src="/company-logos/silence_logo.webp" 
                 alt="Silence" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="smp">
-              <img 
+              <Image 
                 src="/company-logos/smp_logo.webp" 
                 alt="SMP" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="enlog">
-              <img 
+              <Image 
                 src="/company-logos/enlog.webp" 
                 alt="Enlog" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="sese">
-              <img 
+              <Image 
                 src="/company-logos/sese_logo.webp" 
                 alt="SESE" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="matt">
-              <img 
+              <Image 
                 src="/company-logos/matt_logo.webp" 
                 alt="Matt" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="zeus">
-              <img 
+              <Image 
                 src="/company-logos/zeus_smart_visual_data_logo.webp" 
                 alt="Zeus Smart Visual Data" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="hebo">
-              <img 
+              <Image 
                 src="/company-logos/hebo_logo.webp" 
                 alt="Hebo" 
+                width={112}
+                height={112} 
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
             <div className="client-logo-item" data-logo="mango">
-              <img 
+              <Image 
                 src="/company-logos/mango_logo.webp" 
                 alt="Mango" 
+                width={112}
+                height={112}
                 className="h-20 md:h-24 lg:h-28 w-auto"
               />
             </div>
@@ -2141,7 +2193,7 @@ export default function Home() {
                     <Mail className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-400 transition-colors">{t.contact.email}</h3>
+                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.email}</h3>
                     <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
                       alonso.molina@cypcore.com
                     </span>
@@ -2161,7 +2213,7 @@ export default function Home() {
                     <Phone className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-400 transition-colors">{t.contact.call}</h3>
+                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.call}</h3>
                     <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
                       +34 659 160 145
                     </span>
@@ -2184,7 +2236,7 @@ export default function Home() {
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-400 transition-colors">{t.contact.visit}</h3>
+                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.visit}</h3>
                     <address className="text-gray-400 group-hover:text-purple-300 transition-colors not-italic">
                       Ctra. Piera, 7A<br />
                       08760 Martorell, Barcelona, {language === 'es' ? 'España' : 'Spain'}
@@ -2209,7 +2261,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-400 transition-colors">{t.contact.linkedin}</h3>
+                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.linkedin}</h3>
                     <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
                       @cypcore
                     </span>
@@ -2338,9 +2390,9 @@ export default function Home() {
               <p className="text-gray-400 mt-2">{t.footer.description}</p>
             </div>
             <div className="flex space-x-6">
-              <NavLink href="#services" className="text-gray-400 hover:text-purple-400">{t.nav.services}</NavLink>
-              <NavLink href="#cases" className="text-gray-400 hover:text-purple-400">{t.nav.cases}</NavLink>
-              <NavLink href="#contact" className="text-gray-400 hover:text-purple-400">{t.nav.contact}</NavLink>
+              <NavLink href="#services" className="text-gray-400 hover:text-purple-300">{t.nav.services}</NavLink>
+              <NavLink href="#cases" className="text-gray-400 hover:text-purple-300">{t.nav.cases}</NavLink>
+              <NavLink href="#contact" className="text-gray-400 hover:text-purple-300">{t.nav.contact}</NavLink>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">

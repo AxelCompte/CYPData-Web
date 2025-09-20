@@ -5,10 +5,14 @@
 :root {
   --background: #111827;
   --foreground: #f9fafb;
-  --primary-purple: #993399;
-  --secondary-purple: #663399;
-  --gradient-start: #993399;
-  --gradient-end: #663399;
+  --primary-purple: #bb43bb;
+  /* --primary-purple: #993399; */
+  --secondary-purple: #753fac;
+  /* --secondary-purple: #663399; */
+  --gradient-start: #dd35c1;
+  --gradient-end: #a934f7;
+  /* --gradient-start: #993399;
+  --gradient-end: #663399; */
 }
 
 * {
@@ -116,11 +120,9 @@ body {
 /* Client logos hover effect */
 .client-logo-item {
   position: relative;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
   transition: all 0.3s ease;
-  --gradient-start: #8b5cf6;
-  --gradient-end: #a855f7;
 }
 
 .client-logo-item:hover {
