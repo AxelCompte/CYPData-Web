@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   compress: true,
   
+  // Development settings
+  env: {
+    CUSTOM_KEY: 'development',
+  },
+  
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],

@@ -788,7 +788,7 @@ const ExpandableServiceCard = ({
 
   const getTransform = () => {
     // Disable 3D tilt effect on mobile
-    if (!isHovered || !cardRef.current || isMobile) return '';
+    if (!isHovered || !cardRef.current || isMobile) return 'none';
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.width / 2;
@@ -837,7 +837,7 @@ const ExpandableServiceCard = ({
           boxShadow: { duration: 0.3 }
         }}
         style={{
-          transform: getTransform(),
+          transform: !isMobile ? getTransform() : undefined,
           transition: isHovered && !isMobile ? 'transform 0.1s ease-out' : 'transform 0.3s ease-out',
         }}
       >
@@ -1719,49 +1719,51 @@ export default function Home() {
               </button>
               
               {/* Language Switcher */}
-              <div className="relative language-dropdown">
-                <button
-                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
-                  title="Choose language"
-                >
-                  <Globe className="w-4 h-4" />
-                  <span className="text-sm font-medium">{currentLanguage?.name}</span>
-                  <motion.div
-                    animate={{ rotate: isLanguageDropdownOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
+              {isMounted && (
+                <div className="relative language-dropdown">
+                  <button
+                    onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
+                    title="Choose language"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </motion.div>
-                </button>
-                
-                <AnimatePresence>
-                  {isLanguageDropdownOpen && (
+                    <Globe className="w-4 h-4" />
+                    <span className="text-sm font-medium">{currentLanguage?.name}</span>
                     <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ rotate: isLanguageDropdownOpen ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full mt-2 right-0 bg-gray-800 border border-gray-700 rounded-lg shadow-lg py-2 min-w-[140px] z-50"
                     >
-                      {languages.map((lang) => (
-                        <button
-                          key={lang.code}
-                          onClick={() => changeLanguage(lang.code)}
-                          className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors flex items-center space-x-3 ${
-                            language === lang.code ? 'text-purple-300 bg-gray-700/50' : 'text-gray-300'
-                          }`}
-                        >
-                          <span className="text-sm">{lang.flag}</span>
-                          <span className="text-sm">{lang.name}</span>
-                        </button>
-                      ))}
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                  </button>
+                  
+                  <AnimatePresence>
+                    {isLanguageDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full mt-2 right-0 bg-gray-800 border border-gray-700 rounded-lg shadow-lg py-2 min-w-[140px] z-50"
+                      >
+                        {languages.map((lang) => (
+                          <button
+                            key={lang.code}
+                            onClick={() => changeLanguage(lang.code)}
+                            className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors flex items-center space-x-3 ${
+                              language === lang.code ? 'text-purple-300 bg-gray-700/50' : 'text-gray-300'
+                            }`}
+                          >
+                            <span className="text-sm">{lang.flag}</span>
+                            <span className="text-sm">{lang.name}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -1849,38 +1851,40 @@ export default function Home() {
                     </motion.div>
 
                     {/* Mobile Language Switcher */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 }}
-                      className="pt-4 space-y-2"
-                    >
-                      <div className="text-sm text-gray-400 px-4 mb-2">Idioma / Language</div>
-                      {languages.map((lang) => (
-                        <button
-                          key={lang.code}
-                          onClick={() => {
-                            changeLanguage(lang.code);
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className={`flex items-center space-x-3 py-3 px-4 rounded-lg border transition-colors w-full ${
-                            language === lang.code 
-                              ? 'border-purple-500 bg-purple-500/10 text-purple-300' 
-                              : 'border-gray-700 hover:border-purple-500'
-                          }`}
-                        >
-                          <span className="text-lg">{lang.flag}</span>
-                          <span className="text-lg font-medium">{lang.name}</span>
-                          {language === lang.code && (
-                            <div className="ml-auto">
-                              <svg className="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                    </motion.div>
+                    {isMounted && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="pt-4 space-y-2"
+                      >
+                        <div className="text-sm text-gray-400 px-4 mb-2">Idioma / Language</div>
+                        {languages.map((lang) => (
+                          <button
+                            key={lang.code}
+                            onClick={() => {
+                              changeLanguage(lang.code);
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className={`flex items-center space-x-3 py-3 px-4 rounded-lg border transition-colors w-full ${
+                              language === lang.code 
+                                ? 'border-purple-500 bg-purple-500/10 text-purple-300' 
+                                : 'border-gray-700 hover:border-purple-500'
+                            }`}
+                          >
+                            <span className="text-lg">{lang.flag}</span>
+                            <span className="text-lg font-medium">{lang.name}</span>
+                            {language === lang.code && (
+                              <div className="ml-auto">
+                                <svg className="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               </motion.div>
