@@ -674,31 +674,31 @@ const AnimatedProjectCard = ({ children, index }: {
 // Technology Icon Mapping
 const getTechIcon = (tech: string) => {
   const iconMap: Record<string, React.ReactNode> = {
-    'React Native': <SiReact className="w-5 h-5" style={{ color: '#61DAFB' }} />,
-    'React': <SiReact className="w-5 h-5" style={{ color: '#61DAFB' }} />,
-    'Flutter': <SiFlutter className="w-5 h-5" style={{ color: '#02569B' }} />,
-    'Swift': <SiSwift className="w-5 h-5" style={{ color: '#FA7343' }} />,
-    'Kotlin': <SiKotlin className="w-5 h-5" style={{ color: '#7F52FF' }} />,
-    'Electron': <SiElectron className="w-5 h-5" style={{ color: '#47848F' }} />,
-    'Qt': <SiQt className="w-5 h-5" style={{ color: '#41CD52' }} />,
-    '.NET': <SiDotnet className="w-5 h-5" style={{ color: '#512BD4' }} />,
-    'Java': <FaJava className="w-5 h-5" style={{ color: '#ED8B00' }} />,
-    'Next.js': <SiNextdotjs className="w-5 h-5" style={{ color: '#000000' }} />,
-    'Vue.js': <SiVuedotjs className="w-5 h-5" style={{ color: '#4FC08D' }} />,
-    'Node.js': <SiNodedotjs className="w-5 h-5" style={{ color: '#339933' }} />,
-    'OpenAI': <SiOpenai className="w-5 h-5" style={{ color: '#412991' }} />,
-    'TensorFlow': <SiTensorflow className="w-5 h-5" style={{ color: '#FF6F00' }} />,
-    'PyTorch': <SiPytorch className="w-5 h-5" style={{ color: '#EE4C2C' }} />,
-    'Power BI': <BarChart3 className="w-5 h-5" style={{ color: '#F2C811' }} />,
-    'Tableau': <SiTableau className="w-5 h-5" style={{ color: '#E97627' }} />,
-    'Apache Spark': <SiApachespark className="w-5 h-5" style={{ color: '#E25A1C' }} />,
-    'MongoDB': <SiMongodb className="w-5 h-5" style={{ color: '#47A248' }} />,
-    'Elasticsearch': <SiElasticsearch className="w-5 h-5" style={{ color: '#005571' }} />,
+    'React Native': <SiReact className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'React': <SiReact className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Flutter': <SiFlutter className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Swift': <SiSwift className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Kotlin': <SiKotlin className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Electron': <SiElectron className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Qt': <SiQt className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    '.NET': <SiDotnet className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Java': <FaJava className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Next.js': <SiNextdotjs className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Vue.js': <SiVuedotjs className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Node.js': <SiNodedotjs className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'OpenAI': <SiOpenai className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'TensorFlow': <SiTensorflow className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'PyTorch': <SiPytorch className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Power BI': <BarChart3 className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Tableau': <SiTableau className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Apache Spark': <SiApachespark className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'MongoDB': <SiMongodb className="w-5 h-5" style={{ color: '#ffffff' }} />,
+    'Elasticsearch': <SiElasticsearch className="w-5 h-5" style={{ color: '#ffffff' }} />,
     // Fallback icons for technologies without specific icons
-    'Qlik': <BarChart3 className="w-5 h-5 text-purple-300" />,
-    'Custom BI': <BarChart3 className="w-5 h-5 text-purple-300" />,
-    'Hadoop': <Database className="w-5 h-5 text-green-400" />,
-    'Hugging Face': <Brain className="w-5 h-5 text-yellow-400" />
+    'Qlik': <BarChart3 className="w-5 h-5 text-white" />,
+    'Custom BI': <BarChart3 className="w-5 h-5 text-white" />,
+    'Hadoop': <Database className="w-5 h-5 text-white" />,
+    'Hugging Face': <Brain className="w-5 h-5 text-white" />
   };
   
   return iconMap[tech] || <Code className="w-5 h-5 text-gray-400" />;
@@ -940,28 +940,21 @@ const ExpandableServiceCard = ({
                 }}
               >
                 {service.tech.map((tech, techIndex) => (
-                  <motion.div
+                  <div
                     key={techIndex}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      duration: 0.2,
-                      delay: techIndex * 0.05 + 0.15,
-                      ease: "easeOut"
-                    }}
                     className={`flex flex-col items-center ${
                       isMobile ? 'p-2' : 'p-3'
-                    } rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors group/tech`}
+                    } rounded-lg border border-gray-600/50 hover:border-purple-400/60 transition-all duration-200 group/tech`}
                   >
                     <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
                       {getTechIcon(tech)}
                     </div>
                     <span className={`${
                       isMobile ? 'text-xs' : 'text-xs'
-                    } text-gray-400 text-center leading-tight`}>
+                    } text-white text-center leading-tight`}>
                       {tech}
                     </span>
-                  </motion.div>
+                  </div>
                 ))}
               </motion.div>
             </div>
