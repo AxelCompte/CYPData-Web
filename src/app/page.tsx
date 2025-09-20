@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
@@ -963,6 +963,181 @@ const ExpandableServiceCard = ({
         </AnimatePresence>
       </motion.div>
     </motion.div>
+  );
+};
+
+// Magnetic Client Logos Component
+const MagneticClientLogos = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 768; // md breakpoint
+      const isMobileDevice = isTouchDevice && isSmallScreen; // More strict: must be both touch AND small screen
+      setIsMobile(isMobileDevice);
+      
+      // Debug log
+      console.log('Mobile detection:', { 
+        isTouchDevice, 
+        isSmallScreen, 
+        windowWidth: window.innerWidth,
+        isMobileDevice 
+      });
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Company logos data
+  const logos = [
+    { src: "/company-logos/seat_logo.webp", alt: "Seat", id: "seat" },
+    { src: "/company-logos/pfizer_logo.webp", alt: "Pfizer", id: "pfizer" },
+    { src: "/company-logos/magna_logo.webp", alt: "Magna", id: "magna" },
+    { src: "/company-logos/gestamp_logo.webp", alt: "Gestamp", id: "gestamp" },
+    { src: "/company-logos/lear_corporation_logo.webp", alt: "Lear Corporation", id: "lear" },
+    { src: "/company-logos/nissan_logo.webp", alt: "Nissan", id: "nissan" },
+    { src: "/company-logos/plastic_omnium_logo.webp", alt: "Plastic Omnium", id: "plastic-omnium" },
+    { src: "/company-logos/benteler_logo.webp", alt: "Benteler", id: "benteler" },
+    { src: "/company-logos/mango_logo.webp", alt: "Mango", id: "mango" },
+    { src: "/company-logos/autoneum_logo.webp", alt: "Autoneum", id: "autoneum" },
+    { src: "/company-logos/ti_automotive_logo.webp", alt: "TI Automotive", id: "ti-automotive" },
+    { src: "/company-logos/grupo_antolin_logo.webp", alt: "Grupo Antolin", id: "grupo-antolin" },
+    { src: "/company-logos/balearia_logo.webp", alt: "Balearia", id: "balearia" },
+    { src: "/company-logos/schmitz_cargo_bull_logo.webp", alt: "Schmitz Cargobull", id: "schmitz" },
+    { src: "/company-logos/doga_logo.webp", alt: "Doga", id: "doga" },
+    { src: "/company-logos/silence_logo.webp", alt: "Silence", id: "silence" },
+    { src: "/company-logos/agc_logo.webp", alt: "AGC", id: "agc" },
+    { src: "/company-logos/volkswagen_logo.webp", alt: "Volkswagen", id: "volkswagen" },
+    { src: "/company-logos/smp_logo.webp", alt: "SMP", id: "smp" },
+    { src: "/company-logos/enlog.webp", alt: "Enlog", id: "enlog" },
+    { src: "/company-logos/sese_logo.webp", alt: "SESE", id: "sese" },
+    { src: "/company-logos/berge_logo.webp", alt: "Berge", id: "berge" },
+    { src: "/company-logos/zeus_smart_visual_data_logo.webp", alt: "Zeus Smart Visual Data", id: "zeus" },
+    { src: "/company-logos/hebo_logo.webp", alt: "Hebo", id: "hebo" },
+    { src: "/company-logos/mercedez_benz_logo.webp", alt: "Mercedes Benz", id: "mercedes" },
+    { src: "/company-logos/matt_logo.webp", alt: "Matt", id: "matt" },
+  ];
+
+  // Calculate distance from mouse to logo center
+  const calculateDistance = (logoRect: DOMRect, mouseX: number, mouseY: number) => {
+    const logoCenterX = logoRect.left + logoRect.width / 2;
+    const logoCenterY = logoRect.top + logoRect.height / 2;
+    return Math.sqrt(Math.pow(mouseX - logoCenterX, 2) + Math.pow(mouseY - logoCenterY, 2));
+  };
+
+  // Calculate scale and brightness based on distance
+  const calculateEffects = (distance: number) => {
+    const maxDistance = 500; // Increased range for effect
+    const minScale = 0.9;
+    const maxScale = 1.35; // Slightly more dramatic scaling
+    const minBrightness = 0.6;
+    const maxBrightness = 1.3;
+    
+    // Normalize distance (0 = closest, 1 = furthest)
+    const normalizedDistance = Math.min(distance / maxDistance, 1);
+    
+    // Invert so closer = higher values
+    const proximity = 1 - normalizedDistance;
+    
+    const scale = minScale + (proximity * (maxScale - minScale));
+    const brightness = minBrightness + (proximity * (maxBrightness - minBrightness));
+    
+    return { scale, brightness };
+  };
+
+  // Mouse move handler with requestAnimationFrame for smoother performance
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    // Skip magnetic effect on mobile
+    if (isMobile || !containerRef.current) return;
+    
+    // Debug log
+    console.log('Mouse move detected, applying magnetic effect');
+    
+    // Use requestAnimationFrame for smoother updates
+    requestAnimationFrame(() => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      // Apply effects immediately without state update delay
+      logoRefs.current.forEach((logoElement) => {
+        if (!logoElement) return;
+        
+        const logoRect = logoElement.getBoundingClientRect();
+        const distance = calculateDistance(logoRect, mouseX, mouseY);
+        const { scale, brightness } = calculateEffects(distance);
+        
+        const img = logoElement.querySelector('img');
+        if (img) {
+          img.style.transform = `scale(${scale})`;
+          img.style.filter = `brightness(${brightness})`;
+        }
+      });
+    });
+  }, [isMobile]);
+
+  // Add/remove mouse listener and set mobile styles
+  useEffect(() => {
+    console.log('Effect running, isMobile:', isMobile);
+    
+    if (isMobile) {
+      // On mobile: set all logos to scale 1 and full brightness
+      console.log('Setting mobile styles');
+      logoRefs.current.forEach((logoElement) => {
+        if (!logoElement) return;
+        const img = logoElement.querySelector('img');
+        if (img) {
+          img.style.transform = 'scale(1)';
+          img.style.filter = 'brightness(1)';
+        }
+      });
+    } else {
+      // On desktop: add mouse listener for magnetic effect
+      console.log('Adding mouse listener for desktop');
+      document.addEventListener('mousemove', handleMouseMove);
+    }
+    
+    // Cleanup function
+    return () => {
+      if (!isMobile) {
+        console.log('Removing mouse listener');
+        document.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
+  }, [handleMouseMove, isMobile]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2 lg:gap-2 items-center justify-items-center"
+    >
+      {logos.map((logo, index) => (
+        <div 
+          key={logo.id}
+          ref={(el) => { logoRefs.current[index] = el; }}
+          className="client-logo-item" 
+          data-logo={logo.id}
+        >
+          <Image 
+            src={logo.src}
+            alt={logo.alt}
+            width={112}
+            height={112}
+            className="h-20 md:h-24 lg:h-28 w-auto transition-all duration-200 ease-out"
+            style={{ 
+              transformOrigin: 'center',
+              filter: isMobile ? 'brightness(1)' : 'brightness(0.7)', // Full brightness on mobile, dimmed on desktop
+              transform: isMobile ? 'scale(1)' : undefined // Ensure scale 1 on mobile
+            }}
+          />
+        </div>
+      ))}
+    </div>
   );
 };
 
@@ -2202,251 +2377,14 @@ export default function Home() {
           </FadeInWhenVisible>
 
           {/* Client Logo Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2 lg:gap-2 items-center justify-items-center">
-            <div className="client-logo-item" data-logo="mercedes">
-              <Image 
-                src="/company-logos/mercedez_benz_logo.webp" 
-                alt="Mercedes Benz" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="volkswagen">
-              <Image 
-                src="/company-logos/volkswagen_logo.webp" 
-                alt="Volkswagen" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="nissan">
-              <Image 
-                src="/company-logos/nissan_logo.webp" 
-                alt="Nissan" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="seat">
-              <Image 
-                src="/company-logos/seat_logo.webp" 
-                alt="SEAT" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="pfizer">
-              <Image 
-                src="/company-logos/pfizer_logo.webp" 
-                alt="Pfizer" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="magna">
-              <Image 
-                src="/company-logos/magna_logo.webp" 
-                alt="Magna" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="gestamp">
-              <Image 
-                src="/company-logos/gestamp_logo.webp" 
-                alt="Gestamp" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="lear">
-              <Image 
-                src="/company-logos/lear_corporation_logo.webp" 
-                alt="Lear Corporation" 
-                width={112}
-                height={112} 
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="plastic-omnium">
-              <Image 
-                src="/company-logos/plastic_omnium_logo.webp" 
-                alt="Plastic Omnium" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="benteler">
-              <Image 
-                src="/company-logos/benteler_logo.webp" 
-                alt="Benteler" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="agc">
-              <Image 
-                src="/company-logos/agc_logo.webp" 
-                alt="AGC" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="autoneum">
-              <Image 
-                src="/company-logos/autoneum_logo.webp" 
-                alt="Autoneum" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="ti-automotive">
-              <Image 
-                src="/company-logos/ti_automotive_logo.webp" 
-                alt="TI Automotive" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="grupo-antolin">
-              <Image 
-                src="/company-logos/grupo_antolin_logo.webp" 
-                alt="Grupo Antolin" 
-                width={112}
-                height={112} 
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="balearia">
-              <Image 
-                src="/company-logos/balearia_logo.webp" 
-                alt="Balearia" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="schmitz">
-              <Image 
-                src="/company-logos/schmitz_cargo_bull_logo.webp" 
-                alt="Schmitz Cargobull" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="berge">
-              <Image 
-                src="/company-logos/berge_logo.webp" 
-                alt="Berge" 
-                width={112}
-                height={112} 
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="doga">
-              <Image 
-                src="/company-logos/doga_logo.webp" 
-                alt="Doga" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="silence">
-              <Image 
-                src="/company-logos/silence_logo.webp" 
-                alt="Silence" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="smp">
-              <Image 
-                src="/company-logos/smp_logo.webp" 
-                alt="SMP" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="enlog">
-              <Image 
-                src="/company-logos/enlog.webp" 
-                alt="Enlog" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="sese">
-              <Image 
-                src="/company-logos/sese_logo.webp" 
-                alt="SESE" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="matt">
-              <Image 
-                src="/company-logos/matt_logo.webp" 
-                alt="Matt" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="zeus">
-              <Image 
-                src="/company-logos/zeus_smart_visual_data_logo.webp" 
-                alt="Zeus Smart Visual Data" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="hebo">
-              <Image 
-                src="/company-logos/hebo_logo.webp" 
-                alt="Hebo" 
-                width={112}
-                height={112} 
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-            <div className="client-logo-item" data-logo="mango">
-              <Image 
-                src="/company-logos/mango_logo.webp" 
-                alt="Mango" 
-                width={112}
-                height={112}
-                className="h-20 md:h-24 lg:h-28 w-auto"
-              />
-            </div>
-          </div>
+          <MagneticClientLogos />
         </div>
       </section>
 
       {/* Contact Section */}
       <section ref={contactRef} id="contact" className="py-32 px-6 bg-gray-900 relative z-10 overflow-hidden min-h-screen">
         {/* Constellation Background */}
-        <ConstellationBackground sectionRef={contactRef} />
-        
-        <div className="container mx-auto max-w-7xl relative z-20">
+        <ConstellationBackground sectionRef={contactRef} />        <div className="container mx-auto max-w-7xl relative z-20">
           <FadeInWhenVisible direction="up" className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               {t.contact.title} <span className="gradient-text">{t.contact.titleHighlight}</span>
