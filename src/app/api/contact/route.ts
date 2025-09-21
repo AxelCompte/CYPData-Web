@@ -1,133 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { contactFormSchema, checkRateLimit } from '@/lib/validation';
+import { sendContactEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
+    // Get client IP for rate limiting
+    const clientIP = request.headers.get('x-forwarded-for') || 
+                    request.headers.get('x-real-ip') || 
+                    '127.0.0.1';
+
+    // Check rate limit
+    const rateLimitResult = checkRateLimit(clientIP);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { 
+          error: 'Too many requests. Please try again later.',
+          resetTime: rateLimitResult.resetTime
+        },
+        { status: 429 }
+      );
+    }
+
+    // Parse and validate the request body
     const body = await request.json();
-    const { name, email, message } = body;
-
-    // Validate required fields
-    if (!name || !email || !message) {
+    
+    // Validate with Zod schema
+    const validationResult = contactFormSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { 
+          error: 'Validation failed',
+          details: validationResult.error.flatten().fieldErrors
+        },
         { status: 400 }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const { name, email, message, company, phone } = validationResult.data;
+
+    // Basic spam detection
+    const spamKeywords = ['viagra', 'casino', 'lottery', 'winner', 'urgent', 'crypto', 'bitcoin'];
+    const messageText = `${name} ${email} ${message}`.toLowerCase();
+    const hasSpam = spamKeywords.some(keyword => messageText.includes(keyword));
+    
+    if (hasSpam) {
+      // Log suspicious submission but don't tell the user
+      console.warn('Potential spam submission:', { name, email, clientIP });
       return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
+        { success: true, message: 'Thank you for your message!' },
+        { status: 200 }
       );
     }
 
-    // TODO: Integrate with your preferred email service
-    // Options:
-    // 1. Nodemailer with SMTP
-    // 2. SendGrid API
-    // 3. Resend API
-    // 4. AWS SES
-    // 5. EmailJS
-
-    // For now, we'll log the submission and return success
-    console.log('Contact form submission:', {
+    // Send email
+    const emailResult = await sendContactEmail({
       name,
-      email,
+      email, 
       message,
+      company,
+      phone
+    });
+
+    // Log successful submission
+    console.log('Contact form submission successful:', {
+      name,
+      email: email.replace(/(.{2}).*(@.*)/, '$1***$2'), // Partially hide email in logs
       timestamp: new Date().toISOString(),
-      userAgent: request.headers.get('user-agent'),
-      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
+      clientIP,
+      emailIds: {
+        team: emailResult.teamEmailId,
+        user: emailResult.userEmailId
+      }
     });
-
-    // You can also save to a database here
-    // await saveToDatabase({ name, email, message });
-
-    // Example with different email services:
-    
-    // 1. With Resend (recommended for simplicity)
-    /*
-    import { Resend } from 'resend';
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    
-    await resend.emails.send({
-      from: 'contact@cypdata.com',
-      to: ['alonso.molina@cypcore.com'],
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-      `,
-    });
-    */
-
-    // 2. With SendGrid
-    /*
-    import sgMail from '@sendgrid/mail';
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
-
-    const msg = {
-      to: 'alonso.molina@cypcore.com',
-      from: 'contact@cypdata.com',
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-      `,
-    };
-
-    await sgMail.send(msg);
-    */
-
-    // 3. With Nodemailer (SMTP)
-    /*
-    import nodemailer from 'nodemailer';
-
-    const transporter = nodemailer.createTransporter({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: 'alonso.molina@cypcore.com',
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-      `,
-    });
-    */
 
     return NextResponse.json(
       { 
         success: true, 
-        message: 'Contact form submitted successfully' 
+        message: 'Thank you for your message! We\'ll get back to you within 24 hours.' 
       },
       { status: 200 }
     );
 
   } catch (error) {
     console.error('Contact form error:', error);
+    
+    // Don't expose internal errors to the client
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Sorry, there was an issue sending your message. Please try again or contact us directly.' },
       { status: 500 }
     );
   }

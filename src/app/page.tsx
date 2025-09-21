@@ -1292,6 +1292,10 @@ const translations = {
         namePlaceholder: "El teu nom complet",
         emailLabel: "Email",
         emailPlaceholder: "el.teu.email@empresa.com",
+        companyLabel: "Empresa",
+        companyPlaceholder: "Nom de la teva empresa (opcional)",
+        phoneLabel: "Telèfon",
+        phonePlaceholder: "+34 123 456 789 (opcional)",
         messageLabel: "Missatge",
         messagePlaceholder: "Explica'ns sobre la teva idea de projecte, requisits o qualsevol pregunta que tinguis...",
         submit: "Enviar Missatge",
@@ -1439,6 +1443,10 @@ const translations = {
         namePlaceholder: "Tu nombre completo",
         emailLabel: "Email",
         emailPlaceholder: "tu.email@empresa.com",
+        companyLabel: "Empresa",
+        companyPlaceholder: "Nombre de tu empresa (opcional)",
+        phoneLabel: "Teléfono",
+        phonePlaceholder: "+34 123 456 789 (opcional)",
         messageLabel: "Mensaje",
         messagePlaceholder: "Cuéntanos sobre tu idea de proyecto, requisitos o cualquier pregunta que tengas...",
         submit: "Enviar Mensaje",
@@ -1586,6 +1594,10 @@ const translations = {
         namePlaceholder: "Your full name",
         emailLabel: "Email",
         emailPlaceholder: "your.email@company.com",
+        companyLabel: "Company",
+        companyPlaceholder: "Your company name (optional)",
+        phoneLabel: "Phone",
+        phonePlaceholder: "+34 123 456 789 (optional)",
         messageLabel: "Message",
         messagePlaceholder: "Tell us about your project idea, requirements, or any questions you have...",
         submit: "Send Message",
@@ -1630,10 +1642,13 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    company: '',
+    phone: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [submitType, setSubmitType] = useState<'success' | 'error' | ''>('');
   
   // Language switcher
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
@@ -1679,9 +1694,9 @@ export default function Home() {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage('');
+    setSubmitType('');
     
     try {
-      // TODO: Replace with your actual API endpoint
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -1690,15 +1705,19 @@ export default function Home() {
         body: JSON.stringify(formData),
       });
       
+      const data = await response.json();
+      
       if (response.ok) {
-        setSubmitMessage(t.contact.form.success);
-        setFormData({ name: '', email: '', message: '' });
+        setSubmitMessage(data.message || t.contact.form.success);
+        setSubmitType('success');
+        setFormData({ name: '', email: '', company: '', phone: '', message: '' });
       } else {
-        throw new Error('Error al enviar el mensaje');
+        throw new Error(data.error || 'Error sending message');
       }
     } catch (error) {
       console.error('Error:', error);
-      setSubmitMessage(t.contact.form.error);
+      setSubmitMessage(error instanceof Error ? error.message : t.contact.form.error);
+      setSubmitType('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -2525,6 +2544,43 @@ export default function Home() {
                   />
                 </div>
 
+                {/* Company and Phone Fields - Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Company Field */}
+                  <div>
+                    <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-2">
+                      <Globe className="w-4 h-4 inline mr-2" />
+                      {t.contact.form.companyLabel}
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                      placeholder={t.contact.form.companyPlaceholder}
+                    />
+                  </div>
+
+                  {/* Phone Field */}
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      {t.contact.form.phoneLabel}
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                      placeholder={t.contact.form.phonePlaceholder}
+                    />
+                  </div>
+                </div>
+
                 {/* Message Field */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
@@ -2566,16 +2622,26 @@ export default function Home() {
 
                 {/* Submit Message */}
                 {submitMessage && (
-                  <div className={`p-4 rounded-lg text-sm ${
-                    submitMessage.includes('correctamente') 
-                      ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                  }`}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-4 rounded-lg text-sm ${
+                      submitType === 'success'
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    }`}
+                  >
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                      {submitType === 'success' ? (
+                        <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                      ) : (
+                        <div className="w-4 h-4 flex-shrink-0 rounded-full border-2 border-red-400 flex items-center justify-center">
+                          <div className="w-1 h-1 bg-red-400 rounded-full"></div>
+                        </div>
+                      )}
                       {submitMessage}
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </form>
             </div>
