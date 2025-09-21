@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "analyze": "set ANALYZE=true && next build",
-    "analyze:server": "set BUNDLE_ANALYZE=server && next build",
-    "analyze:browser": "set BUNDLE_ANALYZE=browser && next build"
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:server": "BUNDLE_ANALYZE=server npm run build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser npm run build",
+    "build:prod": "NODE_ENV=production npm run build"
   },
   "dependencies": {
     "critters": "^0.0.23",

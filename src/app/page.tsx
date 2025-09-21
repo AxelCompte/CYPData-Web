@@ -243,7 +243,7 @@ const OptimizedVideo = ({
       muted
       playsInline
       onLoadedData={() => {
-        console.log(`Video loaded: ${src}`);
+        // console.log(`Video loaded: ${src}`); // Disabled for production
         setIsLoaded(true);
       }}
       onCanPlay={() => {
@@ -253,7 +253,7 @@ const OptimizedVideo = ({
         }
       }}
       onError={(e) => {
-        console.error(`Video failed to load: ${src}`, e);
+        // console.error(`Video failed to load: ${src}`, e); // Disabled for production
         // Try to reload the video on error
         setTimeout(() => {
           if (videoRef.current) {
@@ -822,6 +822,16 @@ const ExpandableServiceCard = ({
         onMouseLeave={() => setIsHovered(false)}
         onMouseMove={handleMouseMove}
         onClick={handleMobileClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleMobileClick();
+          }
+        }}
+        tabIndex={0}
+        role="button"
+        aria-expanded={isExpanded}
+        aria-label={`${service.title} - ${service.description}`}
         animate={isMobile && isExpanded ? { 
           scale: 1.02,
           borderColor: 'rgb(168 85 247 / 0.5)',
@@ -2122,8 +2132,8 @@ export default function Home() {
               alt="CyP Data" 
               width={192}
               height={128}
+              priority={true}
               className="h-24 md:h-32 w-auto"
-              priority
             />
           </FadeInWhenVisible>
           

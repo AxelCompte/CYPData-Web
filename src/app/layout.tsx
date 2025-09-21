@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://cypdata.com'),
+  metadataBase: new URL('https://data.cypcore.com'),
   alternates: {
     canonical: '/',
     languages: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CyP Data - Digital Solutions & Business Intelligence",
     description: "Leading tech company in Barcelona specializing in native mobile apps, web development, Business Intelligence, Big Data analytics, AI solutions, and digital transformation.",
-    url: 'https://cypdata.com',
+    url: 'https://data.cypcore.com',
     siteName: 'CyP Data',
     images: [
       {
@@ -114,8 +114,8 @@ export default function RootLayout({
               "@type": "Organization",
               "name": "CyP Data",
               "legalName": "CypCore",
-              "url": "https://cypdata.com",
-              "logo": "https://cypdata.com/logo.webp",
+              "url": "https://data.cypcore.com",
+              "logo": "https://data.cypcore.com/logo.webp",
               "description": "Leading tech company in Barcelona specializing in native mobile apps, web development, Business Intelligence, Big Data analytics, AI solutions, and digital transformation.",
               "address": {
                 "@type": "PostalAddress",
@@ -194,7 +194,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               "name": "CyP Data",
-              "image": "https://cypdata.com/logo.webp",
+              "image": "https://data.cypcore.com/logo.webp",
               "telephone": "+34-659-160-145",
               "email": "alonso.molina@cypcore.com",
               "address": {
