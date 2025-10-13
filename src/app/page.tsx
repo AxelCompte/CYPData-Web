@@ -794,10 +794,10 @@ const ExpandableServiceCard = ({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    const rotateX = (mousePosition.y - centerY) / centerY * -8;
-    const rotateY = (mousePosition.x - centerX) / centerX * 8;
+    const rotateX = (mousePosition.y - centerY) / centerY * -3;
+    const rotateY = (mousePosition.x - centerX) / centerX * 3;
     
-    return `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+    return `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
   };
 
   return (
