@@ -96,14 +96,14 @@ export default function RootLayout({
     <html lang="es" className="scroll-smooth">
       <head>
         {/* Favicon and App Icons */}
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" sizes="180x180" />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico?v=3" sizes="32x32" />
+        <link rel="icon" href="/icon.svg?v=3" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.svg?v=3" sizes="180x180" />
+        <link rel="manifest" href="/manifest.json?v=3" />
         
         {/* Theme Color */}
-        <meta name="theme-color" content="#993399" />
-        <meta name="msapplication-TileColor" content="#993399" />
+        <meta name="theme-color" content="#a476ff" />
+        <meta name="msapplication-TileColor" content="#a476ff" />
         
         {/* JSON-LD Structured Data */}
         <script
@@ -115,7 +115,7 @@ export default function RootLayout({
               "name": "CyP Data",
               "legalName": "CypCore",
               "url": "https://data.cypcore.com",
-              "logo": "https://data.cypcore.com/logo.webp",
+              "logo": "https://data.cypcore.com/CYPData_logo_white.svg",
               "description": "Leading tech company in Barcelona specializing in native mobile apps, web development, Business Intelligence, Big Data analytics, AI solutions, and digital transformation.",
               "address": {
                 "@type": "PostalAddress",
@@ -194,7 +194,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               "name": "CyP Data",
-              "image": "https://data.cypcore.com/logo.webp",
+              "image": "https://data.cypcore.com/CYPData_logo_white.svg",
               "telephone": "+34-659-160-145",
               "email": "alonso.molina@cypcore.com",
               "address": {

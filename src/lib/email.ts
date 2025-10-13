@@ -19,7 +19,7 @@ export async function sendContactEmail(data: ContactEmailData) {
       subject: `New Contact Form Submission from ${data.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #993399;">New Contact Form Submission</h2>
+          <h2 style="color: #a476ff;">New Contact Form Submission</h2>
           
           <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin-top: 0;">Contact Information</h3>
@@ -29,7 +29,7 @@ export async function sendContactEmail(data: ContactEmailData) {
             ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
           </div>
           
-          <div style="background: #ffffff; padding: 20px; border-radius: 8px; border-left: 4px solid #993399;">
+          <div style="background: #ffffff; padding: 20px; border-radius: 8px; border-left: 4px solid #a476ff;">
             <h3 style="margin-top: 0;">Message</h3>
             <p style="white-space: pre-wrap;">${data.message}</p>
           </div>
@@ -52,7 +52,7 @@ export async function sendContactEmail(data: ContactEmailData) {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #993399;">CyP Data</h1>
+            <h1 style="color: #a476ff;">CyP Data</h1>
             <p style="color: #666;">Digital Solutions & Business Intelligence</p>
           </div>
           
@@ -65,7 +65,7 @@ export async function sendContactEmail(data: ContactEmailData) {
             <p style="white-space: pre-wrap; font-style: italic;">"${data.message}"</p>
           </div>
           
-          <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #993399, #7c3aed); border-radius: 8px; color: white;">
+          <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #a476ff, #7c52ef); border-radius: 8px; color: white;">
             <h3 style="margin-top: 0; color: white;">Contact Information</h3>
             <p style="margin: 5px 0;">📧 alonso.molina@cypcore.com</p>
             <p style="margin: 5px 0;">📱 +34 659 160 145</p>

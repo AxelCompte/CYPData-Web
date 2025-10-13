@@ -5,20 +5,20 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#111827",
-  "theme_color": "#993399",
+  "theme_color": "#a476ff",
   "orientation": "portrait-primary",
   "categories": ["business", "technology", "productivity"],
   "icons": [
     {
-      "src": "/logo.webp",
+      "src": "/CYPData_logo_white.svg",
       "sizes": "192x192",
-      "type": "image/webp",
+      "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {
-      "src": "/logo.webp", 
+      "src": "/CYPData_logo_white.svg", 
       "sizes": "512x512",
-      "type": "image/webp",
+      "type": "image/svg+xml",
       "purpose": "maskable any"
     },
     {

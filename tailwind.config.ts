@@ -11,6 +11,16 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: '#a476ff',
+          light: '#b58bff',
+          dark: '#8c62f2',
+        },
+        secondary: {
+          DEFAULT: '#7c52ef',
+          light: '#9368f5',
+          dark: '#6b45d8',
+        },
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],

@@ -5,14 +5,10 @@
 :root {
   --background: #111827;
   --foreground: #f9fafb;
-  --primary-purple: #bb43bb;
-  /* --primary-purple: #993399; */
-  --secondary-purple: #753fac;
-  /* --secondary-purple: #663399; */
-  --gradient-start: #dd35c1;
-  --gradient-end: #a934f7;
-  /* --gradient-start: #993399;
-  --gradient-end: #663399; */
+  --primary-purple: #a476ff;
+  --secondary-purple: #8c62f2;
+  --gradient-start: #a476ff;
+  --gradient-end: #7c52ef;
 }
 
 * {
@@ -76,7 +72,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #b347b3, #7a4d9a);
+  background: linear-gradient(135deg, #b58bff, #8c62f2);
 }
 
 /* Selection colors */

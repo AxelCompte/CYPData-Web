@@ -301,10 +301,10 @@ const EnhancedButton = ({
   const baseClasses = "relative overflow-hidden font-medium transition-all duration-200 ease-out cursor-pointer select-none";
   
   const variantClasses = {
-    primary: "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-purple-500/25",
-    secondary: "bg-gray-800 text-white border border-gray-700 hover:border-purple-500",
-    ghost: "text-purple-300 hover:text-purple-300 hover:bg-purple-500/10",
-    outline: "border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
+    primary: "bg-gradient-to-r from-[#a476ff] to-[#7c52ef] text-white shadow-lg hover:shadow-[#a476ff]/25",
+    secondary: "bg-gray-800 text-white border border-gray-700 hover:border-[#a476ff]",
+    ghost: "text-[#a476ff] hover:text-[#b58bff] hover:bg-[#a476ff]/10",
+    outline: "border border-[#a476ff] text-[#a476ff] hover:bg-[#a476ff] hover:text-white"
   };
 
   const sizeClasses = {
@@ -374,7 +374,7 @@ const EnhancedButton = ({
     >
       {/* Magnetic hover effect background */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0"
+        className="absolute inset-0 bg-gradient-to-r from-[#a476ff] to-[#7c52ef] opacity-0"
         animate={{ opacity: isHovered ? 0.1 : 0 }}
         transition={{ duration: 0.2 }}
       />
@@ -459,7 +459,7 @@ const NavLink = ({
       
       {/* Animated underline */}
       <motion.div
-        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
+        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[#a476ff] to-[#7c52ef]"
         initial={{ width: 0 }}
         animate={{ width: isHovered ? "100%" : 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -815,7 +815,7 @@ const ExpandableServiceCard = ({
     >
       <motion.div
         ref={cardRef}
-        className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer relative"
+        className="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-[#a476ff]/50 transition-all duration-300 hover:shadow-lg hover:shadow-[#a476ff]/10 cursor-pointer relative"
         data-cursor-hover
         data-cursor-text={service.title}
         onMouseEnter={() => setIsHovered(true)}
@@ -863,7 +863,7 @@ const ExpandableServiceCard = ({
               <motion.div
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="p-2 rounded-full bg-gray-700/50 text-purple-300"
+                className="p-2 rounded-full bg-gray-700/50 text-[#b58bff]"
               >
                 <svg 
                   className="w-5 h-5" 
@@ -928,11 +928,11 @@ const ExpandableServiceCard = ({
             <div className={`p-6 rounded-2xl ${
               isMobile 
                 ? 'bg-gray-700/50 border border-gray-600/50' // Mobile: simpler styling
-                : 'bg-gray-800/95 border border-purple-500/30 backdrop-blur-sm shadow-2xl shadow-purple-500/10' // Desktop: fancy overlay
+                : 'bg-gray-800/95 border border-[#a476ff]/30 backdrop-blur-sm shadow-2xl shadow-[#a476ff]/10' // Desktop: fancy overlay
             }`}>
               <div className="flex items-center mb-4">
-                <Code className="w-4 h-4 text-purple-300 mr-2" />
-                <span className="text-sm font-semibold text-purple-300 uppercase tracking-wide">
+                <Code className="w-4 h-4 text-[#b58bff] mr-2" />
+                <span className="text-sm font-semibold text-[#b58bff] uppercase tracking-wide">
                   {technologiesLabel}
                 </span>
               </div>
@@ -954,7 +954,7 @@ const ExpandableServiceCard = ({
                     key={techIndex}
                     className={`flex flex-col items-center ${
                       isMobile ? 'p-2' : 'p-3'
-                    } rounded-lg border border-gray-600/50 hover:border-purple-400/60 transition-all duration-200 group/tech`}
+                    } rounded-lg border border-gray-600/50 hover:border-[#a476ff]/60 transition-all duration-200 group/tech`}
                   >
                     <div className="mb-2 group-hover/tech:scale-105 transition-transform duration-150">
                       {getTechIcon(tech)}
@@ -1878,7 +1878,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="logo-gradient-container">
               <Image 
-                src="/logo.webp" 
+                src="/CYPData_logo_white.svg" 
                 alt="CyP Data" 
                 width={120}
                 height={40}
@@ -1889,13 +1889,13 @@ export default function Home() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8 items-center">
-              <button onClick={() => scrollToSection('services')} className="hover:text-purple-300 transition-colors">
+              <button onClick={() => scrollToSection('services')} className="hover:text-[#b58bff] transition-colors">
                 {t.nav.services}
               </button>
-              <button onClick={() => scrollToSection('cases')} className="hover:text-purple-300 transition-colors">
+              <button onClick={() => scrollToSection('cases')} className="hover:text-[#b58bff] transition-colors">
                 {t.nav.cases}
               </button>
-              <button onClick={() => scrollToSection('contact')} className="hover:text-purple-300 transition-colors">
+              <button onClick={() => scrollToSection('contact')} className="hover:text-[#b58bff] transition-colors">
                 {t.nav.contact}
               </button>
               
@@ -1904,7 +1904,7 @@ export default function Home() {
                 <div className="relative language-dropdown">
                   <button
                     onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                    className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors"
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-700 hover:border-[#a476ff] transition-colors"
                     title="Choose language"
                   >
                     <Globe className="w-4 h-4" />
@@ -1933,7 +1933,7 @@ export default function Home() {
                             key={lang.code}
                             onClick={() => changeLanguage(lang.code)}
                             className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors flex items-center space-x-3 ${
-                              language === lang.code ? 'text-purple-300 bg-gray-700/50' : 'text-gray-300'
+                              language === lang.code ? 'text-[#b58bff] bg-gray-700/50' : 'text-gray-300'
                             }`}
                           >
                             <span className="text-sm">{lang.flag}</span>
@@ -1989,7 +1989,7 @@ export default function Home() {
                       transition={{ delay: 0.1 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-[#b58bff] border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('services');
                           setIsMobileMenuOpen(false);
@@ -2005,7 +2005,7 @@ export default function Home() {
                       transition={{ delay: 0.2 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-[#b58bff] border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('cases');
                           setIsMobileMenuOpen(false);
@@ -2021,7 +2021,7 @@ export default function Home() {
                       transition={{ delay: 0.3 }}
                     >
                       <button 
-                        className="block py-3 text-lg hover:text-purple-300 border-b border-gray-800 transition-colors w-full text-left"
+                        className="block py-3 text-lg hover:text-[#b58bff] border-b border-gray-800 transition-colors w-full text-left"
                         onClick={() => {
                           scrollToSection('contact');
                           setIsMobileMenuOpen(false);
@@ -2049,15 +2049,15 @@ export default function Home() {
                             }}
                             className={`flex items-center space-x-3 py-3 px-4 rounded-lg border transition-colors w-full ${
                               language === lang.code 
-                                ? 'border-purple-500 bg-purple-500/10 text-purple-300' 
-                                : 'border-gray-700 hover:border-purple-500'
+                                ? 'border-[#a476ff] bg-[#a476ff]/10 text-[#b58bff]' 
+                                : 'border-gray-700 hover:border-[#a476ff]'
                             }`}
                           >
                             <span className="text-lg">{lang.flag}</span>
                             <span className="text-lg font-medium">{lang.name}</span>
                             {language === lang.code && (
                               <div className="ml-auto">
-                                <svg className="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="w-5 h-5 text-[#b58bff]" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                 </svg>
                               </div>
@@ -2082,7 +2082,7 @@ export default function Home() {
             <div className="relative">
               <button
                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-black/30 backdrop-blur-sm border border-white/20 hover:border-purple-400/50 transition-all duration-300 text-white/90 hover:text-white"
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-black/30 backdrop-blur-sm border border-white/20 hover:border-[#a476ff]/50 transition-all duration-300 text-white/90 hover:text-white"
                 title="Choose language"
               >
                 <Globe className="w-4 h-4" />
@@ -2111,7 +2111,7 @@ export default function Home() {
                         key={lang.code}
                         onClick={() => changeLanguage(lang.code)}
                         className={`w-full text-left px-4 py-2 hover:bg-white/10 transition-colors flex items-center space-x-3 ${
-                          language === lang.code ? 'text-purple-300 bg-white/10' : 'text-gray-200'
+                          language === lang.code ? 'text-[#b58bff] bg-white/10' : 'text-gray-200'
                         }`}
                       >
                         <span className="text-sm">{lang.flag}</span>
@@ -2137,7 +2137,7 @@ export default function Home() {
         
         {/* Gradient Overlay */}
         <div 
-          className="fixed inset-0 bg-gradient-to-br from-purple-600/40 via-gray-900/60 to-purple-800/40" 
+          className="fixed inset-0 bg-gradient-to-br from-[#a476ff]/40 via-gray-900/60 to-[#7c52ef]/40" 
           style={{ 
             zIndex: 1,
             height: '100vh'
@@ -2147,7 +2147,7 @@ export default function Home() {
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <FadeInWhenVisible direction="up" delay={0.2} className="hero-logo-white flex justify-center mb-8">
             <Image 
-              src="/logo.webp" 
+              src="/CYPData_logo_white.svg" 
               alt="CyP Data" 
               width={192}
               height={128}
@@ -2229,33 +2229,33 @@ export default function Home() {
       {/* Mid-line Header */}
       <section className="relative py-16 px-6 overflow-hidden">
         {/* Enhanced Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-purple-900/30"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-[#4a2c7a]/30"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(139,92,246,0.1),transparent_50%)]"></div>
         
         {/* Animated background elements */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#a476ff]/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-blue-500/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
         
         <div className="container mx-auto max-w-7xl relative z-10">
           <FadeInWhenVisible direction="up" className="text-center">
             <div className="relative">
               {/* Enhanced Decorative elements */}
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent transform -translate-y-1/2"></div>
+              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#b58bff]/60 to-transparent transform -translate-y-1/2"></div>
               <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-300/80 to-transparent transform -translate-y-1/2"></div>
               
               {/* Enhanced center dot */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
+                <div className="w-3 h-3 bg-[#b58bff] rounded-full"></div>
                 <div className="absolute inset-0 w-3 h-3 bg-purple-300 rounded-full animate-ping opacity-75"></div>
               </div>
               
               {/* Side accent dots */}
-              <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-purple-400/60 rounded-full"></div>
-              <div className="absolute top-1/2 right-1/4 transform translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-purple-400/60 rounded-full"></div>
+              <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#b58bff]/60 rounded-full"></div>
+              <div className="absolute top-1/2 right-1/4 transform translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#b58bff]/60 rounded-full"></div>
               
               {/* Main content with better styling */}
-              <div className="relative bg-gray-900 px-12 py-6 rounded-2xl border border-purple-500/20 inline-block">
+              <div className="relative bg-gray-900 px-12 py-6 rounded-2xl border border-[#a476ff]/20 inline-block">
                 <div className="text-center space-y-2">
                   <h3 className="text-2xl md:text-4xl font-bold">
                     <span className="gradient-text">{t.midline.title}</span>
@@ -2295,13 +2295,13 @@ export default function Home() {
                   id={study.id}
                   ref={(el) => { elementsRef.current[index] = el; }}
                 >
-                  <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
+                  <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-[#a476ff]/50 transition-all duration-300 hover:shadow-2xl hover:shadow-[#a476ff]/10">
                     <div className="mb-4">
-                      <span className="text-sm font-semibold text-purple-300 uppercase tracking-wide">
+                      <span className="text-sm font-semibold text-[#b58bff] uppercase tracking-wide">
                         {study.industry}
                       </span>
                     </div>
-                    <h3 className="text-3xl font-bold mb-6 group-hover:text-purple-300 transition-colors">
+                    <h3 className="text-3xl font-bold mb-6 group-hover:text-[#b58bff] transition-colors">
                       {study.title}
                     </h3>
                     <p className="text-lg text-gray-400 mb-8 leading-relaxed">
@@ -2365,7 +2365,7 @@ export default function Home() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-600/20 to-purple-800/20 flex items-center justify-center">
-                        <BarChart3 className="w-16 h-16 text-purple-300" />
+                        <BarChart3 className="w-16 h-16 text-[#b58bff]" />
                       </div>
                       <p className="text-gray-400 text-lg">Scroll to explore our projects</p>
                     </div>
@@ -2413,7 +2413,7 @@ export default function Home() {
               {/* Email us */}
               <a 
                 href="mailto:alonso.molina@cypcore.com"
-                className="block p-6 rounded-xl border border-transparent hover:border-purple-500/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
+                className="block p-6 rounded-xl border border-transparent hover:border-[#a476ff]/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
                 data-cursor-hover
                 data-cursor-text="Email us"
               >
@@ -2422,8 +2422,8 @@ export default function Home() {
                     <Mail className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.email}</h3>
-                    <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
+                    <h3 className="font-semibold text-lg group-hover:text-[#b58bff] transition-colors">{t.contact.email}</h3>
+                    <span className="text-gray-400 group-hover:text-[#b58bff] transition-colors">
                       alonso.molina@cypcore.com
                     </span>
                   </div>
@@ -2433,7 +2433,7 @@ export default function Home() {
               {/* Call us */}
               <a 
                 href="tel:+34659160145"
-                className="block p-6 rounded-xl border border-transparent hover:border-purple-500/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
+                className="block p-6 rounded-xl border border-transparent hover:border-[#a476ff]/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
                 data-cursor-hover
                 data-cursor-text="Call us"
               >
@@ -2442,8 +2442,8 @@ export default function Home() {
                     <Phone className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.call}</h3>
-                    <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
+                    <h3 className="font-semibold text-lg group-hover:text-[#b58bff] transition-colors">{t.contact.call}</h3>
+                    <span className="text-gray-400 group-hover:text-[#b58bff] transition-colors">
                       +34 659 160 145
                     </span>
                     <p className="text-sm text-gray-500 group-hover:text-gray-400 transition-colors">{t.contact.schedule}</p>
@@ -2456,7 +2456,7 @@ export default function Home() {
                 href="https://maps.app.goo.gl/DS6az1i1nTtbcghW8"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-6 rounded-xl border border-transparent hover:border-purple-500/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
+                className="block p-6 rounded-xl border border-transparent hover:border-[#a476ff]/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
                 data-cursor-hover
                 data-cursor-text="Visit us"
               >
@@ -2465,8 +2465,8 @@ export default function Home() {
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.visit}</h3>
-                    <address className="text-gray-400 group-hover:text-purple-300 transition-colors not-italic">
+                    <h3 className="font-semibold text-lg group-hover:text-[#b58bff] transition-colors">{t.contact.visit}</h3>
+                    <address className="text-gray-400 group-hover:text-[#b58bff] transition-colors not-italic">
                       Ctra. Piera, 7A<br />
                       08760 Martorell, Barcelona, {language === 'ca' ? 'Catalunya' : language === 'es' ? 'España' : 'Spain'}
                     </address>
@@ -2479,7 +2479,7 @@ export default function Home() {
                 href="https://es.linkedin.com/company/cypcore"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-6 rounded-xl border border-transparent hover:border-purple-500/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
+                className="block p-6 rounded-xl border border-transparent hover:border-[#a476ff]/50 transition-all duration-300 hover:bg-gray-800/30 group cursor-pointer"
                 data-cursor-hover
                 data-cursor-text="LinkedIn"
               >
@@ -2490,8 +2490,8 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg group-hover:text-purple-300 transition-colors">{t.contact.linkedin}</h3>
-                    <span className="text-gray-400 group-hover:text-purple-300 transition-colors">
+                    <h3 className="font-semibold text-lg group-hover:text-[#b58bff] transition-colors">{t.contact.linkedin}</h3>
+                    <span className="text-gray-400 group-hover:text-[#b58bff] transition-colors">
                       @cypcore
                     </span>
                   </div>
@@ -2521,7 +2521,7 @@ export default function Home() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-[#a476ff] focus:ring-2 focus:ring-[#a476ff]/20 focus:outline-none transition-all duration-200"
                     placeholder={t.contact.form.namePlaceholder}
                   />
                 </div>
@@ -2539,7 +2539,7 @@ export default function Home() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-[#a476ff] focus:ring-2 focus:ring-[#a476ff]/20 focus:outline-none transition-all duration-200"
                     placeholder={t.contact.form.emailPlaceholder}
                   />
                 </div>
@@ -2558,7 +2558,7 @@ export default function Home() {
                       name="company"
                       value={formData.company}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-[#a476ff] focus:ring-2 focus:ring-[#a476ff]/20 focus:outline-none transition-all duration-200"
                       placeholder={t.contact.form.companyPlaceholder}
                     />
                   </div>
@@ -2575,7 +2575,7 @@ export default function Home() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-200"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-[#a476ff] focus:ring-2 focus:ring-[#a476ff]/20 focus:outline-none transition-all duration-200"
                       placeholder={t.contact.form.phonePlaceholder}
                     />
                   </div>
@@ -2594,7 +2594,7 @@ export default function Home() {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-colors duration-200 resize-vertical"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-[#a476ff] focus:ring-2 focus:ring-[#a476ff]/20 focus:outline-none transition-colors duration-200 resize-vertical"
                     placeholder={t.contact.form.messagePlaceholder}
                     style={{ 
                       minHeight: '100px',
@@ -2656,7 +2656,7 @@ export default function Home() {
             <div className="mb-4 md:mb-0">
               <div className="logo-gradient-container">
                 <Image 
-                  src="/logo.webp" 
+                  src="/CYPData_logo_white.svg" 
                   alt="CyP Data" 
                   width={120}
                   height={40}
@@ -2666,9 +2666,9 @@ export default function Home() {
               <p className="text-gray-400 mt-2">{t.footer.description}</p>
             </div>
             <div className="flex space-x-6">
-              <NavLink href="#services" className="text-gray-400 hover:text-purple-300">{t.nav.services}</NavLink>
-              <NavLink href="#cases" className="text-gray-400 hover:text-purple-300">{t.nav.cases}</NavLink>
-              <NavLink href="#contact" className="text-gray-400 hover:text-purple-300">{t.nav.contact}</NavLink>
+              <NavLink href="#services" className="text-gray-400 hover:text-[#b58bff]">{t.nav.services}</NavLink>
+              <NavLink href="#cases" className="text-gray-400 hover:text-[#b58bff]">{t.nav.cases}</NavLink>
+              <NavLink href="#contact" className="text-gray-400 hover:text-[#b58bff]">{t.nav.contact}</NavLink>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
