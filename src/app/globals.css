@@ -3,12 +3,56 @@
 @tailwind utilities;
 
 :root {
+  /* Colors - RGB format for opacity support */
+  --color-primary: 164 118 255;
+  --color-primary-light: 181 139 255;
+  --color-primary-dark: 140 98 242;
+  --color-secondary: 124 82 239;
+  --color-secondary-light: 147 104 245;
+  --color-secondary-dark: 107 69 216;
+  
+  /* Background & Foreground */
   --background: #111827;
   --foreground: #f9fafb;
-  --primary-purple: #a476ff;
-  --secondary-purple: #8c62f2;
+  
+  /* Gradients */
   --gradient-start: #a476ff;
   --gradient-end: #7c52ef;
+  
+  /* Legacy support (will be phased out) */
+  --primary-purple: #a476ff;
+  --secondary-purple: #8c62f2;
+  
+  /* Spacing scale */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  --spacing-3xl: 6rem;
+  
+  /* Typography */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px rgba(164, 118, 255, 0.3);
+  
+  /* Border radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
