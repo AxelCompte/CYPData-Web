@@ -19,9 +19,15 @@ export function CTASection({ nextProject }: CTASectionProps) {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-20 bg-black relative overflow-hidden">
+    <section ref={ref} className="py-20 relative overflow-hidden">
+      {/* Blur Overlay for sticky background */}
+      <div 
+        className="absolute inset-0 bg-black/90 backdrop-blur-md"
+        style={{ zIndex: 1 }}
+      />
+      
       {/* Gradient background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" style={{ zIndex: 2 }}>
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-black" />
         <motion.div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full blur-[150px]"

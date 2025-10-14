@@ -87,7 +87,13 @@ export function CaseStudySections({ goals, challenge, approach, results }: CaseS
   }, [isMounted]);
 
   return (
-    <section ref={containerRef} className="relative bg-gray-900 overflow-hidden">
+    <section ref={containerRef} className="relative overflow-hidden">
+      {/* Blur Overlay for sticky background */}
+      <div 
+        className="absolute inset-0 bg-gray-900/80 backdrop-blur-md"
+        style={{ zIndex: 1 }}
+      />
+      
       <ConstellationBackground sectionRef={containerRef} />
 
       <div className="container mx-auto px-6 py-20 relative z-10">

@@ -67,9 +67,15 @@ export function MetricsSection({ metrics }: MetricsSectionProps) {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-20 bg-black relative overflow-hidden">
+    <section ref={ref} className="py-20 relative overflow-hidden">
+      {/* Blur Overlay for sticky background */}
+      <div 
+        className="absolute inset-0 bg-black/90 backdrop-blur-md"
+        style={{ zIndex: 1 }}
+      />
+      
       {/* Animated background gradients */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-20" style={{ zIndex: 2 }}>
         <motion.div
           className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full blur-[120px]"
           animate={{
