@@ -14,6 +14,10 @@ export interface CaseStudy {
   tags: string[];
   year: number;
   featured: boolean;
+  gridSize?: {
+    cols: 1 | 2; // Column span (1 or 2)
+    rows: 1 | 2; // Row span (1 or 2)
+  };
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -28,6 +32,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Big Data', 'IoT', 'Predictive Analytics'],
     year: 2024,
     featured: true,
+    gridSize: { cols: 1, rows: 2 }, // Regular
   },
   {
     id: '2',
@@ -40,6 +45,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Healthcare', 'Data Analytics', 'Compliance'],
     year: 2024,
     featured: true,
+    gridSize: { cols: 1, rows: 2 }, // Regular
   },
   {
     id: '3',
@@ -52,6 +58,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['AI/ML', 'Logistics', 'Optimization'],
     year: 2023,
     featured: true,
+    gridSize: { cols: 2, rows: 1 }, // Wide
   },
   {
     id: '4',
@@ -64,6 +71,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Computer Vision', 'Quality Assurance', 'AI'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 1, rows: 2 }, // Tall
   },
   {
     id: '5',
@@ -76,6 +84,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Business Intelligence', 'HR Analytics', 'Dashboard'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 1, rows: 1 }, // Regular
   },
   {
     id: '6',
@@ -88,6 +97,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Inventory', 'Forecasting', 'ERP Integration'],
     year: 2024,
     featured: false,
+    gridSize: { cols: 1, rows: 2 }, // Wide
   },
   {
     id: '7',
@@ -100,6 +110,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['IoT', 'Energy', 'Sustainability'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 1, rows: 1 }, // Regular
   },
   {
     id: '8',
@@ -112,6 +123,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['AI/ML', 'Maintenance', 'Predictive Analytics'],
     year: 2024,
     featured: false,
+    gridSize: { cols: 1, rows: 1 }, // Regular
   },
   {
     id: '9',
@@ -124,6 +136,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['E-Commerce', 'Analytics', 'Customer Insights'],
     year: 2024,
     featured: true,
+    gridSize: { cols: 1, rows: 2 }, // Large (2x2)
   },
   {
     id: '10',
@@ -136,6 +149,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Testing', 'Automation', 'Data Analysis'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 2, rows: 1 }, // Regular
   },
   {
     id: '11',
@@ -148,6 +162,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Robotics', 'Automation', 'Control Systems'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 1, rows: 1 }, // Regular
   },
   {
     id: '12',
@@ -160,6 +175,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['RFID', 'Tracking', 'Supply Chain'],
     year: 2024,
     featured: false,
+    gridSize: { cols: 1, rows: 2 }, // Regular
   },
   {
     id: '13',
@@ -172,6 +188,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Fleet Management', 'GPS', 'Optimization'],
     year: 2024,
     featured: false,
+    gridSize: { cols: 1, rows: 1 }, // Regular
   },
   {
     id: '14',
@@ -184,6 +201,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Logistics', 'Tracking', 'IoT'],
     year: 2023,
     featured: false,
+    gridSize: { cols: 2, rows: 1 }, // Regular
   },
   {
     id: '15',
@@ -196,6 +214,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Planning', 'AI', 'Optimization'],
     year: 2024,
     featured: true,
+    gridSize: { cols: 1, rows: 1 }, // Wide
   },
 ];
 

@@ -44,7 +44,7 @@ export function CaseStudiesPageClient({ caseStudies }: CaseStudiesPageClientProp
       />
 
       {/* Header Section */}
-      <section className="relative py-24 md:py-32 overflow-hidden min-h-[60vh] flex items-center">
+      <section className="relative pt-24 pb-16 md:pt-28 md:pb-20 overflow-hidden flex items-center">
         <div className="container mx-auto px-6 relative" style={{ zIndex: 10 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -63,40 +63,13 @@ export function CaseStudiesPageClient({ caseStudies }: CaseStudiesPageClientProp
             </motion.h1>
             
             <motion.p
-              className="text-xl text-gray-400 mb-8 leading-relaxed"
+              className="text-xl text-gray-400 leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               Real results from real projects. Discover how we've helped leading companies transform their operations with innovative digital solutions.
             </motion.p>
-
-            {/* Stats */}
-            <motion.div
-              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <div>
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  {caseStudies.length}+
-                </div>
-                <div className="text-sm text-gray-400">Projects</div>
-              </div>
-              <div>
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  {new Set(caseStudies.map(s => s.industry)).size}
-                </div>
-                <div className="text-sm text-gray-400">Industries</div>
-              </div>
-              <div>
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  100%
-                </div>
-                <div className="text-sm text-gray-400">Success Rate</div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -110,18 +83,25 @@ export function CaseStudiesPageClient({ caseStudies }: CaseStudiesPageClientProp
         />
 
         <div className="container mx-auto px-6 relative" style={{ zIndex: 10 }}>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-            layout
-          >
-            {caseStudies.map((caseStudy, index) => (
-              <CaseStudyCard
-                key={caseStudy.id}
-                caseStudy={caseStudy}
-                index={index}
-              />
-            ))}
-          </motion.div>
+          {/* Bento Grid Layout */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[190px]">
+            {caseStudies.map((caseStudy, index) => {
+              const colSpan = caseStudy.gridSize?.cols === 2 ? 'col-span-2' : 'col-span-1';
+              const rowSpan = caseStudy.gridSize?.rows === 2 ? 'row-span-2' : 'row-span-1';
+              
+              return (
+                <div 
+                  key={caseStudy.id} 
+                  className={`${colSpan} ${rowSpan}`}
+                >
+                  <CaseStudyCard
+                    caseStudy={caseStudy}
+                    index={index}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

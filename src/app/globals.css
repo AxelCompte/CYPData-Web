@@ -248,3 +248,12 @@ canvas {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Masonry Grid Styles */
+.masonry-grid-column {
+  background-clip: padding-box;
+}
+
+.masonry-grid-column > div {
+  background: transparent;
+}

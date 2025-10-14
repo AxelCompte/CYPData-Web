@@ -23,11 +23,11 @@ export function CaseStudyCard({ caseStudy, index }: CaseStudyCardProps) {
         delay: index * 0.1,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className="group"
+      className="group h-full"
     >
       <Link href={`/case-studies/${caseStudy.slug}`}>
         <motion.div
-          className="relative h-80 rounded-2xl overflow-hidden cursor-pointer bg-gray-800/50 border border-gray-700/50"
+          className="relative h-full rounded-2xl overflow-hidden cursor-pointer bg-gray-800/50 border border-gray-700/50"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           whileHover={{
@@ -49,10 +49,10 @@ export function CaseStudyCard({ caseStudy, index }: CaseStudyCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
           </div>
 
-          {/* Content - Client Name Centered */}
-          <div className="relative h-full flex items-center justify-center p-6">
+          {/* Content - Client Name Bottom Right */}
+          <div className="relative h-full flex items-end justify-end p-6">
             <motion.h3
-              className="text-4xl md:text-5xl font-bold text-white text-center"
+              className="text-xl md:text-2xl font-bold text-white text-right"
               animate={{
                 scale: isHovered ? 1.05 : 1,
               }}
