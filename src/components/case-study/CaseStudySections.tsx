@@ -24,10 +24,36 @@ interface CaseStudySectionsProps {
   results: { points: BulletPoint[]; image: string };
 }
 
+function useIntersectionObserver() {
+  const [activeId, setActiveId] = useState('');
+  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: '-50% 0px -50% 0px',
+      }
+    );
+
+    elementsRef.current.forEach((element) => {
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [activeId, elementsRef] as const;
+}
+
 export function CaseStudySections({ goals, challenge, approach, results }: CaseStudySectionsProps) {
-  const [activeSection, setActiveSection] = useState<string>('');
-  const [isMounted, setIsMounted] = useState(false);
-  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+  const [activeSection, elementsRef] = useIntersectionObserver();
   const containerRef = useRef<HTMLElement>(null);
 
   const sections: Section[] = [
@@ -57,126 +83,82 @@ export function CaseStudySections({ goals, challenge, approach, results }: CaseS
     },
   ];
 
-  useEffect(() => {
-    setIsMounted(true);
-    setActiveSection('goals');
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 0.5,
-        rootMargin: '-20% 0px -20% 0px',
-      }
-    );
-
-    Object.values(sectionsRef.current).forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => observer.disconnect();
-  }, [isMounted]);
-
   return (
-    <section ref={containerRef} className="relative overflow-hidden">
-      {/* Blur Overlay for sticky background */}
-      <div 
-        className="absolute inset-0 bg-gray-900/80 backdrop-blur-md"
-        style={{ zIndex: 1 }}
-      />
-      
+    <section ref={containerRef} className="py-20 px-6 bg-gray-900/80 backdrop-blur-md relative z-10">
       <ConstellationBackground sectionRef={containerRef} />
-
-      <div className="container mx-auto px-6 py-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      
+      <div className="container mx-auto max-w-7xl relative z-10">
+        {/* Two-column layout: Left for text, Right for sticky images */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Left Column - Scrolling Content */}
           <div className="space-y-8 lg:space-y-96 lg:pb-96">
-            {sections.map((section, sectionIndex) => (
+            {sections.map((section, index) => (
               <div
                 key={section.id}
                 id={section.id}
-                ref={(el) => {
-                  sectionsRef.current[section.id] = el;
-                }}
-                className="min-h-screen flex items-center"
+                ref={(el) => { elementsRef.current[index] = el; }}
               >
-                <div className="w-full">
-                  <div className="p-8 md:p-10 rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-[#a476ff]/30 transition-all duration-300">
-                    <motion.div
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -50 }}
-                      transition={{ duration: 0.8 }}
-                      viewport={{ once: false, amount: 0.3 }}
-                    >
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white">
-                        {section.title}
-                      </h2>
+                <div className="p-8 rounded-2xl bg-gray-900/80 border border-gray-700/50 hover:border-[#a476ff]/50 transition-all duration-300 hover:shadow-2xl hover:shadow-[#a476ff]/10">
+                  <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                  >
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8">
+                      {section.title}
+                    </h2>
 
-                      <div className="lg:hidden mb-8">
-                        <div className="relative h-80 rounded-xl overflow-hidden">
-                          <Image
-                            src={section.image}
-                            alt={section.title}
-                            fill
-                            className="object-cover"
-                            sizes="100vw"
-                          />
+                    {/* Mobile Image - Show on small screens only */}
+                    <div className="lg:hidden mb-8">
+                      <div className="relative h-80 rounded-xl overflow-hidden border border-gray-700/50 shadow-2xl">
+                        <Image
+                          src={section.image}
+                          alt={section.title}
+                          fill
+                          className="object-cover"
+                          sizes="100vw"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Key Points */}
+                    <div className="space-y-6">
+                      {section.points.map((point, pointIndex) => (
+                        <div key={pointIndex} className="flex items-start space-x-4">
+                          <div className="flex-shrink-0 p-2 rounded-lg bg-gradient-to-br from-[#a476ff] to-[#7c52ef] text-white">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 className="text-lg md:text-xl font-semibold mb-2 text-white">
+                              {point.title}
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed">
+                              {point.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-
-                      <div className="space-y-6">
-                        {section.points.map((point, pointIndex) => (
-                          <motion.div
-                            key={pointIndex}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: pointIndex * 0.1 }}
-                            viewport={{ once: true }}
-                            className="group flex items-start space-x-4"
-                          >
-                            <div className="flex-shrink-0 p-2 rounded-lg bg-gradient-to-br from-[#a476ff] to-[#7c52ef] text-white">
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
-
-                            <div className="flex-1">
-                              <h3 className="text-lg md:text-xl font-semibold mb-2 text-white">
-                                {point.title}
-                              </h3>
-                              <p className="text-gray-400 leading-relaxed">
-                                {point.description}
-                              </p>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  </div>
+                      ))}
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             ))}
           </div>
 
+          {/* Right Column - Sticky Image Display (Desktop Only) */}
           <div className="hidden lg:block lg:sticky lg:top-32 lg:h-[70vh] flex items-center justify-center">
             <div className="relative w-full h-full max-w-lg flex items-center justify-center">
-              {isMounted && sections.map((section) => (
+              {sections.map((section, index) => (
                 <div
-                  key={section.id}
+                  key={index}
                   className={`absolute inset-0 transition-opacity duration-500 ${
                     activeSection === section.id ? 'opacity-100' : 'opacity-0'
                   }`}
                 >
-                  <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
+                  <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl relative">
                     <Image
                       src={section.image}
                       alt={section.title}
@@ -188,7 +170,8 @@ export function CaseStudySections({ goals, challenge, approach, results }: CaseS
                   </div>
                 </div>
               ))}
-
+              
+              {/* Default state when no section is active */}
               {!activeSection && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
