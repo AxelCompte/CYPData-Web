@@ -125,6 +125,13 @@ export function CaseStudiesPageClient({ caseStudies }: CaseStudiesPageClientProp
         </div>
       </section>
 
+      {/* Subtle Separator Line */}
+      <div className="relative z-10">
+        <div className="container mx-auto px-6">
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-700/50 to-transparent" />
+        </div>
+      </div>
+
       {/* CTA Section with Services-style Background */}
       <section ref={ctaSectionRef} className="py-16 md:py-24 bg-gray-900 relative z-10 overflow-hidden">
         {/* Constellation Background */}
