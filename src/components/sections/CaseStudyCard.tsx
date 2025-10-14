@@ -49,10 +49,10 @@ export function CaseStudyCard({ caseStudy, index }: CaseStudyCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
           </div>
 
-          {/* Content - Client Name Bottom Right */}
-          <div className="relative h-full flex items-end justify-end p-6">
+          {/* Content - Client Name Centered */}
+          <div className="relative h-full flex items-center justify-center p-6">
             <motion.h3
-              className="text-xl md:text-2xl font-bold text-white text-right"
+              className="text-4xl md:text-5xl font-bold text-white text-center"
               animate={{
                 scale: isHovered ? 1.05 : 1,
               }}
